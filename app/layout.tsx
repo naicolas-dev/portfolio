@@ -1,6 +1,11 @@
 import { Sora, JetBrains_Mono } from 'next/font/google'
 import "./globals.css";
 
+export const metadata = {
+  title: 'Naicolas',
+  description: 'Portfolio of Nicolas Viana Alves',
+};
+
 const sora = Sora({ subsets: ['latin'], variable: '--font-sora', weight: ['400', '600', '800'] })
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', weight: ['400'] })
 

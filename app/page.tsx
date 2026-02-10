@@ -16,6 +16,8 @@ import {
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
 
+import { TabTitleHandler } from './components/TabTitleHandler';
+
 // --- TYPES ---
 interface Project {
   title: string;
@@ -444,6 +446,7 @@ export default function Portfolio() {
 
   return (
     <main className="min-h-screen relative font-sans selection:bg-[#0A84FF]/30 selection:text-blue-100">
+      <TabTitleHandler language={language} />
       {/* Background Texture & Lighting - Apple Style */}
       <div className="fixed inset-0 bg-[#000000] -z-20" />
       <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[#0A84FF]/10 blur-[120px] rounded-full -z-10 mix-blend-screen opacity-40" />
