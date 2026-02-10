@@ -179,6 +179,7 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const openProject = (project: Project) => {
     setSelectedProject(project);
@@ -201,7 +202,11 @@ export default function Portfolio() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setSelectedProject(null);
+        if (isFullScreen) {
+          setIsFullScreen(false);
+        } else {
+          setSelectedProject(null);
+        }
       }
     };
 
@@ -459,7 +464,10 @@ export default function Portfolio() {
               </button>
 
               {/* Carousel Section */}
-              <div className="w-full h-64 sm:h-80 bg-zinc-950 relative group flex items-center justify-center overflow-hidden">
+              <div
+                className="w-full h-64 sm:h-80 bg-zinc-950 relative group flex items-center justify-center overflow-hidden cursor-zoom-in"
+                onClick={() => setIsFullScreen(true)}
+              >
 
                 {/* Blurred Background for Vertical Images */}
                 <div className="absolute inset-0">
@@ -494,13 +502,13 @@ export default function Portfolio() {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
                     >
                       <ChevronLeft size={24} />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
                     >
                       <ChevronRight size={24} />
                     </button>
@@ -516,6 +524,10 @@ export default function Portfolio() {
                     </div>
                   </>
                 )}
+
+                <div className="absolute top-4 right-4 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
+                  Clique para ampliar
+                </div>
               </div>
 
               <div className="p-8">
@@ -552,6 +564,62 @@ export default function Portfolio() {
                 </div>
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- FULL SCREEN GALLERY --- */}
+      <AnimatePresence>
+        {isFullScreen && selectedProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] bg-black/95 flex items-center justify-center p-4"
+            onClick={() => setIsFullScreen(false)}
+          >
+            <button
+              onClick={() => setIsFullScreen(false)}
+              className="absolute top-4 right-4 p-3 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-400 hover:text-white rounded-full transition-colors z-50"
+            >
+              <X size={24} />
+            </button>
+
+            <div className="relative w-full h-full max-w-7xl max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentImageIndex}
+                  src={selectedProject.images[currentImageIndex]}
+                  alt={`${selectedProject.title} full screen ${currentImageIndex + 1}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.2 }}
+                  className="max-w-full max-h-full object-contain"
+                />
+              </AnimatePresence>
+
+              {selectedProject.images.length > 1 && (
+                <>
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-zinc-900/50 hover:bg-zinc-800 text-white rounded-full transition-colors z-50"
+                  >
+                    <ChevronLeft size={32} />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-zinc-900/50 hover:bg-zinc-800 text-white rounded-full transition-colors z-50"
+                  >
+                    <ChevronRight size={32} />
+                  </button>
+                </>
+              )}
+
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 px-4 py-2 rounded-full text-white text-sm backdrop-blur-md">
+                {currentImageIndex + 1} / {selectedProject.images.length}
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
