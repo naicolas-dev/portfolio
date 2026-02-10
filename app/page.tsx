@@ -23,8 +23,37 @@ interface Project {
   longDescription?: string;
   techs: string[];
   links: { github?: string; demo?: string };
+  cta?: { text: string; link?: string };
   images: string[]; // Changed from image?: string to images: string[]
   isFeatured?: boolean;
+}
+
+interface Content {
+  hero: {
+    role: string;
+    bio: (age: React.ReactNode) => React.ReactNode;
+    stackTitle: string;
+    contactTitle: string;
+  };
+  sections: {
+    projects: string;
+    otherProjects: string;
+    featured: string;
+  };
+  projects: {
+    featured: Project;
+    main: Project[];
+    other: { name: string; tech: string }[];
+  };
+  education: {
+    title: string;
+    items: {
+      title: string;
+      institution: string;
+      dotColor: string;
+      textColor: string;
+    }[];
+  };
 }
 
 // --- DATA SOURCE ---
@@ -51,123 +80,248 @@ const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
   'Jetpack Compose': { icon: <SiJetpackcompose size={18} />, color: "bg-[#4285F4]/10 text-[#4285F4] border-[#4285F4]/20" },
 };
 
-const featuredProject: Project = {
-  title: 'Frequência Certa',
-  description: 'Sistema full-stack completo para controle de frequência e gestão acadêmica.',
-  longDescription: 'Desenvolvido como trabalho final e evoluído para uma aplicação robusta com painéis administrativos, controle de presença em tempo real, relatórios automatizados em PDF e integração com Google Gemini para análise de desempenho.',
-  techs: ['PHP', 'Laravel', 'MySQL', 'Bootstrap', 'MVC'],
-  links: { github: 'https://github.com/naicolas-br' },
-  images: [
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174439.png',
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174444.png',
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174450.png',
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174455.png',
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174459.png',
-    '/projects/frequencia certa/Captura de tela 2026-02-10 174509.png'
-  ],
-  isFeatured: true,
-};
-
-const mainProjects: Project[] = [
-  {
-    title: 'Dashboard Financeiro',
-    description: 'Sistema em tempo real para gestão de ativos e passivos.',
-    longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
-    techs: ['React', 'JS', 'Firebase'],
-    links: { github: 'https://github.com/naicolas-br' },
-    images: [
-      '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
-      '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
-      '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
-    ],
-  },
-  {
-    title: 'TikTok Downloader',
-    description: 'App Android para download de vídeos sem marca d\'água.',
-    longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
-    techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
-    links: { github: 'https://github.com/naicolas-br' },
-    images: [
-      '/projects/tiktok downloader/preview.jpeg',
-      '/projects/tiktok downloader/preview2.jpeg'
-    ],
-  },
-  {
-    title: 'A Ordem Survived',
-    description: 'Portal imersivo para servidor de DayZ com foco em performance.',
-    longDescription: 'Website promocional com alto impacto visual, demonstrando as principais funcionalidades do servidor.',
-    techs: ['HTML5', 'Tailwind', 'JS'],
-    links: { github: 'https://github.com/naicolas-br', demo: '#' },
-    images: [
-      '/projects/aordem/Captura de tela 2026-02-08 201323.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201331.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201334.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201434.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201339.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201342.png',
-      '/projects/aordem/Captura de tela 2026-02-08 201347.png'
-    ],
-  },
-  {
-    title: 'Sollux Engenharia',
-    description: 'Landing page de alta conversão para serviços elétricos.',
-    longDescription: 'Landing page otimizada para SEO e conversão, com formulários de contato integrados e design responsivo moderno.',
-    techs: ['HTML5', 'Tailwind', 'JS'],
-    links: { github: 'https://github.com/naicolas-br' },
-    images: [
-      '/projects/eletricidade/Captura de tela 2026-02-10 174112.png',
-      '/projects/eletricidade/Captura de tela 2026-02-10 174117.png',
-      '/projects/eletricidade/Captura de tela 2026-02-10 174125.png',
-      '/projects/eletricidade/Captura de tela 2026-02-10 174129.png',
-      '/projects/eletricidade/Captura de tela 2026-02-10 174140.png'
-    ],
-  }
-];
-
 // --- STACK DATA ---
 const stackItems = [
-  {
-    name: "PHP",
-    color: "bg-[#777BB4]/10 text-[#777BB4] border-[#777BB4]/20",
-    icon: <SiPhp size={18} />
-  },
-  {
-    name: "Laravel",
-    color: "bg-[#FF2D20]/10 text-[#FF2D20] border-[#FF2D20]/20",
-    icon: <SiLaravel size={18} />
-  },
-  {
-    name: "Next.js",
-    color: "bg-zinc-100/10 text-zinc-100 border-zinc-100/20",
-    icon: <SiNextdotjs size={18} />
-  },
-  {
-    name: "React",
-    color: "bg-[#61DAFB]/10 text-[#61DAFB] border-[#61DAFB]/20",
-    icon: <SiReact size={18} />
-  },
-  {
-    name: "JavaScript",
-    color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20",
-    icon: <SiJavascript size={18} />
-  },
-  {
-    name: "Tailwind",
-    color: "bg-[#38B2AC]/10 text-[#38B2AC] border-[#38B2AC]/20",
-    icon: <SiTailwindcss size={18} />
-  },
-  {
-    name: "TypeScript",
-    color: "bg-[#3178C6]/10 text-[#3178C6] border-[#3178C6]/20",
-    icon: <SiTypescript size={18} />
-  },
+  { name: "PHP", color: "bg-[#777BB4]/10 text-[#777BB4] border-[#777BB4]/20", icon: <SiPhp size={18} /> },
+  { name: "Laravel", color: "bg-[#FF2D20]/10 text-[#FF2D20] border-[#FF2D20]/20", icon: <SiLaravel size={18} /> },
+  { name: "Next.js", color: "bg-zinc-100/10 text-zinc-100 border-zinc-100/20", icon: <SiNextdotjs size={18} /> },
+  { name: "React", color: "bg-[#61DAFB]/10 text-[#61DAFB] border-[#61DAFB]/20", icon: <SiReact size={18} /> },
+  { name: "JavaScript", color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20", icon: <SiJavascript size={18} /> },
+  { name: "Tailwind", color: "bg-[#38B2AC]/10 text-[#38B2AC] border-[#38B2AC]/20", icon: <SiTailwindcss size={18} /> },
+  { name: "TypeScript", color: "bg-[#3178C6]/10 text-[#3178C6] border-[#3178C6]/20", icon: <SiTypescript size={18} /> },
 ];
 
-const otherProjects = [
-  { name: 'Nutrika', tech: 'Next.js & React' },
-  { name: 'Biblioteca API', tech: 'PHP & Laravel' },
-  { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
-];
+const content: Record<'pt' | 'en', Content> = {
+  pt: {
+    hero: {
+      role: "Full-Stack Developer",
+      bio: (age: React.ReactNode) => (
+        <>
+          <strong className="text-white font-medium">Desenvolvedor Full-Stack</strong> de {age} anos, focado na criação de aplicações web reais utilizando <span className="text-[#777BB4]">PHP</span>, <span className="text-cyan-400">React</span> e <span className="text-blue-400">TypeScript</span>.
+        </>
+      ),
+      stackTitle: "Tech Stack Principal",
+      contactTitle: "Vamos Conversar"
+    },
+    sections: {
+      projects: "Meus Projetos",
+      otherProjects: "Outros Projetos",
+      featured: "Destaque"
+    },
+    projects: {
+      featured: {
+        title: 'Frequência Certa',
+        description: 'Sistema full-stack completo para controle de frequência e gestão acadêmica.',
+        longDescription: 'Desenvolvido como trabalho final e evoluído para uma aplicação robusta com painéis administrativos, controle de presença em tempo real, relatórios automatizados em PDF e integração com Google Gemini para análise de desempenho.',
+        techs: ['PHP', 'Laravel', 'MySQL', 'Bootstrap', 'MVC'],
+        links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
+        cta: { text: "Visitar", link: "https://frequenciacerta.app.br" },
+        images: [
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174439.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174444.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174450.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174455.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174459.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174509.png'
+        ],
+        isFeatured: true,
+      },
+      main: [
+        {
+          title: 'Dashboard Financeiro',
+          description: 'Sistema em tempo real para gestão de ativos e passivos.',
+          longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
+          techs: ['React', 'JS', 'Firebase'],
+          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
+          cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
+          images: [
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
+          ],
+        },
+        {
+          title: 'TikTok Downloader',
+          description: 'App Android para download de vídeos sem marca d\'água.',
+          longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
+          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
+          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
+          cta: { text: "Baixar", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
+          images: [
+            '/projects/tiktok downloader/preview.jpeg',
+            '/projects/tiktok downloader/preview2.jpeg'
+          ],
+        },
+        {
+          title: 'A Ordem Survived',
+          description: 'Portal imersivo para servidor de DayZ com foco em performance.',
+          longDescription: 'Website promocional com alto impacto visual, demonstrando as principais funcionalidades do servidor.',
+          techs: ['HTML5', 'Tailwind', 'JS'],
+          links: { demo: '#' },
+          cta: { text: "Em breve" },
+          images: [
+            '/projects/aordem/Captura de tela 2026-02-08 201323.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201331.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201334.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201434.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201339.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201342.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201347.png'
+          ],
+        },
+        {
+          title: 'Sollux Engenharia',
+          description: 'Landing page de alta conversão para serviços elétricos.',
+          longDescription: 'Landing page otimizada para SEO e conversão, com formulários de contato integrados e design responsivo moderno.',
+          techs: ['HTML5', 'Tailwind', 'JS'],
+          links: {},
+          cta: { text: "Em breve" },
+          images: [
+            '/projects/eletricidade/Captura de tela 2026-02-10 174112.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174117.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174125.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174129.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174140.png'
+          ],
+        }
+      ],
+      other: [
+        { name: 'Nutrika', tech: 'Next.js & React' },
+        { name: 'Biblioteca API', tech: 'PHP & Laravel' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
+      ]
+    },
+    education: {
+      title: "Formação",
+      items: [
+        {
+          title: "Técnico em Desenvolvimento de Sistemas",
+          institution: "Proz Educação • 2024 — 2026",
+          dotColor: "bg-[#0A84FF]",
+          textColor: "text-white"
+        },
+        {
+          title: "Ensino Médio Completo",
+          institution: "Escola Estadual Professora Dilma Quadros • 2023 — 2025",
+          dotColor: "bg-zinc-800",
+          textColor: "text-zinc-400"
+        }
+      ]
+    }
+  },
+  en: {
+    hero: {
+      role: "Full-Stack Developer",
+      bio: (age: React.ReactNode) => (
+        <>
+          <strong className="text-white font-medium">Full-Stack Developer</strong>, {age} years old, building real web applications with <span className="text-[#0A84FF]">PHP</span>, <span className="text-cyan-400">React</span> and <span className="text-blue-400">TypeScript</span>.
+        </>
+      ),
+      stackTitle: "Main Tech Stack",
+      contactTitle: "Let's Talk"
+    },
+    sections: {
+      projects: "My Projects",
+      otherProjects: "Other Projects",
+      featured: "Featured"
+    },
+    projects: {
+      featured: {
+        title: 'Frequência Certa',
+        description: 'Complete full-stack system for attendance control and academic management.',
+        longDescription: 'Developed as a final thesis and evolved into a robust application with administrative dashboards, real-time attendance tracking, automated PDF reports, and Google Gemini integration for performance analysis.',
+        techs: ['PHP', 'Laravel', 'MySQL', 'Bootstrap', 'MVC'],
+        links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
+        images: [
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174439.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174444.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174450.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174455.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174459.png',
+          '/projects/frequencia certa/Captura de tela 2026-02-10 174509.png'
+        ],
+        isFeatured: true,
+      },
+      main: [
+        {
+          title: 'Finance Dashboard',
+          description: 'Real-time system for asset and liability management.',
+          longDescription: 'A modern and interactive dashboard for personal finance management, allowing users to add, view, edit, and delete income and expense transactions. The application features financial summaries and graphical visualizations for clear data analysis.',
+          techs: ['React', 'JS', 'Firebase'],
+          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
+          images: [
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
+          ],
+        },
+        {
+          title: 'TikTok Downloader',
+          description: 'Android app for downloading watermak-free videos.',
+          longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
+          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
+          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
+          images: [
+            '/projects/tiktok downloader/preview.jpeg',
+            '/projects/tiktok downloader/preview2.jpeg'
+          ],
+        },
+        {
+          title: 'A Ordem Survived',
+          description: 'Immersive portal for DayZ server focused on performance.',
+          longDescription: 'Promotional website with high visual impact, demonstrating key server functionalities.',
+          techs: ['HTML5', 'Tailwind', 'JS'],
+          links: { demo: '#' },
+          images: [
+            '/projects/aordem/Captura de tela 2026-02-08 201323.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201331.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201334.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201434.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201339.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201342.png',
+            '/projects/aordem/Captura de tela 2026-02-08 201347.png'
+          ],
+        },
+        {
+          title: 'Sollux Engineering',
+          description: 'High-conversion landing page for electrical services.',
+          longDescription: 'SEO and conversion optimized landing page, with integrated contact forms and modern responsive design.',
+          techs: ['HTML5', 'Tailwind', 'JS'],
+          links: {},
+          images: [
+            '/projects/eletricidade/Captura de tela 2026-02-10 174112.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174117.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174125.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174129.png',
+            '/projects/eletricidade/Captura de tela 2026-02-10 174140.png'
+          ],
+        }
+      ],
+      other: [
+        { name: 'Nutrika', tech: 'Next.js & React' },
+        { name: 'Library API', tech: 'PHP & Laravel' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
+      ]
+    },
+    education: {
+      title: "Education",
+      items: [
+        {
+          title: "Systems Development Technician",
+          institution: "Proz Education • 2024 — 2026",
+          dotColor: "bg-[#0A84FF]",
+          textColor: "text-white"
+        },
+        {
+          title: "High School Diploma",
+          institution: "State School Professora Dilma Quadros • 2023 — 2025",
+          dotColor: "bg-zinc-800",
+          textColor: "text-zinc-400"
+        }
+      ]
+    }
+  }
+};
 
 // --- COMPONENTS ---
 
@@ -187,14 +341,14 @@ const SectionHeading = ({ children, number }: { children: string, number: string
 );
 
 const StackBadge = ({ name, color, children }: { name: string, color: string, children: React.ReactNode }) => (
-  <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border bg-opacity-10 backdrop-blur-sm transition-all hover:scale-105 select-none cursor-default ${color}`}>
+  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border bg-opacity-5 backdrop-blur-sm transition-all hover:scale-105 select-none cursor-default ${color}`}>
     {children}
-    <span className="font-semibold text-xs tracking-wide">{name}</span>
+    <span className="font-medium text-[11px] tracking-wide">{name}</span>
   </div>
 );
 
 const Badge = ({ children }: { children: React.ReactNode }) => (
-  <span className="font-mono text-[10px] uppercase tracking-wider px-2 py-1 rounded-sm border border-zinc-800 bg-zinc-900/50 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors cursor-default">
+  <span className="font-medium text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-200 transition-colors cursor-default">
     {children}
   </span>
 );
@@ -214,7 +368,7 @@ const AgeCounter = () => {
   if (age === 0) return <span className="w-4 h-4 bg-zinc-800/50 animate-pulse rounded inline-block align-middle ml-1" />;
 
   return (
-    <span className="font-mono text-indigo-400 font-bold tabular-nums">
+    <span className="font-mono text-[#0A84FF] font-bold tabular-nums">
       {age}
     </span>
   );
@@ -227,6 +381,9 @@ export default function Portfolio() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [language, setLanguage] = useState<'pt' | 'en'>('pt');
+
+  const t = content[language];
 
   // Prevent hydration mismatch for checking local storage or random values if any (none here but good practice)
   useEffect(() => {
@@ -286,41 +443,84 @@ export default function Portfolio() {
   }, [selectedProject]);
 
   return (
-    <main className="min-h-screen relative font-sans selection:bg-indigo-500/20 selection:text-indigo-200">
-      {/* Background Texture & Lighting */}
-      <div className="fixed inset-0 bg-[#050505] -z-20" />
-      <div className="bg-noise fixed inset-0 z-50 pointer-events-none opacity-[0.03]" />
+    <main className="min-h-screen relative font-sans selection:bg-[#0A84FF]/30 selection:text-blue-100">
+      {/* Background Texture & Lighting - Apple Style */}
+      <div className="fixed inset-0 bg-[#000000] -z-20" />
+      <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[#0A84FF]/10 blur-[120px] rounded-full -z-10 mix-blend-screen opacity-40" />
+      <div className="fixed bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-[#000000] to-transparent z-0 pointer-events-none" />
 
-      {/* Atmospheric Glows */}
-      <div className="fixed top-[-20%] left-[-10%] w-[600px] h-[600px] bg-indigo-900/10 blur-[150px] rounded-full -z-10" />
-      <div className="fixed bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-emerald-900/10 blur-[150px] rounded-full -z-10" />
+      <div className="max-w-5xl mx-auto px-6 py-24 md:py-32 relative z-10">
 
-      <div className="max-w-3xl mx-auto px-6 py-20 md:py-32 relative z-10">
-
-        {/* --- 1. HEADER --- */}
-        <header className="mb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+        {/* --- 1. HERO --- */}
+        <header className="mb-40 relative flex flex-col items-center text-center">
+          <button
+            onClick={() => setLanguage(l => l === 'pt' ? 'en' : 'pt')}
+            className="fixed top-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-full bg-[#151516]/60 border border-[#1d1d1f] backdrop-blur-xl text-xs font-medium text-[#86868b] hover:text-white hover:bg-[#1c1c1e] transition-all hover:scale-105 shadow-xl group overflow-hidden"
           >
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-6">
+            <Globe size={16} />
+            <div className="flex items-center overflow-hidden">
+              <span className="max-w-[20px] group-hover:max-w-0 opacity-100 group-hover:opacity-0 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                {language.toUpperCase()}
+              </span>
+              <span className="max-w-0 group-hover:max-w-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                {language === 'pt' ? 'Português Brasileiro' : 'English US'}
+              </span>
+            </div>
+          </button>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} // Apple ease
+            className="flex flex-col items-center max-w-3xl"
+          >
+            <div className="mb-6 inline-flex items-center justify-center">
+              <Badge>{t.hero.role}</Badge>
+            </div>
+
+            <h1 className="text-6xl md:text-8xl font-semibold tracking-tighter text-[#F5F5F7] mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
               Nicolas Viana Alves
             </h1>
 
-            <div className="h-1 w-24 bg-indigo-500 mb-8" />
-
-            <p className="text-xl text-zinc-400 font-light leading-relaxed max-w-2xl mb-8">
-              <strong className="text-zinc-100 font-medium">Desenvolvedor Full-Stack</strong> de <AgeCounter /> anos, focado na criação de aplicações web reais utilizando <span className="text-indigo-400">PHP</span>, <span className="text-cyan-400">React</span> e <span className="text-blue-400">TypeScript</span>.
+            <p className="text-2xl text-[#86868b] font-light leading-relaxed max-w-2xl mb-12">
+              {t.hero.bio(<AgeCounter />)}
             </p>
 
+            <div className="flex flex-wrap gap-4 justify-center mb-16">
+              <a
+                href="https://github.com/naicolas-dev"
+                target="_blank"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-zinc-200 transition-all hover:scale-105"
+              >
+                <Github size={20} />
+                <span>GitHub</span>
+              </a>
+
+              <a
+                href="https://www.linkedin.com/in/naicolas-dev/"
+                target="_blank"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 hover:text-white transition-all hover:scale-105"
+              >
+                <Linkedin size={20} />
+                <span>LinkedIn</span>
+              </a>
+
+              <a
+                href="mailto:naicolas.dev@gmail.com"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 hover:text-white transition-all hover:scale-105"
+              >
+                <Mail size={20} />
+                <span>Email</span>
+              </a>
+            </div>
+
             {/* --- STACK SECTION --- */}
-            <div className="mb-10">
-              <h3 className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-4">
-                Tech Stack Principal
+            <div>
+              <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-6">
+                {t.hero.stackTitle}
               </h3>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 justify-center">
                 {stackItems.map((item) => (
                   <StackBadge key={item.name} name={item.name} color={item.color}>
                     {item.icon}
@@ -329,87 +529,67 @@ export default function Portfolio() {
               </div>
             </div>
 
+            {/* Remove Old Contact Section from here as it's now minimal buttons above */}
 
-            <div className="mb-8">
-              <h3 className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-4">Vamos Conversar</h3>
-              <div className="flex flex-wrap gap-4">
-                <a
-                  href="https://github.com/naicolas-br"
-                  target="_blank"
-                  className="flex items-center gap-3 px-6 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-600 hover:bg-zinc-800 hover:scale-105 transition-all duration-300 group"
-                >
-                  <Github size={20} className="text-zinc-400 group-hover:text-white transition-colors" />
-                  <span className="text-zinc-300 font-medium group-hover:text-white">GitHub</span>
-                </a>
-
-                <a
-                  href="https://linkedin.com"
-                  target="_blank"
-                  className="flex items-center gap-3 px-6 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-600 hover:bg-zinc-800 hover:scale-105 transition-all duration-300 group"
-                >
-                  <Linkedin size={20} className="text-zinc-400 group-hover:text-blue-400 transition-colors" />
-                  <span className="text-zinc-300 font-medium group-hover:text-white">LinkedIn</span>
-                </a>
-
-                <a
-                  href="mailto:nicolas.viana.moc@gmail.com"
-                  className="flex items-center gap-3 px-6 py-3 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:border-zinc-600 hover:bg-zinc-800 hover:scale-105 transition-all duration-300 group"
-                >
-                  <Mail size={20} className="text-zinc-400 group-hover:text-emerald-400 transition-colors" />
-                  <span className="text-zinc-300 font-medium group-hover:text-white">Email</span>
-                </a>
-              </div>
-            </div>
           </motion.div>
         </header>
 
 
         {/* --- 2. PROJETOS (Main) --- */}
         <section className="mb-32">
-          <SectionHeading number="1">Meus Projetos</SectionHeading>
+          <SectionHeading number="1">{t.sections.projects}</SectionHeading>
 
           <div className="space-y-16">
 
             {/* DESTAQUE: TCC */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="group relative cursor-pointer"
-              onClick={() => openProject(featuredProject)}
+              className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#1d1d1f] bg-[#151516]/50 backdrop-blur-md hover:border-[#3a3a3c] transition-all duration-500"
+              onClick={() => openProject(t.projects.featured)}
             >
-              <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0A84FF]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-              <div className="relative border border-zinc-800 bg-zinc-900/40 backdrop-blur-sm p-8 rounded-xl hover:border-zinc-700 transition-colors">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
-                    <span className="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-2 block">Destaque Principal (TCC)</span>
-                    <h3 className="text-3xl font-bold text-white mb-2">{featuredProject.title}</h3>
+              <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <span className="text-xs font-medium text-[#0A84FF] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
+                  <h3 className="text-4xl font-semibold text-[#F5F5F7] mb-4 tracking-tight">{t.projects.featured.title}</h3>
+                  <p className="text-[#86868b] leading-relaxed mb-8 text-lg font-light">
+                    {t.projects.featured.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mb-8">
+                    {t.projects.featured.techs.map(t => {
+                      const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
+                      return (
+                        <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
+                          {tech.icon}
+                        </StackBadge>
+                      );
+                    })}
                   </div>
-                  <div className="text-zinc-500 group-hover:text-white transition-colors">
-                    <Github size={24} />
+
+                  <div className="flex gap-4">
+                    <span className="inline-flex items-center gap-2 text-sm font-medium text-white group-hover:text-[#0A84FF] transition-colors">
+                      Ver Detalhes <ArrowRight size={14} />
+                    </span>
                   </div>
                 </div>
 
-                <p className="text-zinc-400 leading-relaxed mb-8 max-w-xl text-lg">
-                  {featuredProject.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {featuredProject.techs.map(t => {
-                    const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
-                    return (
-                      <StackBadge key={t} name={t} color={tech.color}>
-                        {tech.icon}
-                      </StackBadge>
-                    );
-                  })}
-                </div>
-
-                <div className="flex gap-4">
-                  <span className="inline-flex items-center gap-2 text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">
-                    Ver Detalhes do Projeto <ArrowRight size={14} />
-                  </span>
+                <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-white/5 bg-black/50">
+                  {/* Placeholder for project preview or abstract graphic */}
+                  <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
+                    <Globe size={48} strokeWidth={1} />
+                  </div>
+                  {/* If images exist, show the first one blurred or specific */}
+                  {t.projects.featured.images[0] && (
+                    <img
+                      src={t.projects.featured.images[0]}
+                      alt="Project Preview"
+                      className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 transform"
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -417,7 +597,7 @@ export default function Portfolio() {
 
             {/* OUTROS PROJETOS PRINCIPAIS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {mainProjects.map((project, i) => (
+              {t.projects.main.map((project, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
@@ -425,27 +605,27 @@ export default function Portfolio() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => openProject(project)}
-                  className="p-6 border border-zinc-900 bg-zinc-900/20 hover:border-zinc-700 hover:bg-zinc-900/40 rounded-lg transition-all group cursor-pointer"
+                  className="p-8 rounded-2xl border border-[#1d1d1f] bg-[#151516]/40 hover:bg-[#1c1c1e] hover:border-[#3a3a3c] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
                 >
-                  <div className="flex justify-between items-start mb-4">
-                    <h4 className="text-lg font-bold text-zinc-200 group-hover:text-indigo-400 transition-colors">{project.title}</h4>
-                    <Github size={18} className="text-zinc-600 group-hover:text-white transition-colors" />
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <h4 className="text-xl font-semibold text-[#F5F5F7] group-hover:text-white transition-colors tracking-tight">{project.title}</h4>
+                      <div className="p-2 rounded-full bg-[#1c1c1e] text-[#86868b] group-hover:text-white transition-colors">
+                        <ArrowRight size={16} className="-rotate-45" />
+                      </div>
+                    </div>
+
+                    <p className="text-[#86868b] text-sm leading-relaxed mb-6 font-light line-clamp-3">
+                      {project.description}
+                    </p>
                   </div>
 
-                  <p className="text-zinc-500 text-sm leading-relaxed mb-6 h-12 line-clamp-2">
-                    {project.description}
-                  </p>
-
                   <div className="flex flex-wrap gap-2">
-                    {project.techs.map(t => {
-                      const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
-                      return (
-                        <div key={t} className={`flex items-center gap-1.5 px-2 py-1 rounded-md border bg-opacity-10 backdrop-blur-sm select-none cursor-default text-[10px] ${tech.color}`}>
-                          {tech.icon}
-                          <span className="font-semibold tracking-wide">{t}</span>
-                        </div>
-                      );
-                    })}
+                    {project.techs.map(t => (
+                      <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                        {t}
+                      </span>
+                    ))}
                   </div>
                 </motion.div>
               ))}
@@ -456,20 +636,20 @@ export default function Portfolio() {
 
 
         {/* --- 3. OUTROS EXPERIMENTOS --- */}
-        <section className="mb-32">
-          <SectionHeading number="2">Outros Projetos</SectionHeading>
+        <section className="mb-40">
+          <SectionHeading number="2">{t.sections.otherProjects}</SectionHeading>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {otherProjects.map((p, i) => (
+          <div className="divide-y divide-white/5 border-t border-b border-white/5">
+            {t.projects.other.map((p, i) => (
               <motion.div
                 key={i}
-                className="p-4 border border-zinc-900/50 rounded hover:border-zinc-800 transition-colors"
+                className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-default"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
               >
-                <h5 className="text-zinc-300 font-medium text-sm mb-1">{p.name}</h5>
-                <p className="text-zinc-600 text-xs font-mono">{p.tech}</p>
+                <h5 className="text-zinc-300 font-medium text-sm group-hover:text-white transition-colors">{p.name}</h5>
+                <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
               </motion.div>
             ))}
           </div>
@@ -477,44 +657,43 @@ export default function Portfolio() {
 
 
         {/* --- 4. FORMAÇÃO --- */}
-        <section className="mb-32">
-          <SectionHeading number="3">Formação</SectionHeading>
+        <section className="mb-40">
+          <SectionHeading number="3">{t.education.title}</SectionHeading>
 
-          <div className="border-l border-zinc-800 ml-2 space-y-12">
-            <motion.div
-              className="relative pl-8"
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-indigo-500 rounded-full ring-4 ring-[#050505]" />
-              <div className="mb-1">
-                <span className="text-xl font-bold text-white block">Técnico em Desenvolvimento de Sistemas</span>
-                <span className="text-zinc-500 text-sm">Proz Educação • 2024 — 2026</span>
-              </div>
-            </motion.div>
+          <div className="relative space-y-12 pl-4">
+            {/* Timeline Line */}
+            <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
 
-            <motion.div
-              className="relative pl-8"
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-            >
-              <div className="absolute -left-[5px] top-2 w-2.5 h-2.5 bg-zinc-800 rounded-full ring-4 ring-[#050505]" />
-              <div className="mb-1">
-                <span className="text-lg font-medium text-zinc-400 block">Ensino Médio Completo</span>
-                <span className="text-zinc-600 text-sm">Escola Estadual Professora Dilma Quadros • 2023 — 2025</span>
-              </div>
-            </motion.div>
+            {t.education.items.map((item, i) => (
+              <motion.div
+                key={i}
+                className="relative pl-10"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#050505] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
+                <div className="mb-2">
+                  <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
+                  <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </section>
 
 
         {/* --- FOOTER --- */}
-        <footer className="border-t border-zinc-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-zinc-600 text-sm">
-          <p>© 2026 Nicolas Viana Alves</p>
-          <p className="font-mono text-xs">Built with Next.js, Tailwind & Motion</p>
+        <footer className="border-t border-white/5 pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
+          <div className="flex gap-6">
+            <a href="https://github.com/naicolas-dev" className="hover:text-white transition-colors"><Github size={20} /></a>
+            <a href="https://www.linkedin.com/in/naicolas-dev/" className="hover:text-white transition-colors"><Linkedin size={20} /></a>
+            <a href="mailto:naicolas.dev@gmail.com" className="hover:text-white transition-colors"><Mail size={20} /></a>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-blue-400 transition-colors">Nicolas Viana Alves</a></p>
+          </div>
         </footer>
 
       </div>
@@ -534,7 +713,7 @@ export default function Portfolio() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col"
+              className="bg-[#151516] border border-[#1d1d1f] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col"
             >
               {/* Close Button */}
               <button
@@ -630,23 +809,33 @@ export default function Portfolio() {
                   </p>
                 </div>
 
-                <div className="flex gap-4 pt-6 border-t border-zinc-800">
-                  {selectedProject.links.github && (
+                <div className="flex gap-4 pt-6 border-t border-zinc-800 items-center justify-between">
+                  <div className="flex gap-3">
+                    {selectedProject.links.github && (
+                      <a
+                        href={selectedProject.links.github}
+                        target="_blank"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
+                      >
+                        <Github size={16} /> Ver Código
+                      </a>
+                    )}
+                  </div>
+
+                  {selectedProject.cta && (
                     <a
-                      href={selectedProject.links.github}
+                      href={selectedProject.cta.link || '#'}
                       target="_blank"
-                      className="flex items-center gap-2 px-5 py-2.5 bg-zinc-100 text-zinc-900 rounded-lg hover:bg-white transition-colors font-medium text-sm"
+                      onClick={(e) => !selectedProject.cta?.link && e.preventDefault()}
+                      className={`
+                        flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
+                        ${selectedProject.cta.link
+                          ? 'bg-[#0A84FF]/10 hover:bg-[#0A84FF]/20 text-[#0A84FF] hover:text-[#409CFF] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/10 cursor-pointer border border-[#0A84FF]/30'
+                          : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
+                      `}
                     >
-                      <Github size={18} /> Ver Código
-                    </a>
-                  )}
-                  {selectedProject.links.demo && (
-                    <a
-                      href={selectedProject.links.demo}
-                      target="_blank"
-                      className="flex items-center gap-2 px-5 py-2.5 border border-zinc-700 text-zinc-300 rounded-lg hover:bg-zinc-800 hover:text-white transition-colors font-medium text-sm"
-                    >
-                      <ExternalLink size={18} /> Live Demo
+                      {selectedProject.cta.text}
+                      {selectedProject.cta.link && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
                     </a>
                   )}
                 </div>
