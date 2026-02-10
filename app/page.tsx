@@ -10,8 +10,11 @@ import {
 } from 'lucide-react';
 import {
   SiPhp, SiLaravel, SiNextdotjs, SiReact,
-  SiJavascript, SiTailwindcss, SiTypescript
+  SiJavascript, SiTailwindcss, SiTypescript,
+  SiMysql, SiBootstrap, SiNodedotjs, SiHtml5, SiCss3, SiAndroid,
+  SiFirebase, SiKotlin, SiJetpackcompose
 } from 'react-icons/si';
+import { FaJava } from 'react-icons/fa';
 
 // --- TYPES ---
 interface Project {
@@ -25,6 +28,28 @@ interface Project {
 }
 
 // --- DATA SOURCE ---
+
+const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
+  PHP: { icon: <SiPhp size={18} />, color: "bg-[#777BB4]/10 text-[#777BB4] border-[#777BB4]/20" },
+  Laravel: { icon: <SiLaravel size={18} />, color: "bg-[#FF2D20]/10 text-[#FF2D20] border-[#FF2D20]/20" },
+  MySQL: { icon: <SiMysql size={18} />, color: "bg-[#4479A1]/10 text-[#4479A1] border-[#4479A1]/20" },
+  Bootstrap: { icon: <SiBootstrap size={18} />, color: "bg-[#7952B3]/10 text-[#7952B3] border-[#7952B3]/20" },
+  MVC: { icon: <Code2 size={18} />, color: "bg-zinc-500/10 text-zinc-500 border-zinc-500/20" },
+  React: { icon: <SiReact size={18} />, color: "bg-[#61DAFB]/10 text-[#61DAFB] border-[#61DAFB]/20" },
+  TypeScript: { icon: <SiTypescript size={18} />, color: "bg-[#3178C6]/10 text-[#3178C6] border-[#3178C6]/20" },
+  'Node.js': { icon: <SiNodedotjs size={18} />, color: "bg-[#339933]/10 text-[#339933] border-[#339933]/20" },
+  Java: { icon: <FaJava size={18} />, color: "bg-[#007396]/10 text-[#007396] border-[#007396]/20" },
+  'Android SDK': { icon: <SiAndroid size={18} />, color: "bg-[#3DDC84]/10 text-[#3DDC84] border-[#3DDC84]/20" },
+  'API Rest': { icon: <Server size={18} />, color: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" },
+  HTML5: { icon: <SiHtml5 size={18} />, color: "bg-[#E34F26]/10 text-[#E34F26] border-[#E34F26]/20" },
+  CSS3: { icon: <SiCss3 size={18} />, color: "bg-[#1572B6]/10 text-[#1572B6] border-[#1572B6]/20" },
+  JS: { icon: <SiJavascript size={18} />, color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20" },
+  'Next.js': { icon: <SiNextdotjs size={18} />, color: "bg-zinc-100/10 text-zinc-100 border-zinc-100/20" },
+  Tailwind: { icon: <SiTailwindcss size={18} />, color: "bg-[#38B2AC]/10 text-[#38B2AC] border-[#38B2AC]/20" },
+  Firebase: { icon: <SiFirebase size={18} />, color: "bg-[#FFCA28]/10 text-[#FFCA28] border-[#FFCA28]/20" },
+  Kotlin: { icon: <SiKotlin size={18} />, color: "bg-[#7F52FF]/10 text-[#7F52FF] border-[#7F52FF]/20" },
+  'Jetpack Compose': { icon: <SiJetpackcompose size={18} />, color: "bg-[#4285F4]/10 text-[#4285F4] border-[#4285F4]/20" },
+};
 
 const featuredProject: Project = {
   title: 'Frequência Certa',
@@ -47,8 +72,8 @@ const mainProjects: Project[] = [
   {
     title: 'Dashboard Financeiro',
     description: 'Sistema em tempo real para gestão de ativos e passivos.',
-    longDescription: 'Aplicação complexa de gestão financeira com gráficos interativos, atualizações via WebSocket e suporte a múltiplas moedas.',
-    techs: ['React', 'TypeScript', 'Node.js'],
+    longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
+    techs: ['React', 'JS', 'Firebase'],
     links: { github: 'https://github.com/naicolas-br' },
     images: [
       '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
@@ -60,7 +85,7 @@ const mainProjects: Project[] = [
     title: 'TikTok Downloader',
     description: 'App Android para download de vídeos sem marca d\'água.',
     longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
-    techs: ['Java', 'Android SDK', 'API Rest'],
+    techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
     links: { github: 'https://github.com/naicolas-br' },
     images: [
       '/projects/tiktok downloader/preview.jpeg',
@@ -68,10 +93,10 @@ const mainProjects: Project[] = [
     ],
   },
   {
-    title: 'A Ordem RP',
+    title: 'A Ordem Survived',
     description: 'Portal imersivo para servidor de DayZ com foco em performance.',
-    longDescription: 'Website promocional com alto impacto visual, integrado com status do servidor em tempo real e sistema de whitelist automatizado.',
-    techs: ['HTML5', 'CSS3', 'JS'],
+    longDescription: 'Website promocional com alto impacto visual, demonstrando as principais funcionalidades do servidor.',
+    techs: ['HTML5', 'Tailwind', 'JS'],
     links: { github: 'https://github.com/naicolas-br', demo: '#' },
     images: [
       '/projects/aordem/Captura de tela 2026-02-08 201323.png',
@@ -84,10 +109,10 @@ const mainProjects: Project[] = [
     ],
   },
   {
-    title: 'Landing Page Eletricidade',
-    description: 'Página de alta conversão para serviços elétricos.',
+    title: 'Sollux Engenharia',
+    description: 'Landing page de alta conversão para serviços elétricos.',
     longDescription: 'Landing page otimizada para SEO e conversão, com formulários de contato integrados e design responsivo moderno.',
-    techs: ['Next.js', 'Tailwind'],
+    techs: ['HTML5', 'Tailwind', 'JS'],
     links: { github: 'https://github.com/naicolas-br' },
     images: [
       '/projects/eletricidade/Captura de tela 2026-02-10 174112.png',
@@ -139,9 +164,9 @@ const stackItems = [
 ];
 
 const otherProjects = [
-  { name: 'To-Do List API', tech: 'Node.js' },
-  { name: 'Chat em Tempo Real', tech: 'Socket.io' },
-  { name: 'Portfólio v1', tech: 'HTML/CSS' },
+  { name: 'Nutrika', tech: 'Next.js & React' },
+  { name: 'Biblioteca API', tech: 'PHP & Laravel' },
+  { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
 ];
 
 // --- COMPONENTS ---
@@ -174,17 +199,46 @@ const Badge = ({ children }: { children: React.ReactNode }) => (
   </span>
 );
 
+const AgeCounter = () => {
+  const [age, setAge] = useState<number>(0);
+
+  useEffect(() => {
+    const birthDate = new Date('2008-03-18T00:00:00');
+
+    const now = new Date();
+    const diff = now.getTime() - birthDate.getTime();
+    const ageInYears = diff / (1000 * 60 * 60 * 24 * 365.25);
+    setAge(Math.floor(ageInYears));
+  }, []);
+
+  if (age === 0) return <span className="w-4 h-4 bg-zinc-800/50 animate-pulse rounded inline-block align-middle ml-1" />;
+
+  return (
+    <span className="font-mono text-indigo-400 font-bold tabular-nums">
+      {age}
+    </span>
+  );
+};
+
 // --- MAIN PAGE ---
 
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent hydration mismatch for checking local storage or random values if any (none here but good practice)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const openProject = (project: Project) => {
     setSelectedProject(project);
     setCurrentImageIndex(0);
   };
+
+
 
   const prevImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -217,6 +271,18 @@ export default function Portfolio() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
+  }, [selectedProject, isFullScreen]);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
   }, [selectedProject]);
 
   return (
@@ -245,7 +311,7 @@ export default function Portfolio() {
             <div className="h-1 w-24 bg-indigo-500 mb-8" />
 
             <p className="text-xl text-zinc-400 font-light leading-relaxed max-w-2xl mb-8">
-              <strong className="text-zinc-100 font-medium">Full-Stack Developer</strong> construindo aplicações web reais com <span className="text-indigo-400">PHP</span>, <span className="text-cyan-400">React</span> e <span className="text-blue-400">TypeScript</span>.
+              <strong className="text-zinc-100 font-medium">Desenvolvedor Full-Stack</strong> de <AgeCounter /> anos, focado na criação de aplicações web reais utilizando <span className="text-indigo-400">PHP</span>, <span className="text-cyan-400">React</span> e <span className="text-blue-400">TypeScript</span>.
             </p>
 
             {/* --- STACK SECTION --- */}
@@ -330,7 +396,14 @@ export default function Portfolio() {
                 </p>
 
                 <div className="flex flex-wrap gap-2 mb-8">
-                  {featuredProject.techs.map(t => <Badge key={t}>{t}</Badge>)}
+                  {featuredProject.techs.map(t => {
+                    const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
+                    return (
+                      <StackBadge key={t} name={t} color={tech.color}>
+                        {tech.icon}
+                      </StackBadge>
+                    );
+                  })}
                 </div>
 
                 <div className="flex gap-4">
@@ -364,7 +437,15 @@ export default function Portfolio() {
                   </p>
 
                   <div className="flex flex-wrap gap-2">
-                    {project.techs.map(t => <Badge key={t}>{t}</Badge>)}
+                    {project.techs.map(t => {
+                      const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
+                      return (
+                        <div key={t} className={`flex items-center gap-1.5 px-2 py-1 rounded-md border bg-opacity-10 backdrop-blur-sm select-none cursor-default text-[10px] ${tech.color}`}>
+                          {tech.icon}
+                          <span className="font-semibold tracking-wide">{t}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </motion.div>
               ))}
@@ -376,7 +457,7 @@ export default function Portfolio() {
 
         {/* --- 3. OUTROS EXPERIMENTOS --- */}
         <section className="mb-32">
-          <SectionHeading number="2">Outros Estudos</SectionHeading>
+          <SectionHeading number="2">Outros Projetos</SectionHeading>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {otherProjects.map((p, i) => (
@@ -532,9 +613,16 @@ export default function Portfolio() {
 
               <div className="p-8">
                 <h3 className="text-3xl font-bold text-white mb-2">{selectedProject.title}</h3>
-                <p className="text-zinc-500 font-mono text-sm mb-6 flex flex-wrap gap-2">
-                  {selectedProject.techs.map(t => <span key={t} className="text-indigo-400">#{t}</span>)}
-                </p>
+                <div className="mb-6 flex flex-wrap gap-2">
+                  {selectedProject.techs.map(t => {
+                    const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
+                    return (
+                      <StackBadge key={t} name={t} color={tech.color}>
+                        {tech.icon}
+                      </StackBadge>
+                    );
+                  })}
+                </div>
 
                 <div className="prose prose-invert prose-zinc max-w-none mb-8">
                   <p className="text-lg leading-relaxed text-zinc-300">
