@@ -196,7 +196,7 @@ const content: Record<'pt' | 'en', Content> = {
       ],
       other: [
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/portfolio-whatsapp' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://whatsapp-portfolio.vercel.app' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
         { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
@@ -315,7 +315,7 @@ const content: Record<'pt' | 'en', Content> = {
       ],
       other: [
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/portfolio-whatsapp' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://whatsapp-portfolio.vercel.app' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
         { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
