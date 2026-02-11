@@ -2,7 +2,7 @@ import { Sora, JetBrains_Mono } from 'next/font/google'
 import "./globals.css";
 
 export const metadata = {
-  title: 'Naicolas',
+  title: 'Nicolas Viana Alves',
   description: 'Portfolio of Nicolas Viana Alves',
 };
 
