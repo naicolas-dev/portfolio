@@ -18,6 +18,7 @@ import {
 import { FaJava } from 'react-icons/fa';
 
 import { TabTitleHandler } from './components/TabTitleHandler';
+import { LocationIndicator } from './components/LocationIndicator';
 
 // --- TYPES ---
 interface Project {
@@ -446,12 +447,42 @@ export default function Portfolio() {
           >
             <Globe size={16} />
             <div className="flex items-center overflow-hidden">
-              <span className="max-w-[20px] group-hover:max-w-0 opacity-100 group-hover:opacity-0 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
-                {language.toUpperCase()}
-              </span>
-              <span className="max-w-0 group-hover:max-w-[200px] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
-                {language === 'pt' ? 'Português Brasileiro' : 'English US'}
-              </span>
+              <AnimatePresence mode="wait">
+                {language === 'pt' ? (
+                  <motion.div
+                    key="pt"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center text-xs"
+                  >
+                    <span>p</span>
+                    <span className="max-w-0 group-hover:max-w-[20px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">or</span>
+                    <span>t</span>
+                    <span className="max-w-0 group-hover:max-w-[45px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">uguês</span>
+                    <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">-</span>
+                    <span className="max-w-0 group-hover:max-w-[10px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">&nbsp;</span>
+                    <span>B</span>
+                    <span className="max-w-0 group-hover:max-w-[70px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">rasileiro</span>
+                    <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">R</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="en"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center text-xs"
+                  >
+                    <span>en</span>
+                    <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">-</span>
+                    <span className="max-w-0 group-hover:max-w-[40px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">glish&nbsp;</span>
+                    <span>US</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </button>
 
@@ -465,9 +496,11 @@ export default function Portfolio() {
               <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter text-white mb-6 leading-[0.9]">
                 Nicolas V. Alves
               </h1>
-              <p className="text-[18px] md:text-[22px] text-[#A1A1AA] font-normal leading-relaxed max-w-[600px] mb-12">
+              <p className="text-[18px] md:text-[22px] text-[#A1A1AA] font-normal leading-relaxed max-w-[600px] mb-6">
                 {t.hero.subtext}
               </p>
+
+              <LocationIndicator language={language} />
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center mb-16">
