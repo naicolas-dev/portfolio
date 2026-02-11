@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { track } from '@vercel/analytics';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import {
   Github, Linkedin, Mail, ArrowRight, X,
@@ -668,7 +669,10 @@ export default function Portfolio() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
               <button
-                onClick={() => document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  track('Hero CTA Click', { action: 'Scroll to Projects' });
+                  document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
                 className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-[#E2C17D] text-black font-bold hover:bg-[#f2d18d] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(226,193,125,0.15)] overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -690,6 +694,7 @@ export default function Portfolio() {
                 <a
                   href="https://github.com/naicolas-dev"
                   target="_blank"
+                  onClick={() => track('Social Click', { platform: 'Github', location: 'Header' })}
                   className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
                 >
                   <Github size={24} />
@@ -698,6 +703,7 @@ export default function Portfolio() {
                 <a
                   href="https://www.linkedin.com/in/naicolas-dev/"
                   target="_blank"
+                  onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Header' })}
                   className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
                 >
                   <Linkedin size={24} />
@@ -705,6 +711,7 @@ export default function Portfolio() {
 
                 <a
                   href="mailto:naicolas.dev@gmail.com"
+                  onClick={() => track('Social Click', { platform: 'Mail', location: 'Header' })}
                   className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
                 >
                   <Mail size={24} />
@@ -790,7 +797,10 @@ export default function Portfolio() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#2d2d2d] bg-[#202020] transition-all duration-300"
-                onClick={() => openProject(t.projects.featured)}
+                onClick={() => {
+                  track('Project Click', { project: t.projects.featured.title, type: 'Featured' });
+                  openProject(t.projects.featured);
+                }}
               >
 
                 <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
@@ -846,7 +856,10 @@ export default function Portfolio() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    onClick={() => openProject(project)}
+                    onClick={() => {
+                      track('Project Click', { project: project.title, type: 'Main' });
+                      openProject(project);
+                    }}
                     className="p-8 rounded-2xl border border-[#2d2d2d] bg-[#202020]/50 hover:bg-[#202020] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
                   >
                     <div>
@@ -897,6 +910,7 @@ export default function Portfolio() {
                   href={p.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => track('Project Click', { project: p.name, type: 'Other' })}
                   className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -984,6 +998,7 @@ export default function Portfolio() {
 
                 <a
                   href="mailto:naicolas.dev@gmail.com"
+                  onClick={() => track('Contact CTA Click', { location: 'Footer Section' })}
                   className="px-10 py-4 rounded-full bg-[#E2C17D] text-black font-bold text-lg hover:bg-[#f2d18d] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(226,193,125,0.1)] group flex items-center gap-3"
                 >
                   <Mail size={20} />
@@ -999,9 +1014,9 @@ export default function Portfolio() {
         {/* --- FOOTER --- */}
         <footer className="border-t border-[#2d2d2d] pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
           <div className="flex gap-6">
-            <a href="https://github.com/naicolas-dev" className="hover:text-white transition-colors"><Github size={20} /></a>
-            <a href="https://www.linkedin.com/in/naicolas-dev/" className="hover:text-white transition-colors"><Linkedin size={20} /></a>
-            <a href="mailto:naicolas.dev@gmail.com" className="hover:text-white transition-colors"><Mail size={20} /></a>
+            <a href="https://github.com/naicolas-dev" onClick={() => track('Social Click', { platform: 'Github', location: 'Footer' })} className="hover:text-white transition-colors"><Github size={20} /></a>
+            <a href="https://www.linkedin.com/in/naicolas-dev/" onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Footer' })} className="hover:text-white transition-colors"><Linkedin size={20} /></a>
+            <a href="mailto:naicolas.dev@gmail.com" onClick={() => track('Social Click', { platform: 'Mail', location: 'Footer' })} className="hover:text-white transition-colors"><Mail size={20} /></a>
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-[#E2C17D] transition-colors">Nicolas Viana Alves</a></p>
@@ -1183,6 +1198,7 @@ export default function Portfolio() {
                         <a
                           href={selectedProject.links.github}
                           target="_blank"
+                          onClick={() => track('Project Link Click', { project: selectedProject.title, type: 'Github' })}
                           className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
                         >
                           <Github size={16} /> {t.projects.viewCode}
@@ -1194,7 +1210,13 @@ export default function Portfolio() {
                       <a
                         href={selectedProject.cta.link || '#'}
                         target="_blank"
-                        onClick={(e) => !selectedProject.cta?.link && e.preventDefault()}
+                        onClick={(e) => {
+                          if (!selectedProject.cta?.link) {
+                            e.preventDefault();
+                          } else {
+                            track('Project Link Click', { project: selectedProject.title, type: 'CTA' });
+                          }
+                        }}
                         className={`
                           flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
                           ${selectedProject.cta.link
