@@ -457,7 +457,7 @@ export default function Portfolio() {
   }, [selectedProject]);
 
   return (
-    <main className="min-h-screen relative font-sans selection:bg-[#0A84FF]/30 selection:text-blue-100">
+    <main className="min-h-screen relative font-sans selection:bg-[#0A84FF]/30 selection:text-blue-100 overflow-x-hidden">
       <TabTitleHandler language={language} />
       {/* Background Texture & Lighting - Apple Style */}
       <div className="fixed inset-0 bg-[#000000] -z-20" />
@@ -517,7 +517,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 30, filter: 'blur(10px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} // Apple ease
-            className="flex flex-col items-center max-w-3xl"
+            className="flex flex-col items-center"
           >
             <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
               <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter text-white mb-6 leading-[0.9]">
@@ -571,43 +571,48 @@ export default function Portfolio() {
 
             {/* --- STACK SECTION (INTERACTIVE) --- */}
             <div
-              className="h-12 flex items-center justify-center cursor-default"
+              className="h-12 relative flex items-center justify-center cursor-default w-full group"
               onMouseEnter={() => setIsStackHovered(true)}
               onMouseLeave={() => setIsStackHovered(false)}
             >
-              <AnimatePresence mode="wait">
-                {!isStackHovered ? (
-                  <motion.div
-                    key={`text-${language}`}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-2 group cursor-default transition-all"
-                  >
-                    <Layers size={14} className="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
-                    <span className="text-zinc-500 text-sm font-medium group-hover:text-zinc-300 transition-colors">{t.hero.stackLabel}:</span>
-                    <span className="text-zinc-600 text-sm font-light tracking-wide group-hover:text-zinc-400 transition-colors">
-                      {t.hero.stackTeaser}
-                    </span>
-                    <Plus size={14} className="text-zinc-700 group-hover:text-zinc-500 transition-colors ml-1 opacity-50 group-hover:opacity-100" />
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="badges"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    className="flex flex-wrap gap-2 justify-center"
-                  >
-                    {stackItems.map((item) => (
-                      <StackBadge key={item.name} name={item.name} color={item.color}>
-                        {item.icon}
-                      </StackBadge>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Trigger horizontal da esquerda à direita sem afetar o layout */}
+              <div className="absolute inset-x-[-100vw] top-0 bottom-0 z-0 bg-transparent" />
+
+              <div className="relative z-10 flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  {!isStackHovered ? (
+                    <motion.div
+                      key={`text-${language}`}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-2 group cursor-default transition-all"
+                    >
+                      <Layers size={14} className="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+                      <span className="text-zinc-500 text-sm font-medium group-hover:text-zinc-300 transition-colors">{t.hero.stackLabel}:</span>
+                      <span className="text-zinc-600 text-sm font-light tracking-wide group-hover:text-zinc-400 transition-colors">
+                        {t.hero.stackTeaser}
+                      </span>
+                      <Plus size={14} className="text-zinc-700 group-hover:text-zinc-500 transition-colors ml-1 opacity-50 group-hover:opacity-100" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="badges"
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      className="flex flex-wrap gap-2 justify-center"
+                    >
+                      {stackItems.map((item) => (
+                        <StackBadge key={item.name} name={item.name} color={item.color}>
+                          {item.icon}
+                        </StackBadge>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
 
             {/* Remove Old Contact Section from here as it's now minimal buttons above */}
