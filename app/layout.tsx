@@ -1,4 +1,5 @@
 import { Sora, JetBrains_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import "./globals.css";
 
 export const metadata = {
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR" className={`${sora.variable} ${mono.variable}`}>
       <body className="bg-[#191919] text-zinc-200 antialiased selection:bg-[#E2C17D]/30 selection:text-amber-100">
         {children}
+        <Analytics />
       </body>
     </html>
   );
