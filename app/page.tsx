@@ -7,7 +7,7 @@ import {
   Globe,
   Server, Code2,
   ChevronLeft, ChevronRight,
-  Plus, Layers
+  Plus, Layers, ArrowUpRight
 } from 'lucide-react';
 import {
   SiPhp, SiLaravel, SiNextdotjs, SiReact,
@@ -45,7 +45,7 @@ interface Content {
   projects: {
     featured: Project;
     main: Project[];
-    other: { name: string; tech: string }[];
+    other: { name: string; tech: string; link: string }[];
     viewCode: string;
   };
   education: {
@@ -188,9 +188,12 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
-        { name: 'Nutrika', tech: 'Next.js & React' },
-        { name: 'Biblioteca API', tech: 'PHP & Laravel' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
+        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/portfolio-whatsapp' },
+        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
+        { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
+        { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
+        { name: 'Gestor de Segurança', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
       ],
       viewCode: 'Abrir no GitHub',
     },
@@ -301,9 +304,12 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
-        { name: 'Nutrika', tech: 'Next.js & React' },
-        { name: 'Library API', tech: 'PHP & Laravel' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
+        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
+        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/portfolio-whatsapp' },
+        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
+        { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
+        { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
+        { name: 'Security Manager', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
       ],
       viewCode: 'View on GitHub',
     },
@@ -644,16 +650,22 @@ export default function Portfolio() {
 
           <div className="divide-y divide-white/5 border-t border-b border-white/5">
             {t.projects.other.map((p, i) => (
-              <motion.div
+              <motion.a
                 key={i}
-                className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-default"
+                href={p.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
               >
                 <h5 className="text-zinc-300 font-medium text-sm group-hover:text-white transition-colors">{p.name}</h5>
-                <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
-              </motion.div>
+                <div className="flex items-center gap-3">
+                  <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
+                  <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-white transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
+                </div>
+              </motion.a>
             ))}
           </div>
         </section>
