@@ -45,7 +45,7 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="relative overflow-hidden h-8 px-5 rounded-full bg-[#202020] border border-[#2d2d2d] backdrop-blur-sm hover:bg-[#252525] hover:border-[#353535] transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
+            <div className="relative overflow-hidden h-8 px-5 rounded-full bg-[#202020] border border-[#2d2d2d] sm:backdrop-blur-sm hover:bg-[#252525] hover:border-[#353535] transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
 
                 {/* Location View */}
                 <div className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${actuallyShowingTime ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
