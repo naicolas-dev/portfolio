@@ -42,6 +42,9 @@ interface Content {
     projects: string;
     otherProjects: string;
     featured: string;
+    heroCTA: string;
+    exploreProject: string;
+    letsConnect: string;
   };
   projects: {
     featured: Project;
@@ -102,14 +105,17 @@ const stackItems = [
 const content: Record<'pt' | 'en', Content> = {
   pt: {
     hero: {
-      subtext: "Desenvolvedor focado na criação de aplicações web completas e experiências digitais de alto nível.",
+      subtext: "Desenvolvedor Full-Stack focado em transformar problemas reais e complexos em sistemas web robustos e escaláveis com Laravel, Next.js e mais.",
       stackTeaser: "PHP · Javascript · Typescript e mais",
       stackLabel: "Stack Principal",
     },
     sections: {
       projects: "Meus Projetos",
       otherProjects: "Outros Projetos",
-      featured: "Destaque"
+      featured: "Destaque",
+      heroCTA: "Ver Meus Projetos",
+      exploreProject: "Explorar Projeto",
+      letsConnect: "Vamos Conversar"
     },
     projects: {
       featured: {
@@ -204,7 +210,7 @@ const content: Record<'pt' | 'en', Content> = {
         {
           title: "Técnico em Desenvolvimento de Sistemas",
           institution: "Proz Educação • 2024 — 2026",
-          dotColor: "bg-[#0A84FF]",
+          dotColor: "bg-[#E2C17D]",
           textColor: "text-white"
         },
         {
@@ -218,14 +224,17 @@ const content: Record<'pt' | 'en', Content> = {
   },
   en: {
     hero: {
-      subtext: "Developer focused on building complete web applications and high-level digital experiences.",
+      subtext: "Full-Stack Developer focused on turning complex and real problems into robust, scalable web systems with Laravel, Next.js and more.",
       stackTeaser: "PHP · Javascript · Typescript and more",
       stackLabel: "Main Stack",
     },
     sections: {
       projects: "My Projects",
       otherProjects: "Other Projects",
-      featured: "Featured"
+      featured: "Featured",
+      heroCTA: "View My Projects",
+      exploreProject: "Explore Project",
+      letsConnect: "Let's Connect"
     },
     projects: {
       featured: {
@@ -320,7 +329,7 @@ const content: Record<'pt' | 'en', Content> = {
         {
           title: "Systems Development Technician",
           institution: "Proz Education • 2024 — 2026",
-          dotColor: "bg-[#0A84FF]",
+          dotColor: "bg-[#E2C17D]",
           textColor: "text-white"
         },
         {
@@ -356,13 +365,13 @@ const SectionHeading = ({ children, number }: { children: string, number: string
           {children}
         </motion.span>
       </AnimatePresence>
-      <div className="h-px w-32 bg-zinc-800/50" />
+      <div className="h-px w-32 bg-[#2d2d2d]" />
     </h2>
   </motion.div>
 );
 
 const StackBadge = ({ name, color, children }: { name: string, color: string, children: React.ReactNode }) => (
-  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border bg-opacity-5 backdrop-blur-sm transition-all hover:scale-105 select-none cursor-default ${color}`}>
+  <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#2d2d2d] bg-zinc-800/10 transition-all hover:bg-zinc-800/20 select-none cursor-default ${color}`}>
     {children}
     <span className="font-medium text-[11px] tracking-wide">{name}</span>
   </div>
@@ -457,12 +466,10 @@ export default function Portfolio() {
   }, [selectedProject]);
 
   return (
-    <main className="min-h-screen relative font-sans selection:bg-[#0A84FF]/30 selection:text-blue-100 overflow-x-hidden">
+    <main className="min-h-screen relative font-sans selection:bg-[#E2C17D]/30 selection:text-amber-100 overflow-x-hidden">
       <TabTitleHandler language={language} />
       {/* Background Texture & Lighting - Apple Style */}
-      <div className="fixed inset-0 bg-[#000000] -z-20" />
-      <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-[#0A84FF]/10 blur-[120px] rounded-full -z-10 mix-blend-screen opacity-40" />
-      <div className="fixed bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-[#000000] to-transparent z-0 pointer-events-none" />
+      <div className="fixed inset-0 bg-[#191919] -z-20" />
 
       <div className="max-w-5xl mx-auto px-6 py-24 md:py-32 relative z-10">
 
@@ -470,7 +477,7 @@ export default function Portfolio() {
         <header className="mb-40 relative flex flex-col items-center text-center">
           <button
             onClick={() => setLanguage(l => l === 'pt' ? 'en' : 'pt')}
-            className="fixed top-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-full bg-[#151516]/60 border border-[#1d1d1f] backdrop-blur-xl text-xs font-medium text-[#86868b] hover:text-white hover:bg-[#1c1c1e] transition-all hover:scale-105 shadow-xl group overflow-hidden"
+            className="fixed top-6 right-6 z-50 flex items-center gap-2 px-3 py-2 rounded-full bg-[#252525] border border-[#3d3d3d] backdrop-blur-xl text-xs font-medium text-zinc-100 hover:text-white hover:bg-[#303030] hover:border-[#4d4d4d] transition-all hover:scale-105 shadow-xl group overflow-hidden"
           >
             <Globe size={16} />
             <div className="flex items-center overflow-hidden">
@@ -541,32 +548,40 @@ export default function Portfolio() {
               </AnimatePresence>
             </div>
 
-            <div className="flex flex-wrap gap-4 justify-center mb-16">
-              <a
-                href="https://github.com/naicolas-dev"
-                target="_blank"
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-white text-black font-medium hover:bg-zinc-200 transition-all hover:scale-105"
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+              <button
+                onClick={() => document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-[#E2C17D] text-black font-bold hover:bg-[#f2d18d] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(226,193,125,0.15)] overflow-hidden"
               >
-                <Github size={20} />
-                <span>GitHub</span>
-              </a>
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                <span>{t.sections.heroCTA}</span>
+              </button>
 
-              <a
-                href="https://www.linkedin.com/in/naicolas-dev/"
-                target="_blank"
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 hover:text-white transition-all hover:scale-105"
-              >
-                <Linkedin size={20} />
-                <span>LinkedIn</span>
-              </a>
+              <div className="flex gap-4">
+                <a
+                  href="https://github.com/naicolas-dev"
+                  target="_blank"
+                  className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
+                >
+                  <Github size={24} />
+                </a>
 
-              <a
-                href="mailto:naicolas.dev@gmail.com"
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 font-medium hover:bg-zinc-800 hover:text-white transition-all hover:scale-105"
-              >
-                <Mail size={20} />
-                <span>Email</span>
-              </a>
+                <a
+                  href="https://www.linkedin.com/in/naicolas-dev/"
+                  target="_blank"
+                  className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
+                >
+                  <Linkedin size={24} />
+                </a>
+
+                <a
+                  href="mailto:naicolas.dev@gmail.com"
+                  className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110"
+                >
+                  <Mail size={24} />
+                </a>
+              </div>
             </div>
 
             {/* --- STACK SECTION (INTERACTIVE) --- */}
@@ -622,7 +637,7 @@ export default function Portfolio() {
 
 
         {/* --- 2. PROJETOS (Main) --- */}
-        <section className="mb-32">
+        <section id="projects-section" className="mb-32">
           <SectionHeading number="1">{t.sections.projects}</SectionHeading>
 
           <AnimatePresence mode="wait">
@@ -640,14 +655,13 @@ export default function Portfolio() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#1d1d1f] bg-[#151516]/50 backdrop-blur-md hover:border-[#3a3a3c] transition-all duration-500"
+                className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#2d2d2d] bg-[#202020] transition-all duration-300"
                 onClick={() => openProject(t.projects.featured)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#0A84FF]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                 <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
                   <div>
-                    <span className="text-xs font-medium text-[#0A84FF] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
+                    <span className="text-xs font-medium text-[#E2C17D] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
                     <h3 className="text-4xl font-semibold text-[#F5F5F7] mb-4 tracking-tight">{t.projects.featured.title}</h3>
                     <p className="text-[#86868b] leading-relaxed mb-8 text-lg font-light">
                       {t.projects.featured.description}
@@ -665,8 +679,8 @@ export default function Portfolio() {
                     </div>
 
                     <div className="flex gap-4">
-                      <span className="inline-flex items-center gap-2 text-sm font-medium text-white group-hover:text-[#0A84FF] transition-colors">
-                        {language === 'pt' ? 'Ver Detalhes' : 'View Details'} <ArrowRight size={14} />
+                      <span className="inline-flex items-center gap-2 text-sm font-bold text-white group-hover:text-[#E2C17D] transition-colors">
+                        {language === 'pt' ? 'Explorar Projeto' : 'Explore Project'} <ArrowRight size={14} />
                       </span>
                     </div>
                   </div>
@@ -699,7 +713,7 @@ export default function Portfolio() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                     onClick={() => openProject(project)}
-                    className="p-8 rounded-2xl border border-[#1d1d1f] bg-[#151516]/40 hover:bg-[#1c1c1e] hover:border-[#3a3a3c] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
+                    className="p-8 rounded-2xl border border-[#2d2d2d] bg-[#202020]/50 hover:bg-[#202020] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
                   >
                     <div>
                       <div className="flex justify-between items-start mb-6">
@@ -791,7 +805,7 @@ export default function Portfolio() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#050505] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
+                  <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#191919] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
                   <div className="mb-2">
                     <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
                     <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
@@ -803,15 +817,48 @@ export default function Portfolio() {
         </section>
 
 
+        {/* --- 5. CONTACT CTA --- */}
+        <section className="mb-24 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="p-12 rounded-3xl border border-[#2d2d2d] bg-[#202020] flex flex-col items-center gap-8 relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#E2C17D]/5 blur-[80px] rounded-full -mr-32 -mt-32" />
+
+            <div className="relative z-10">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                {language === 'pt' ? 'Vamos Colaborar?' : "Let's Collaborate"}
+              </h2>
+              <p className="text-zinc-400 text-lg max-w-[500px] mb-2">
+                {language === 'pt'
+                  ? 'Tem um projeto interessante em mente? Vamos transformá-lo em realidade.'
+                  : "Have an interesting project in mind? Let's turn it into reality."}
+              </p>
+            </div>
+
+            <a
+              href="mailto:naicolas.dev@gmail.com"
+              className="px-10 py-4 rounded-full bg-[#E2C17D] text-black font-bold text-lg hover:bg-[#f2d18d] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(226,193,125,0.1)] group flex items-center gap-3"
+            >
+              <Mail size={20} />
+              <span>{language === 'pt' ? 'Me Contrate' : 'Hire Me'}</span>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+          </motion.div>
+        </section>
+
+
         {/* --- FOOTER --- */}
-        <footer className="border-t border-white/5 pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
+        <footer className="border-t border-[#2d2d2d] pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
           <div className="flex gap-6">
             <a href="https://github.com/naicolas-dev" className="hover:text-white transition-colors"><Github size={20} /></a>
             <a href="https://www.linkedin.com/in/naicolas-dev/" className="hover:text-white transition-colors"><Linkedin size={20} /></a>
             <a href="mailto:naicolas.dev@gmail.com" className="hover:text-white transition-colors"><Mail size={20} /></a>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-blue-400 transition-colors">Nicolas Viana Alves</a></p>
+            <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-[#E2C17D] transition-colors">Nicolas Viana Alves</a></p>
           </div>
         </footer>
 
@@ -825,14 +872,14 @@ export default function Portfolio() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#191919]/90 backdrop-blur-md"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[#151516] border border-[#1d1d1f] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col"
+              className="bg-[#202020] border border-[#2d2d2d] rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col"
             >
               {/* Close Button */}
               <button
@@ -844,7 +891,7 @@ export default function Portfolio() {
 
               {/* Carousel Section */}
               <div
-                className="w-full h-64 sm:h-80 bg-zinc-950 relative group flex items-center justify-center overflow-hidden cursor-zoom-in"
+                className="w-full h-64 sm:h-80 bg-[#121212] relative group flex items-center justify-center overflow-hidden cursor-zoom-in"
                 onClick={() => setIsFullScreen(true)}
               >
 
@@ -957,7 +1004,7 @@ export default function Portfolio() {
                         className={`
                           flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
                           ${selectedProject.cta.link
-                            ? 'bg-[#0A84FF]/10 hover:bg-[#0A84FF]/20 text-[#0A84FF] hover:text-[#409CFF] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/10 cursor-pointer border border-[#0A84FF]/30'
+                            ? 'bg-[#E2C17D]/10 hover:bg-[#E2C17D]/20 text-[#E2C17D] hover:text-[#E2C17D] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer border border-[#E2C17D]/30'
                             : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
                         `}
                       >

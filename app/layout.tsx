@@ -12,7 +12,7 @@ const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', weigh
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${sora.variable} ${mono.variable}`}>
-      <body className="bg-[#050505] text-zinc-200 antialiased selection:bg-indigo-500/30 selection:text-indigo-200">
+      <body className="bg-[#191919] text-zinc-200 antialiased selection:bg-[#E2C17D]/30 selection:text-amber-100">
         {children}
       </body>
     </html>

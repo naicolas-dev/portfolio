@@ -45,12 +45,12 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="relative overflow-hidden h-8 px-5 rounded-full bg-zinc-900/30 border border-zinc-800/50 backdrop-blur-sm hover:bg-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
+            <div className="relative overflow-hidden h-8 px-5 rounded-full bg-[#202020] border border-[#2d2d2d] backdrop-blur-sm hover:bg-[#252525] hover:border-[#353535] transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
 
                 {/* Location View */}
                 <div className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${actuallyShowingTime ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
                     }`}>
-                    <MapPin size={14} className="text-zinc-500" />
+                    <MapPin size={14} className="text-white" />
                     <span className="text-zinc-400 text-xs font-medium tracking-wide whitespace-nowrap">
                         Montes Claros, MG - {language === 'pt' ? 'Brasil' : 'Brazil'}
                     </span>
@@ -59,7 +59,7 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
                 {/* Time View */}
                 <div className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${actuallyShowingTime ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
                     }`}>
-                    <Clock size={14} className="text-zinc-500" />
+                    <Clock size={14} className="text-white" />
                     <span className="text-zinc-200 text-xs font-mono font-medium tracking-wider whitespace-nowrap">
                         {time} <span className="text-zinc-600 ml-1">GMT-3</span>
                     </span>
