@@ -1,5 +1,6 @@
 import { Sora, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/react"
+
 import "./globals.css";
 
 export const metadata = {
