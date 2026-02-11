@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Github, Linkedin, Mail, ArrowRight, X,
-  Terminal, Database, Cpu, Globe,
-  Smartphone, Zap, Server, Code2, ExternalLink,
-  ChevronLeft, ChevronRight
+  Globe,
+  Server, Code2,
+  ChevronLeft, ChevronRight,
+  Plus, Layers
 } from 'lucide-react';
 import {
   SiPhp, SiLaravel, SiNextdotjs, SiReact,
-  SiJavascript, SiTailwindcss, SiTypescript,
-  SiMysql, SiBootstrap, SiNodedotjs, SiHtml5, SiCss3, SiAndroid,
+  SiJavascript, SiTailwindcss, SiTypescript, SiAlpinedotjs,
+  SiMysql, SiPostgresql, SiBootstrap, SiNodedotjs, SiHtml5, SiCss3, SiAndroid,
   SiFirebase, SiKotlin, SiJetpackcompose
 } from 'react-icons/si';
 import { FaJava } from 'react-icons/fa';
@@ -32,10 +33,9 @@ interface Project {
 
 interface Content {
   hero: {
-    role: string;
-    bio: (age: React.ReactNode) => React.ReactNode;
-    stackTitle: string;
-    contactTitle: string;
+    subtext: string;
+    stackTeaser: string;
+    stackLabel: string;
   };
   sections: {
     projects: string;
@@ -46,6 +46,7 @@ interface Content {
     featured: Project;
     main: Project[];
     other: { name: string; tech: string }[];
+    viewCode: string;
   };
   education: {
     title: string;
@@ -64,6 +65,8 @@ const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
   PHP: { icon: <SiPhp size={18} />, color: "bg-[#777BB4]/10 text-[#777BB4] border-[#777BB4]/20" },
   Laravel: { icon: <SiLaravel size={18} />, color: "bg-[#FF2D20]/10 text-[#FF2D20] border-[#FF2D20]/20" },
   MySQL: { icon: <SiMysql size={18} />, color: "bg-[#4479A1]/10 text-[#4479A1] border-[#4479A1]/20" },
+  PostgreSQL: { icon: <SiPostgresql size={18} />, color: "bg-[#336791]/10 text-[#336791] border-[#336791]/20" },
+  AlpineJS: { icon: <SiAlpinedotjs size={18} />, color: "bg-[#77C1D2]/10 text-[#77C1D2] border-[#77C1D2]/20" },
   Bootstrap: { icon: <SiBootstrap size={18} />, color: "bg-[#7952B3]/10 text-[#7952B3] border-[#7952B3]/20" },
   MVC: { icon: <Code2 size={18} />, color: "bg-zinc-500/10 text-zinc-500 border-zinc-500/20" },
   React: { icon: <SiReact size={18} />, color: "bg-[#61DAFB]/10 text-[#61DAFB] border-[#61DAFB]/20" },
@@ -74,6 +77,7 @@ const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
   'API Rest': { icon: <Server size={18} />, color: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" },
   HTML5: { icon: <SiHtml5 size={18} />, color: "bg-[#E34F26]/10 text-[#E34F26] border-[#E34F26]/20" },
   CSS3: { icon: <SiCss3 size={18} />, color: "bg-[#1572B6]/10 text-[#1572B6] border-[#1572B6]/20" },
+  JavaScript: { icon: <SiJavascript size={18} />, color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20" },
   JS: { icon: <SiJavascript size={18} />, color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20" },
   'Next.js': { icon: <SiNextdotjs size={18} />, color: "bg-zinc-100/10 text-zinc-100 border-zinc-100/20" },
   Tailwind: { icon: <SiTailwindcss size={18} />, color: "bg-[#38B2AC]/10 text-[#38B2AC] border-[#38B2AC]/20" },
@@ -86,6 +90,7 @@ const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
 const stackItems = [
   { name: "PHP", color: "bg-[#777BB4]/10 text-[#777BB4] border-[#777BB4]/20", icon: <SiPhp size={18} /> },
   { name: "Laravel", color: "bg-[#FF2D20]/10 text-[#FF2D20] border-[#FF2D20]/20", icon: <SiLaravel size={18} /> },
+  { name: "PostgreSQL", color: "bg-[#336791]/10 text-[#336791] border-[#336791]/20", icon: <SiPostgresql size={18} /> },
   { name: "Next.js", color: "bg-zinc-100/10 text-zinc-100 border-zinc-100/20", icon: <SiNextdotjs size={18} /> },
   { name: "React", color: "bg-[#61DAFB]/10 text-[#61DAFB] border-[#61DAFB]/20", icon: <SiReact size={18} /> },
   { name: "JavaScript", color: "bg-[#F7DF1E]/10 text-[#F7DF1E] border-[#F7DF1E]/20", icon: <SiJavascript size={18} /> },
@@ -96,14 +101,9 @@ const stackItems = [
 const content: Record<'pt' | 'en', Content> = {
   pt: {
     hero: {
-      role: "Full-Stack Developer",
-      bio: (age: React.ReactNode) => (
-        <>
-          <strong className="text-white font-medium">Desenvolvedor Full-Stack</strong> de {age} anos, focado na criação de aplicações web reais utilizando <span className="text-[#777BB4]">PHP</span>, <span className="text-cyan-400">React</span> e <span className="text-blue-400">TypeScript</span>.
-        </>
-      ),
-      stackTitle: "Tech Stack Principal",
-      contactTitle: "Vamos Conversar"
+      subtext: "Desenvolvedor focado na criação de aplicações web completas e experiências digitais de alto nível.",
+      stackTeaser: "PHP · Javascript · Typescript e mais",
+      stackLabel: "Stack Principal",
     },
     sections: {
       projects: "Meus Projetos",
@@ -115,7 +115,7 @@ const content: Record<'pt' | 'en', Content> = {
         title: 'Frequência Certa',
         description: 'Sistema full-stack completo para controle de frequência e gestão acadêmica.',
         longDescription: 'Desenvolvido como trabalho final e evoluído para uma aplicação robusta com painéis administrativos, controle de presença em tempo real, relatórios automatizados em PDF e integração com Google Gemini para análise de desempenho.',
-        techs: ['PHP', 'Laravel', 'MySQL', 'Bootstrap', 'MVC'],
+        techs: ['PHP', 'Laravel', 'PostgreSQL', 'Bootstrap', 'Tailwind', 'AlpineJS', 'JavaScript', 'Firebase'],
         links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
         cta: { text: "Visitar", link: "https://frequenciacerta.app.br" },
         images: [
@@ -191,7 +191,8 @@ const content: Record<'pt' | 'en', Content> = {
         { name: 'Nutrika', tech: 'Next.js & React' },
         { name: 'Biblioteca API', tech: 'PHP & Laravel' },
         { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
-      ]
+      ],
+      viewCode: 'Abrir no GitHub',
     },
     education: {
       title: "Formação",
@@ -213,14 +214,9 @@ const content: Record<'pt' | 'en', Content> = {
   },
   en: {
     hero: {
-      role: "Full-Stack Developer",
-      bio: (age: React.ReactNode) => (
-        <>
-          <strong className="text-white font-medium">Full-Stack Developer</strong>, {age} years old, building real web applications with <span className="text-[#0A84FF]">PHP</span>, <span className="text-cyan-400">React</span> and <span className="text-blue-400">TypeScript</span>.
-        </>
-      ),
-      stackTitle: "Main Tech Stack",
-      contactTitle: "Let's Talk"
+      subtext: "Developer focused on building complete web applications and high-level digital experiences.",
+      stackTeaser: "PHP · Javascript · Typescript and more",
+      stackLabel: "Main Stack",
     },
     sections: {
       projects: "My Projects",
@@ -232,8 +228,9 @@ const content: Record<'pt' | 'en', Content> = {
         title: 'Frequência Certa',
         description: 'Complete full-stack system for attendance control and academic management.',
         longDescription: 'Developed as a final thesis and evolved into a robust application with administrative dashboards, real-time attendance tracking, automated PDF reports, and Google Gemini integration for performance analysis.',
-        techs: ['PHP', 'Laravel', 'MySQL', 'Bootstrap', 'MVC'],
+        techs: ['PHP', 'Laravel', 'PostgreSQL', 'Bootstrap', 'Tailwind', 'AlpineJS', 'JavaScript', 'Firebase'],
         links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
+        cta: { text: "Visit", link: "https://frequenciacerta.app.br" },
         images: [
           '/projects/frequencia certa/Captura de tela 2026-02-10 174439.png',
           '/projects/frequencia certa/Captura de tela 2026-02-10 174444.png',
@@ -251,6 +248,7 @@ const content: Record<'pt' | 'en', Content> = {
           longDescription: 'A modern and interactive dashboard for personal finance management, allowing users to add, view, edit, and delete income and expense transactions. The application features financial summaries and graphical visualizations for clear data analysis.',
           techs: ['React', 'JS', 'Firebase'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
+          cta: { text: "Visit", link: "https://despesas-trabalho.vercel.app" },
           images: [
             '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
             '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
@@ -263,6 +261,7 @@ const content: Record<'pt' | 'en', Content> = {
           longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
           links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
+          cta: { text: "Download", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
           images: [
             '/projects/tiktok downloader/preview.jpeg',
             '/projects/tiktok downloader/preview2.jpeg'
@@ -274,6 +273,7 @@ const content: Record<'pt' | 'en', Content> = {
           longDescription: 'Promotional website with high visual impact, demonstrating key server functionalities.',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: { demo: '#' },
+          cta: { text: "Coming soon" },
           images: [
             '/projects/aordem/Captura de tela 2026-02-08 201323.png',
             '/projects/aordem/Captura de tela 2026-02-08 201331.png',
@@ -290,6 +290,7 @@ const content: Record<'pt' | 'en', Content> = {
           longDescription: 'SEO and conversion optimized landing page, with integrated contact forms and modern responsive design.',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: {},
+          cta: { text: "Coming soon" },
           images: [
             '/projects/eletricidade/Captura de tela 2026-02-10 174112.png',
             '/projects/eletricidade/Captura de tela 2026-02-10 174117.png',
@@ -303,7 +304,8 @@ const content: Record<'pt' | 'en', Content> = {
         { name: 'Nutrika', tech: 'Next.js & React' },
         { name: 'Library API', tech: 'PHP & Laravel' },
         { name: 'WhatsApp Portfolio', tech: 'Next.js & React' },
-      ]
+      ],
+      viewCode: 'View on GitHub',
     },
     education: {
       title: "Education",
@@ -349,32 +351,7 @@ const StackBadge = ({ name, color, children }: { name: string, color: string, ch
   </div>
 );
 
-const Badge = ({ children }: { children: React.ReactNode }) => (
-  <span className="font-medium text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-zinc-400 hover:text-zinc-200 transition-colors cursor-default">
-    {children}
-  </span>
-);
 
-const AgeCounter = () => {
-  const [age, setAge] = useState<number>(0);
-
-  useEffect(() => {
-    const birthDate = new Date('2008-03-18T00:00:00');
-
-    const now = new Date();
-    const diff = now.getTime() - birthDate.getTime();
-    const ageInYears = diff / (1000 * 60 * 60 * 24 * 365.25);
-    setAge(Math.floor(ageInYears));
-  }, []);
-
-  if (age === 0) return <span className="w-4 h-4 bg-zinc-800/50 animate-pulse rounded inline-block align-middle ml-1" />;
-
-  return (
-    <span className="font-mono text-[#0A84FF] font-bold tabular-nums">
-      {age}
-    </span>
-  );
-};
 
 // --- MAIN PAGE ---
 
@@ -384,6 +361,7 @@ export default function Portfolio() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [language, setLanguage] = useState<'pt' | 'en'>('pt');
+  const [isStackHovered, setIsStackHovered] = useState(false);
 
   const t = content[language];
 
@@ -477,17 +455,14 @@ export default function Portfolio() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }} // Apple ease
             className="flex flex-col items-center max-w-3xl"
           >
-            <div className="mb-6 inline-flex items-center justify-center">
-              <Badge>{t.hero.role}</Badge>
+            <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+              <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter text-white mb-6 leading-[0.9]">
+                Nicolas V. Alves
+              </h1>
+              <p className="text-[18px] md:text-[22px] text-[#A1A1AA] font-normal leading-relaxed max-w-[600px] mb-12">
+                {t.hero.subtext}
+              </p>
             </div>
-
-            <h1 className="text-6xl md:text-8xl font-semibold tracking-tighter text-[#F5F5F7] mb-8 bg-clip-text text-transparent bg-gradient-to-b from-white to-white/70">
-              Nicolas Viana Alves
-            </h1>
-
-            <p className="text-2xl text-[#86868b] font-light leading-relaxed max-w-2xl mb-12">
-              {t.hero.bio(<AgeCounter />)}
-            </p>
 
             <div className="flex flex-wrap gap-4 justify-center mb-16">
               <a
@@ -517,19 +492,44 @@ export default function Portfolio() {
               </a>
             </div>
 
-            {/* --- STACK SECTION --- */}
-            <div>
-              <h3 className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-6">
-                {t.hero.stackTitle}
-              </h3>
-
-              <div className="flex flex-wrap gap-2 justify-center">
-                {stackItems.map((item) => (
-                  <StackBadge key={item.name} name={item.name} color={item.color}>
-                    {item.icon}
-                  </StackBadge>
-                ))}
-              </div>
+            {/* --- STACK SECTION (INTERACTIVE) --- */}
+            <div
+              className="h-12 flex items-center justify-center cursor-default"
+              onMouseEnter={() => setIsStackHovered(true)}
+              onMouseLeave={() => setIsStackHovered(false)}
+            >
+              <AnimatePresence mode="wait">
+                {!isStackHovered ? (
+                  <motion.div
+                    key="text"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex items-center gap-2 group cursor-default transition-all"
+                  >
+                    <Layers size={14} className="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
+                    <span className="text-zinc-500 text-sm font-medium group-hover:text-zinc-300 transition-colors">{t.hero.stackLabel}:</span>
+                    <span className="text-zinc-600 text-sm font-light tracking-wide group-hover:text-zinc-400 transition-colors">
+                      {t.hero.stackTeaser}
+                    </span>
+                    <Plus size={14} className="text-zinc-700 group-hover:text-zinc-500 transition-colors ml-1 opacity-50 group-hover:opacity-100" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="badges"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-wrap gap-2 justify-center"
+                  >
+                    {stackItems.map((item) => (
+                      <StackBadge key={item.name} name={item.name} color={item.color}>
+                        {item.icon}
+                      </StackBadge>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Remove Old Contact Section from here as it's now minimal buttons above */}
@@ -820,7 +820,7 @@ export default function Portfolio() {
                         target="_blank"
                         className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
                       >
-                        <Github size={16} /> Ver Código
+                        <Github size={16} /> {t.projects.viewCode}
                       </a>
                     )}
                   </div>
