@@ -345,7 +345,17 @@ const SectionHeading = ({ children, number }: { children: string, number: string
   >
     <span className="font-mono text-zinc-600 text-sm">0{number}</span>
     <h2 className="text-2xl font-bold text-zinc-100 tracking-tight flex items-center gap-4">
-      {children}
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={children}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -5 }}
+          transition={{ duration: 0.2 }}
+        >
+          {children}
+        </motion.span>
+      </AnimatePresence>
       <div className="h-px w-32 bg-zinc-800/50" />
     </h2>
   </motion.div>
@@ -381,6 +391,23 @@ export default function Portfolio() {
     setSelectedProject(project);
     setCurrentImageIndex(0);
   };
+
+  // Sync selectedProject when language changes
+  useEffect(() => {
+    if (selectedProject) {
+      if (selectedProject.isFeatured) {
+        setSelectedProject(t.projects.featured);
+      } else {
+        // Find index in the OLD language's main array to find the corresponding one in the NEW language's main array
+        const oldLanguage = language === 'pt' ? 'en' : 'pt';
+        const oldMain = content[oldLanguage].projects.main;
+        const index = oldMain.findIndex(p => p.links.github === selectedProject.links.github || p.links.demo === selectedProject.links.demo);
+        if (index !== -1) {
+          setSelectedProject(t.projects.main[index]);
+        }
+      }
+    }
+  }, [language]);
 
 
 
@@ -496,11 +523,22 @@ export default function Portfolio() {
               <h1 className="text-7xl md:text-9xl font-extrabold tracking-tighter text-white mb-6 leading-[0.9]">
                 Nicolas V. Alves
               </h1>
-              <p className="text-[18px] md:text-[22px] text-[#A1A1AA] font-normal leading-relaxed max-w-[600px] mb-6">
-                {t.hero.subtext}
-              </p>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={language}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col items-center"
+                >
+                  <p className="text-[18px] md:text-[22px] text-[#A1A1AA] font-normal leading-relaxed max-w-[600px] mb-6">
+                    {t.hero.subtext}
+                  </p>
 
-              <LocationIndicator language={language} />
+                  <LocationIndicator language={language} />
+                </motion.div>
+              </AnimatePresence>
             </div>
 
             <div className="flex flex-wrap gap-4 justify-center mb-16">
@@ -540,10 +578,11 @@ export default function Portfolio() {
               <AnimatePresence mode="wait">
                 {!isStackHovered ? (
                   <motion.div
-                    key="text"
+                    key={`text-${language}`}
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
                     className="flex items-center gap-2 group cursor-default transition-all"
                   >
                     <Layers size={14} className="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
@@ -581,99 +620,108 @@ export default function Portfolio() {
         <section className="mb-32">
           <SectionHeading number="1">{t.sections.projects}</SectionHeading>
 
-          <div className="space-y-16">
-
-            {/* DESTAQUE: TCC */}
+          <AnimatePresence mode="wait">
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#1d1d1f] bg-[#151516]/50 backdrop-blur-md hover:border-[#3a3a3c] transition-all duration-500"
-              onClick={() => openProject(t.projects.featured)}
+              key={language}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="space-y-16"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-[#0A84FF]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-              <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <span className="text-xs font-medium text-[#0A84FF] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
-                  <h3 className="text-4xl font-semibold text-[#F5F5F7] mb-4 tracking-tight">{t.projects.featured.title}</h3>
-                  <p className="text-[#86868b] leading-relaxed mb-8 text-lg font-light">
-                    {t.projects.featured.description}
-                  </p>
+              {/* DESTAQUE: TCC */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="group relative cursor-pointer rounded-3xl overflow-hidden border border-[#1d1d1f] bg-[#151516]/50 backdrop-blur-md hover:border-[#3a3a3c] transition-all duration-500"
+                onClick={() => openProject(t.projects.featured)}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0A84FF]/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {t.projects.featured.techs.map(t => {
-                      const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
-                      return (
-                        <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
-                          {tech.icon}
-                        </StackBadge>
-                      );
-                    })}
-                  </div>
-
-                  <div className="flex gap-4">
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-white group-hover:text-[#0A84FF] transition-colors">
-                      Ver Detalhes <ArrowRight size={14} />
-                    </span>
-                  </div>
-                </div>
-
-                <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-white/5 bg-black/50">
-                  {/* Placeholder for project preview or abstract graphic */}
-                  <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
-                    <Globe size={48} strokeWidth={1} />
-                  </div>
-                  {/* If images exist, show the first one blurred or specific */}
-                  {t.projects.featured.images[0] && (
-                    <img
-                      src={t.projects.featured.images[0]}
-                      alt="Project Preview"
-                      className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 transform"
-                    />
-                  )}
-                </div>
-              </div>
-            </motion.div>
-
-
-            {/* OUTROS PROJETOS PRINCIPAIS */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {t.projects.main.map((project, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => openProject(project)}
-                  className="p-8 rounded-2xl border border-[#1d1d1f] bg-[#151516]/40 hover:bg-[#1c1c1e] hover:border-[#3a3a3c] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
-                >
+                <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
                   <div>
-                    <div className="flex justify-between items-start mb-6">
-                      <h4 className="text-xl font-semibold text-[#F5F5F7] group-hover:text-white transition-colors tracking-tight">{project.title}</h4>
-                      <div className="p-2 rounded-full bg-[#1c1c1e] text-[#86868b] group-hover:text-white transition-colors">
-                        <ArrowRight size={16} className="-rotate-45" />
-                      </div>
+                    <span className="text-xs font-medium text-[#0A84FF] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
+                    <h3 className="text-4xl font-semibold text-[#F5F5F7] mb-4 tracking-tight">{t.projects.featured.title}</h3>
+                    <p className="text-[#86868b] leading-relaxed mb-8 text-lg font-light">
+                      {t.projects.featured.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {t.projects.featured.techs.map(t => {
+                        const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
+                        return (
+                          <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
+                            {tech.icon}
+                          </StackBadge>
+                        );
+                      })}
                     </div>
 
-                    <p className="text-[#86868b] text-sm leading-relaxed mb-6 font-light line-clamp-3">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.techs.map(t => (
-                      <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
-                        {t}
+                    <div className="flex gap-4">
+                      <span className="inline-flex items-center gap-2 text-sm font-medium text-white group-hover:text-[#0A84FF] transition-colors">
+                        {language === 'pt' ? 'Ver Detalhes' : 'View Details'} <ArrowRight size={14} />
                       </span>
-                    ))}
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
 
-          </div>
+                  <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-white/5 bg-black/50">
+                    {/* Placeholder for project preview or abstract graphic */}
+                    <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
+                      <Globe size={48} strokeWidth={1} />
+                    </div>
+                    {/* If images exist, show the first one blurred or specific */}
+                    {t.projects.featured.images[0] && (
+                      <img
+                        src={t.projects.featured.images[0]}
+                        alt="Project Preview"
+                        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 transform"
+                      />
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+
+
+              {/* OUTROS PROJETOS PRINCIPAIS */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {t.projects.main.map((project, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    onClick={() => openProject(project)}
+                    className="p-8 rounded-2xl border border-[#1d1d1f] bg-[#151516]/40 hover:bg-[#1c1c1e] hover:border-[#3a3a3c] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex justify-between items-start mb-6">
+                        <h4 className="text-xl font-semibold text-[#F5F5F7] group-hover:text-white transition-colors tracking-tight">{project.title}</h4>
+                        <div className="p-2 rounded-full bg-[#1c1c1e] text-[#86868b] group-hover:text-white transition-colors">
+                          <ArrowRight size={16} className="-rotate-45" />
+                        </div>
+                      </div>
+
+                      <p className="text-[#86868b] text-sm leading-relaxed mb-6 font-light line-clamp-3">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {project.techs.map(t => (
+                        <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+            </motion.div>
+          </AnimatePresence>
         </section>
 
 
@@ -681,26 +729,35 @@ export default function Portfolio() {
         <section className="mb-40">
           <SectionHeading number="2">{t.sections.otherProjects}</SectionHeading>
 
-          <div className="divide-y divide-white/5 border-t border-b border-white/5">
-            {t.projects.other.map((p, i) => (
-              <motion.a
-                key={i}
-                href={p.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <h5 className="text-zinc-300 font-medium text-sm group-hover:text-white transition-colors">{p.name}</h5>
-                <div className="flex items-center gap-3">
-                  <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
-                  <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-white transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
-                </div>
-              </motion.a>
-            ))}
-          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={language}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="divide-y divide-white/5 border-t border-b border-white/5"
+            >
+              {t.projects.other.map((p, i) => (
+                <motion.a
+                  key={i}
+                  href={p.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                >
+                  <h5 className="text-zinc-300 font-medium text-sm group-hover:text-white transition-colors">{p.name}</h5>
+                  <div className="flex items-center gap-3">
+                    <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
+                    <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-white transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
+                  </div>
+                </motion.a>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </section>
 
 
@@ -708,27 +765,36 @@ export default function Portfolio() {
         <section className="mb-40">
           <SectionHeading number="3">{t.education.title}</SectionHeading>
 
-          <div className="relative space-y-12 pl-4">
-            {/* Timeline Line */}
-            <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={language}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative space-y-12 pl-4"
+            >
+              {/* Timeline Line */}
+              <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
 
-            {t.education.items.map((item, i) => (
-              <motion.div
-                key={i}
-                className="relative pl-10"
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#050505] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
-                <div className="mb-2">
-                  <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
-                  <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+              {t.education.items.map((item, i) => (
+                <motion.div
+                  key={i}
+                  className="relative pl-10"
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#050505] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
+                  <div className="mb-2">
+                    <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
+                    <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </section>
 
 
@@ -834,60 +900,69 @@ export default function Portfolio() {
                 )}
 
                 <div className="absolute top-4 right-4 bg-black/50 text-white text-xs px-2 py-1 rounded backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity z-20 pointer-events-none">
-                  Clique para ampliar
+                  {language === 'pt' ? 'Clique para ampliar' : 'Click to enlarge'}
                 </div>
               </div>
 
-              <div className="p-8">
-                <h3 className="text-3xl font-bold text-white mb-2">{selectedProject.title}</h3>
-                <div className="mb-6 flex flex-wrap gap-2">
-                  {selectedProject.techs.map(t => {
-                    const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
-                    return (
-                      <StackBadge key={t} name={t} color={tech.color}>
-                        {tech.icon}
-                      </StackBadge>
-                    );
-                  })}
-                </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={language}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-8"
+                >
+                  <h3 className="text-3xl font-bold text-white mb-2">{selectedProject.title}</h3>
+                  <div className="mb-6 flex flex-wrap gap-2">
+                    {selectedProject.techs.map(t => {
+                      const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
+                      return (
+                        <StackBadge key={t} name={t} color={tech.color}>
+                          {tech.icon}
+                        </StackBadge>
+                      );
+                    })}
+                  </div>
 
-                <div className="prose prose-invert prose-zinc max-w-none mb-8">
-                  <p className="text-lg leading-relaxed text-zinc-300">
-                    {selectedProject.longDescription || selectedProject.description}
-                  </p>
-                </div>
+                  <div className="prose prose-invert prose-zinc max-w-none mb-8">
+                    <p className="text-lg leading-relaxed text-zinc-300">
+                      {selectedProject.longDescription || selectedProject.description}
+                    </p>
+                  </div>
 
-                <div className="flex gap-4 pt-6 border-t border-zinc-800 items-center justify-between">
-                  <div className="flex gap-3">
-                    {selectedProject.links.github && (
+                  <div className="flex gap-4 pt-6 border-t border-zinc-800 items-center justify-between">
+                    <div className="flex gap-3">
+                      {selectedProject.links.github && (
+                        <a
+                          href={selectedProject.links.github}
+                          target="_blank"
+                          className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
+                        >
+                          <Github size={16} /> {t.projects.viewCode}
+                        </a>
+                      )}
+                    </div>
+
+                    {selectedProject.cta && (
                       <a
-                        href={selectedProject.links.github}
+                        href={selectedProject.cta.link || '#'}
                         target="_blank"
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
+                        onClick={(e) => !selectedProject.cta?.link && e.preventDefault()}
+                        className={`
+                          flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
+                          ${selectedProject.cta.link
+                            ? 'bg-[#0A84FF]/10 hover:bg-[#0A84FF]/20 text-[#0A84FF] hover:text-[#409CFF] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/10 cursor-pointer border border-[#0A84FF]/30'
+                            : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
+                        `}
                       >
-                        <Github size={16} /> {t.projects.viewCode}
+                        {selectedProject.cta.text}
+                        {selectedProject.cta.link && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
                       </a>
                     )}
                   </div>
-
-                  {selectedProject.cta && (
-                    <a
-                      href={selectedProject.cta.link || '#'}
-                      target="_blank"
-                      onClick={(e) => !selectedProject.cta?.link && e.preventDefault()}
-                      className={`
-                        flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
-                        ${selectedProject.cta.link
-                          ? 'bg-[#0A84FF]/10 hover:bg-[#0A84FF]/20 text-[#0A84FF] hover:text-[#409CFF] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-indigo-500/10 cursor-pointer border border-[#0A84FF]/30'
-                          : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
-                      `}
-                    >
-                      {selectedProject.cta.text}
-                      {selectedProject.cta.link && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
-                    </a>
-                  )}
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}

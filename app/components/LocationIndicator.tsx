@@ -52,7 +52,7 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
                     }`}>
                     <MapPin size={14} className="text-zinc-500" />
                     <span className="text-zinc-400 text-xs font-medium tracking-wide whitespace-nowrap">
-                        Montes Claros, MG, {language === 'pt' ? 'Brasil' : 'Brazil'}
+                        Montes Claros, MG - {language === 'pt' ? 'Brasil' : 'Brazil'}
                     </span>
                 </div>
 
