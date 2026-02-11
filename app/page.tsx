@@ -568,7 +568,7 @@ export default function Portfolio() {
                       className="flex items-center text-xs whitespace-nowrap"
                     >
                       {/* Mobile Text (Simple) */}
-                      <span className="md:hidden">Português</span>
+                      <span className="md:hidden">🇧🇷 Português (Brasil)</span>
 
                       {/* Desktop Text (Animated) */}
                       <div className="hidden md:flex items-center">
@@ -593,7 +593,7 @@ export default function Portfolio() {
                       className="flex items-center text-xs whitespace-nowrap"
                     >
                       {/* Mobile Text (Simple) */}
-                      <span className="md:hidden">English</span>
+                      <span className="md:hidden">🇺🇸 English (United States)</span>
 
                       {/* Desktop Text (Animated) */}
                       <div className="hidden md:flex items-center">
@@ -622,7 +622,7 @@ export default function Portfolio() {
                     onClick={() => { setLanguage('pt'); setIsLangMenuOpen(false); }}
                     className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'pt' ? 'text-white bg-zinc-800/50' : 'text-zinc-400'}`}
                   >
-                    <span>Português</span>
+                    <span>🇧🇷 Português (Brasil)</span>
                     {language === 'pt' && <Check size={14} className="text-[#E2C17D]" />}
                   </button>
                   <div className="h-px bg-[#3d3d3d]" />
@@ -630,7 +630,7 @@ export default function Portfolio() {
                     onClick={() => { setLanguage('en'); setIsLangMenuOpen(false); }}
                     className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'en' ? 'text-white bg-zinc-800/50' : 'text-zinc-400'}`}
                   >
-                    <span>English</span>
+                    <span>🇺🇸 English (United States)</span>
                     {language === 'en' && <Check size={14} className="text-[#E2C17D]" />}
                   </button>
                 </motion.div>
