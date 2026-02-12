@@ -212,10 +212,16 @@ const content: Record<'pt' | 'en', Content> = {
       title: "Formação",
       items: [
         {
-          title: "Técnico em Desenvolvimento de Sistemas",
-          institution: "Proz Educação • 2024 — 2026",
+          title: "Bacharelado em Sistemas de Informação",
+          institution: "Universidade Estadual de Montes Claros (Unimontes) • 2026 — 2029",
           dotColor: "bg-[#E2C17D]",
           textColor: "text-white"
+        },
+        {
+          title: "Técnico em Desenvolvimento de Sistemas",
+          institution: "Proz Educação • 2024 — 2026",
+          dotColor: "bg-zinc-800",
+          textColor: "text-zinc-400"
         },
         {
           title: "Ensino Médio Completo",
@@ -331,10 +337,16 @@ const content: Record<'pt' | 'en', Content> = {
       title: "Education",
       items: [
         {
-          title: "Systems Development Technician",
-          institution: "Proz Education • 2024 — 2026",
+          title: "Bachelor of Information Systems",
+          institution: "State University of Montes Claros (Unimontes) • 2026 — 2029",
           dotColor: "bg-[#E2C17D]",
           textColor: "text-white"
+        },
+        {
+          title: "Systems Development Technician",
+          institution: "Proz Education • 2024 — 2026",
+          dotColor: "bg-zinc-800",
+          textColor: "text-zinc-400"
         },
         {
           title: "High School Diploma",
