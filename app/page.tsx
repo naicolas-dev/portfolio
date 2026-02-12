@@ -224,7 +224,7 @@ const content: Record<'pt' | 'en', Content> = {
           textColor: "text-zinc-400"
         },
         {
-          title: "Ensino Médio Completo",
+          title: "Ensino Médio",
           institution: "Escola Estadual Professora Dilma Quadros • 2023 — 2025",
           dotColor: "bg-zinc-800",
           textColor: "text-zinc-400"
@@ -337,13 +337,13 @@ const content: Record<'pt' | 'en', Content> = {
       title: "Education",
       items: [
         {
-          title: "Bachelor of Information Systems",
+          title: "Bachelor’s Degree in Information Systems",
           institution: "State University of Montes Claros (Unimontes) • 2026 — 2029",
           dotColor: "bg-[#E2C17D]",
           textColor: "text-white"
         },
         {
-          title: "Systems Development Technician",
+          title: "Technical Degree in Systems Development",
           institution: "Proz Education • 2024 — 2026",
           dotColor: "bg-zinc-800",
           textColor: "text-zinc-400"
