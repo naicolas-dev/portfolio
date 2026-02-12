@@ -209,7 +209,7 @@ const content: Record<'pt' | 'en', Content> = {
       viewCode: 'Abrir no GitHub',
     },
     education: {
-      title: "Formação",
+      title: "Formação Acadêmica",
       items: [
         {
           title: "Bacharelado em Sistemas de Informação",
