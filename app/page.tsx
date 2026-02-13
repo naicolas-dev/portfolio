@@ -846,7 +846,7 @@ export default function Portfolio() {
                     </div>
 
                     <div className="flex gap-4">
-                      <span className="inline-flex items-center gap-2 text-sm font-bold text-white group-hover:text-[#A6ACCD] transition-colors">
+                      <span className="inline-flex items-center gap-2 text-sm font-bold text-[#A6ACCD] group-hover:text-white transition-colors">
                         {language === 'pt' ? 'Explorar Projeto' : 'Explore Project'} <ArrowRight size={14} />
                       </span>
                     </div>
