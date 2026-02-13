@@ -852,17 +852,16 @@ export default function Portfolio() {
                     </div>
                   </div>
 
-                  <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-white/5 bg-black/50">
-                    {/* Placeholder for project preview or abstract graphic */}
-                    <div className="absolute inset-0 flex items-center justify-center text-zinc-700">
-                      <Globe size={48} strokeWidth={1} />
-                    </div>
-                    {/* If images exist, show the first one blurred or specific */}
+                  <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-[#30363D] bg-[#161B22] shadow-inner">
+                    {/* Background decorative gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#161B22] to-[#0F1115]" />
+                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_50%_50%,#A6ACCD_0%,transparent_100%)]" />
+
                     {t.projects.featured.images[0] && (
                       <img
                         src={t.projects.featured.images[0]}
                         alt="Project Preview"
-                        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105 transform"
+                        className="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-110 transform filter brightness-50 group-hover:brightness-100"
                       />
                     )}
                   </div>
