@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { track } from '@vercel/analytics';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import {
-  Github, Linkedin, Mail, ArrowRight, X,
+  Github, Linkedin, Mail, ArrowRight, X, Download,
   Globe, Check,
   Server, Code2,
   ChevronLeft, ChevronRight,
@@ -46,6 +46,7 @@ interface Content {
     otherProjects: string;
     featured: string;
     heroCTA: string;
+    downloadCV: string;
     exploreProject: string;
     letsConnect: string;
   };
@@ -117,6 +118,7 @@ const content: Record<'pt' | 'en', Content> = {
       otherProjects: "Outros Projetos",
       featured: "Destaque",
       heroCTA: "ver meus projetos",
+      downloadCV: "Baixar currículo",
       exploreProject: "Explorar Projeto",
       letsConnect: "Vamos Conversar"
     },
@@ -242,6 +244,7 @@ const content: Record<'pt' | 'en', Content> = {
       otherProjects: "Other Projects",
       featured: "Featured",
       heroCTA: "view my projects",
+      downloadCV: "Download Resume",
       exploreProject: "Explore Project",
       letsConnect: "Let's Connect"
     },
@@ -705,6 +708,28 @@ export default function Portfolio() {
                     </motion.span>
                   </AnimatePresence>
                 </button>
+              </Magnetic>
+
+              <Magnetic>
+                <a
+                  href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'}
+                  download
+                  onClick={() => track('Download CV', { language })}
+                  className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-transparent border border-[#A6ACCD]/40 text-[#A6ACCD] font-bold hover:bg-[#A6ACCD]/10 hover:border-[#A6ACCD]/60 transition-all hover:scale-105 overflow-hidden"
+                >
+                  <Download size={20} className="group-hover:translate-y-0.5 transition-transform duration-300" />
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={language}
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {t.sections.downloadCV}
+                    </motion.span>
+                  </AnimatePresence>
+                </a>
               </Magnetic>
 
               <div className="flex gap-4">
