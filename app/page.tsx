@@ -761,18 +761,18 @@ export default function Portfolio() {
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
                         transition={{ duration: 0.2 }}
-                        className="flex items-center gap-2 group cursor-pointer transition-all active:scale-95 bg-zinc-800/40 border border-zinc-700/50 px-4 py-2 rounded-full hover:bg-zinc-800/60 hover:border-zinc-700"
+                        className="flex items-center gap-2 group cursor-pointer transition-all active:scale-95 bg-[#5F6B7C]/10 border border-[#30363D] px-4 py-2 rounded-full hover:bg-[#5F6B7C]/20 hover:border-[#30363D]"
                         onClick={(e) => {
                           e.stopPropagation();
                           setIsStackHovered(true);
                         }}
                       >
-                        <Layers size={14} className="text-zinc-500 group-hover:text-zinc-300 transition-colors" />
-                        <span className="text-zinc-500 text-sm font-medium group-hover:text-zinc-300 transition-colors hidden md:inline">{t.hero.stackLabel}:</span>
-                        <span className="text-zinc-400 md:text-zinc-600 text-xs md:text-sm font-medium md:font-light tracking-wide group-hover:text-zinc-300 md:group-hover:text-zinc-400 transition-colors">
+                        <Layers size={14} className="text-[#5F6B7C] group-hover:text-[#5F6B7C]/80 transition-colors" />
+                        <span className="text-[#5F6B7C] text-sm font-medium group-hover:text-[#5F6B7C]/80 transition-colors hidden md:inline">{t.hero.stackLabel}:</span>
+                        <span className="text-[#5F6B7C]/80 md:text-[#5F6B7C]/60 text-xs md:text-sm font-medium md:font-light tracking-wide group-hover:text-[#5F6B7C]/80 transition-colors">
                           {t.hero.stackTeaser}
                         </span>
-                        <Plus size={14} className="text-zinc-500 md:text-zinc-700 group-hover:text-zinc-300 md:group-hover:text-zinc-500 transition-colors ml-1 opacity-100 md:opacity-50 md:group-hover:opacity-100" />
+                        <Plus size={14} className="text-[#5F6B7C] md:text-[#5F6B7C]/40 group-hover:text-[#5F6B7C]/60 md:group-hover:text-[#5F6B7C]/60 transition-colors ml-1 opacity-100 md:opacity-50 md:group-hover:opacity-100" />
                       </motion.div>
                     </>
                   ) : (

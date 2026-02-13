@@ -45,13 +45,13 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="relative overflow-hidden h-9 px-4 rounded-full bg-zinc-800/40 border border-zinc-700/50 sm:backdrop-blur-sm hover:bg-zinc-800/60 hover:border-zinc-700 transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
+            <div className="relative overflow-hidden h-9 px-4 rounded-full bg-[#5F6B7C]/10 border border-[#30363D] sm:backdrop-blur-sm hover:bg-[#5F6B7C]/20 hover:border-[#30363D] transition-all duration-500 ease-out shadow-sm flex items-center justify-center min-w-[200px]">
 
                 {/* Location View */}
                 <div className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${actuallyShowingTime ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'
                     }`}>
-                    <MapPin size={14} className="text-zinc-500" />
-                    <span className="text-zinc-500 text-xs font-medium tracking-wide whitespace-nowrap">
+                    <MapPin size={14} className="text-[#5F6B7C]" />
+                    <span className="text-[#5F6B7C] text-xs font-medium tracking-wide whitespace-nowrap">
                         Montes Claros, MG - {language === 'pt' ? 'Brasil' : 'Brazil'}
                     </span>
                 </div>
@@ -59,9 +59,9 @@ export function LocationIndicator({ language = 'pt' }: { language?: 'pt' | 'en' 
                 {/* Time View */}
                 <div className={`absolute inset-0 flex items-center justify-center gap-2 transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${actuallyShowingTime ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
                     }`}>
-                    <Clock size={14} className="text-zinc-500" />
-                    <span className="text-zinc-400 text-xs font-mono font-medium tracking-wider whitespace-nowrap">
-                        {time} <span className="text-zinc-600 ml-1">GMT-3</span>
+                    <Clock size={14} className="text-[#5F6B7C]" />
+                    <span className="text-[#5F6B7C] text-xs font-mono font-medium tracking-wider whitespace-nowrap">
+                        {time} <span className="text-[#5F6B7C]/60 ml-1">GMT-3</span>
                     </span>
                 </div>
             </div>
