@@ -395,6 +395,24 @@ const StackBadge = ({ name, color, children }: { name: string, color: string, ch
   </div>
 );
 
+const SocialButton = ({ icon, label, href, download = false, onClick }: { icon: React.ReactNode, label: string, href: string, download?: boolean, onClick?: () => void }) => (
+  <a
+    href={href}
+    target={download ? undefined : "_blank"}
+    rel={download ? undefined : "noopener noreferrer"}
+    download={download}
+    onClick={onClick}
+    className="group flex items-center justify-center rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110 overflow-hidden cursor-pointer"
+  >
+    <div className="p-4 flex items-center justify-center">
+      {icon}
+    </div>
+    <span className="max-w-0 group-hover:max-w-[200px] overflow-hidden transition-all duration-500 whitespace-nowrap opacity-0 group-hover:opacity-100 font-medium pr-0 group-hover:pr-6">
+      {label}
+    </span>
+  </a>
+);
+
 
 
 // --- MAIN PAGE ---
@@ -686,84 +704,60 @@ export default function Portfolio() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-              <Magnetic>
-                <button
-                  onClick={() => {
-                    track('Hero CTA Click', { action: 'Scroll to Projects' });
-                    document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-[#A6ACCD] text-black font-bold hover:bg-[#A6ACCD] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(166,172,205,0.03)] overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={language}
-                      initial={{ opacity: 0, x: 10 }} // Horizontal slide for button text
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {t.sections.heroCTA}
-                    </motion.span>
-                  </AnimatePresence>
-                </button>
-              </Magnetic>
 
-              <Magnetic>
-                <a
+              <button
+                onClick={() => {
+                  track('Hero CTA Click', { action: 'Scroll to Projects' });
+                  document.getElementById('projects-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-[#A6ACCD] text-black font-bold hover:bg-[#A6ACCD] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(166,172,205,0.03)] overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Plus size={20} className="group-hover:rotate-90 transition-transform duration-500" />
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={language}
+                    initial={{ opacity: 0, x: 10 }} // Horizontal slide for button text
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {t.sections.heroCTA}
+                  </motion.span>
+                </AnimatePresence>
+              </button>
+
+
+
+              <div className="flex gap-4">
+                <SocialButton
                   href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'}
                   download
                   onClick={() => track('Download CV', { language })}
-                  className="group relative flex items-center gap-2 px-8 py-4 rounded-full bg-transparent border border-[#A6ACCD]/40 text-[#A6ACCD] font-bold hover:bg-[#A6ACCD]/10 hover:border-[#A6ACCD]/60 transition-all hover:scale-105 overflow-hidden"
-                >
-                  <Download size={20} className="group-hover:translate-y-0.5 transition-transform duration-300" />
-                  <AnimatePresence mode="wait">
-                    <motion.span
-                      key={language}
-                      initial={{ opacity: 0, x: 10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {t.sections.downloadCV}
-                    </motion.span>
-                  </AnimatePresence>
-                </a>
-              </Magnetic>
+                  icon={<Download size={24} />}
+                  label={t.sections.downloadCV}
+                />
 
-              <div className="flex gap-4">
-                <Magnetic>
-                  <a
-                    href="https://github.com/naicolas-dev"
-                    target="_blank"
-                    onClick={() => track('Social Click', { platform: 'Github', location: 'Header' })}
-                    className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110 flex items-center justify-center"
-                  >
-                    <Github size={24} />
-                  </a>
-                </Magnetic>
+                <SocialButton
+                  href="https://github.com/naicolas-dev"
+                  onClick={() => track('Social Click', { platform: 'Github', location: 'Header' })}
+                  icon={<Github size={24} />}
+                  label="GitHub"
+                />
 
-                <Magnetic>
-                  <a
-                    href="https://www.linkedin.com/in/naicolas-dev/"
-                    target="_blank"
-                    onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Header' })}
-                    className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110 flex items-center justify-center"
-                  >
-                    <Linkedin size={24} />
-                  </a>
-                </Magnetic>
+                <SocialButton
+                  href="https://www.linkedin.com/in/naicolas-dev/"
+                  onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Header' })}
+                  icon={<Linkedin size={24} />}
+                  label="LinkedIn"
+                />
 
-                <Magnetic>
-                  <a
-                    href="mailto:naicolas.dev@gmail.com"
-                    onClick={() => track('Social Click', { platform: 'Mail', location: 'Header' })}
-                    className="p-4 rounded-full bg-zinc-900/50 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all hover:scale-110 flex items-center justify-center"
-                  >
-                    <Mail size={24} />
-                  </a>
-                </Magnetic>
+                <SocialButton
+                  href="mailto:naicolas.dev@gmail.com"
+                  onClick={() => track('Social Click', { platform: 'Mail', location: 'Header' })}
+                  icon={<Mail size={24} />}
+                  label="Email"
+                />
               </div>
             </div>
 
@@ -1063,9 +1057,10 @@ export default function Portfolio() {
         {/* --- FOOTER --- */}
         <footer className="border-t border-[#30363D] pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
           <div className="flex gap-6">
-            <Magnetic><a href="https://github.com/naicolas-dev" onClick={() => track('Social Click', { platform: 'Github', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Github size={20} /></a></Magnetic>
-            <Magnetic><a href="https://www.linkedin.com/in/naicolas-dev/" onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Linkedin size={20} /></a></Magnetic>
-            <Magnetic><a href="mailto:naicolas.dev@gmail.com" onClick={() => track('Social Click', { platform: 'Mail', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Mail size={20} /></a></Magnetic>
+            <a href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'} download onClick={() => track('Download CV', { language })} className="hover:text-white transition-colors flex p-2"><Download size={20} /></a>
+            <a href="https://github.com/naicolas-dev" onClick={() => track('Social Click', { platform: 'Github', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Github size={20} /></a>
+            <a href="https://www.linkedin.com/in/naicolas-dev/" onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Linkedin size={20} /></a>
+            <a href="mailto:naicolas.dev@gmail.com" onClick={() => track('Social Click', { platform: 'Mail', location: 'Footer' })} className="hover:text-white transition-colors flex p-2"><Mail size={20} /></a>
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-[#A6ACCD] transition-colors">Nicolas Viana Alves</a></p>
