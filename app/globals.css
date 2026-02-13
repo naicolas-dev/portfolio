@@ -2,7 +2,7 @@
 
 @theme {
   /* Configurando as Fontes do Google carregadas no Layout */
-  --font-sans: var(--font-sora);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-mono);
 
   /* Animações Personalizadas */
@@ -30,9 +30,15 @@
 
 /* Reset Básico Dark Mode */
 body {
-  background-color: #191919;
-  color: #F5F5F7;
-  /* zinc-200 */
+  background-color: var(--color-bg-page);
+  color: var(--color-text-primary);
+  font-family: var(--font-inter);
+
+  /* 👇 É ESTA LINHA QUE FAZ A MÁGICA */
+  text-transform: lowercase;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar invisível */

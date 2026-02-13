@@ -1,4 +1,4 @@
-import { Sora, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { Analytics } from "@vercel/analytics/react"
 
 import "./globals.css";
@@ -8,13 +8,13 @@ export const metadata = {
   description: 'Portfolio of Nicolas Viana Alves',
 };
 
-const sora = Sora({ subsets: ['latin'], variable: '--font-sora', weight: ['400', '600', '800'] })
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', weight: ['400', '600', '800'] })
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', weight: ['400'] })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={`${sora.variable} ${mono.variable}`}>
-      <body className="bg-[#191919] text-zinc-200 antialiased selection:bg-[#E2C17D]/30 selection:text-amber-100">
+    <html lang="pt-BR" className={`${inter.variable} ${mono.variable}`}>
+      <body className="bg-[#0F1115] text-[A1A6B3] antialiased tracking-tight selection:bg-[A1A6B3]/20 selection:text-white">
         {children}
         <Analytics />
       </body>
