@@ -31,7 +31,8 @@ interface Project {
   techs: string[];
   links: { github?: string; demo?: string };
   cta?: { text: string; link?: string };
-  images: string[]; // Changed from image?: string to images: string[]
+  images: string[];
+  period?: string; // Add period field
   isFeatured?: boolean;
 }
 
@@ -127,6 +128,7 @@ const content: Record<'pt' | 'en', Content> = {
         title: 'Frequência Certa',
         description: 'Sistema full-stack completo para controle de frequência e gestão acadêmica.',
         longDescription: 'Desenvolvido como trabalho final e evoluído para uma aplicação robusta com painéis administrativos, controle de presença em tempo real, relatórios automatizados em PDF e integração com Google Gemini para análise de desempenho.',
+        period: 'Dez 2025 — Fev 2026',
         techs: ['PHP', 'Laravel', 'PostgreSQL', 'Bootstrap', 'Tailwind', 'AlpineJS', 'JavaScript', 'Firebase'],
         links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
         cta: { text: "Visitar", link: "https://frequenciacerta.app.br" },
@@ -145,6 +147,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'Dashboard Financeiro',
           description: 'Sistema em tempo real para gestão de ativos e passivos.',
           longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
+          period: 'Jul 2025 — Ago 2025',
           techs: ['React', 'JS', 'Firebase'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
           cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
@@ -158,6 +161,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'TikTok Downloader',
           description: 'App Android para download de vídeos sem marca d\'água.',
           longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
+          period: 'Jan 2026',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
           links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
           cta: { text: "Baixar", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
@@ -170,6 +174,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'A Ordem Survived',
           description: 'Portal imersivo para servidor de DayZ com foco em performance.',
           longDescription: 'Website promocional com alto impacto visual, demonstrando as principais funcionalidades do servidor.',
+          period: 'Fev 2026',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: { demo: '#' },
           cta: { text: "Em breve" },
@@ -187,6 +192,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'Sollux Engenharia',
           description: 'Landing page de alta conversão para serviços elétricos.',
           longDescription: 'Landing page otimizada para SEO e conversão, com formulários de contato integrados e design responsivo moderno.',
+          period: 'Fev 2026',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: {},
           cta: { text: "Em breve" },
@@ -253,6 +259,7 @@ const content: Record<'pt' | 'en', Content> = {
         title: 'Frequência Certa',
         description: 'Complete full-stack system for attendance control and academic management.',
         longDescription: 'Developed as a final thesis and evolved into a robust application with administrative dashboards, real-time attendance tracking, automated PDF reports, and Google Gemini integration for performance analysis.',
+        period: 'Dec 2025 - Feb 2026',
         techs: ['PHP', 'Laravel', 'PostgreSQL', 'Bootstrap', 'Tailwind', 'AlpineJS', 'JavaScript', 'Firebase'],
         links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
         cta: { text: "Visit", link: "https://frequenciacerta.app.br" },
@@ -271,6 +278,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'Finance Dashboard',
           description: 'Real-time system for asset and liability management.',
           longDescription: 'A modern and interactive dashboard for personal finance management, allowing users to add, view, edit, and delete income and expense transactions. The application features financial summaries and graphical visualizations for clear data analysis.',
+          period: 'Jul 2025 - Aug 2025',
           techs: ['React', 'JS', 'Firebase'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
           cta: { text: "Visit", link: "https://despesas-trabalho.vercel.app" },
@@ -284,6 +292,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'TikTok Downloader',
           description: 'Android app for downloading watermak-free videos.',
           longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
+          period: 'Jan 2026',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
           links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
           cta: { text: "Download", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
@@ -296,6 +305,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'A Ordem Survived',
           description: 'Immersive portal for DayZ server focused on performance.',
           longDescription: 'Promotional website with high visual impact, demonstrating key server functionalities.',
+          period: 'Feb 2026',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: { demo: '#' },
           cta: { text: "Coming soon" },
@@ -313,6 +323,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'Sollux Engineering',
           description: 'High-conversion landing page for electrical services.',
           longDescription: 'SEO and conversion optimized landing page, with integrated contact forms and modern responsive design.',
+          period: 'Feb 2026',
           techs: ['HTML5', 'Tailwind', 'JS'],
           links: {},
           cta: { text: "Coming soon" },
@@ -848,7 +859,10 @@ export default function Portfolio() {
                 <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
                   <div>
                     <span className="text-xs font-medium text-[#A6ACCD] uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
-                    <h3 className="text-4xl font-semibold text-[#A6ACCD] mb-4 tracking-tight">{t.projects.featured.title}</h3>
+                    <h3 className="text-4xl font-semibold text-[#A6ACCD] mb-1 tracking-tight">{t.projects.featured.title}</h3>
+                    {t.projects.featured.period && (
+                      <span className="text-sm font-medium text-[#5F6B7C] mb-4 block italic">{t.projects.featured.period}</span>
+                    )}
                     <p className="text-[#5F6B7C] leading-relaxed mb-8 text-lg font-light">
                       {t.projects.featured.description}
                     </p>
@@ -904,12 +918,15 @@ export default function Portfolio() {
                     className="p-8 rounded-2xl border border-[#30363D] bg-[#161B22]/50 hover:bg-[#161B22] hover:border-[#30363D] transition-all duration-300 group cursor-pointer flex flex-col justify-between"
                   >
                     <div>
-                      <div className="flex justify-between items-start mb-6">
+                      <div className="flex justify-between items-start mb-2">
                         <h4 className="text-xl font-semibold text-[#A6ACCD] group-hover:text-white transition-colors tracking-tight">{project.title}</h4>
                         <div className="p-2 rounded-full bg-[#1c1c1e] text-[#5F6B7C] group-hover:text-white transition-colors">
                           <ArrowRight size={16} className="-rotate-45" />
                         </div>
                       </div>
+                      {project.period && (
+                        <p className="text-xs font-medium text-[#5F6B7C] mb-6 italic">{project.period}</p>
+                      )}
 
                       <p className="text-[#5F6B7C] text-sm leading-relaxed mb-6 font-light line-clamp-3">
                         {project.description}
@@ -1218,7 +1235,10 @@ export default function Portfolio() {
                   transition={{ duration: 0.3 }}
                   className="p-8"
                 >
-                  <h3 className="text-3xl font-bold text-white mb-2">{selectedProject.title}</h3>
+                  <h3 className="text-3xl font-bold text-white mb-1">{selectedProject.title}</h3>
+                  {selectedProject.period && (
+                    <p className="text-sm font-medium text-[#5F6B7C] mb-4 italic">{selectedProject.period}</p>
+                  )}
                   <div className="mb-6 flex flex-wrap gap-2">
                     {selectedProject.techs.map(t => {
                       const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
