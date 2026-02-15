@@ -50,10 +50,12 @@ interface Content {
     downloadCV: string;
     exploreProject: string;
     letsConnect: string;
+    experience: string;
   };
   projects: {
     featured: Project;
     main: Project[];
+    experience: Project[];
     other: { name: string; tech: string; link: string }[];
     viewCode: string;
   };
@@ -115,6 +117,7 @@ const content: Record<'pt' | 'en', Content> = {
       stackLabel: "Stack Principal",
     },
     sections: {
+      experience: "Experiência",
       projects: "Meus Projetos",
       otherProjects: "Outros Projetos",
       featured: "Destaque",
@@ -142,34 +145,7 @@ const content: Record<'pt' | 'en', Content> = {
         ],
         isFeatured: true,
       },
-      main: [
-        {
-          title: 'Dashboard Financeiro',
-          description: 'Sistema em tempo real para gestão de ativos e passivos.',
-          longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
-          period: 'Jul 2025 — Ago 2025',
-          techs: ['React', 'JS', 'Firebase'],
-          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
-          cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
-          images: [
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
-          ],
-        },
-        {
-          title: 'TikTok Downloader',
-          description: 'App Android para download de vídeos sem marca d\'água.',
-          longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
-          period: 'Jan 2026',
-          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
-          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
-          cta: { text: "Baixar", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
-          images: [
-            '/projects/tiktok downloader/preview.jpeg',
-            '/projects/tiktok downloader/preview2.jpeg'
-          ],
-        },
+      experience: [
         {
           title: 'A Ordem Survived',
           description: 'Portal imersivo para servidor de DayZ com foco em performance.',
@@ -205,12 +181,74 @@ const content: Record<'pt' | 'en', Content> = {
           ],
         }
       ],
+      main: [
+        {
+          title: 'Dashboard Financeiro',
+          description: 'Sistema em tempo real para gestão de ativos e passivos.',
+          longDescription: 'Um dashboard moderno e interativo para gerenciamento de finanças pessoais, permitindo ao usuário adicionar, visualizar, editar e excluir transações de receitas e despesas. A aplicação conta com resumos financeiros e visualizações gráficas para uma análise clara dos dados.',
+          period: 'Jul 2025 — Ago 2025',
+          techs: ['React', 'JS', 'Firebase'],
+          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
+          cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
+          images: [
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
+          ],
+        },
+        {
+          title: 'TikTok Downloader',
+          description: 'App Android para download de vídeos sem marca d\'água.',
+          longDescription: 'Aplicativo nativo focado em performance que interage com a API do TikTok para extrair vídeos limpos. Interface minimalista e downloads em background.',
+          period: 'Jan 2026',
+          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
+          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
+          cta: { text: "Baixar", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
+          images: [
+            '/projects/tiktok downloader/preview.jpeg',
+            '/projects/tiktok downloader/preview2.jpeg'
+          ],
+        },
+        {
+          title: 'WhatsApp Portfolio',
+          description: 'Portfolio interativo simulando a interface do WhatsApp.',
+          longDescription: 'Uma forma criativa e interativa de apresentar meu portfólio, simulando a experiência de uso do WhatsApp Web. Inclui chat bot simulado, lista de contatos e visualização de status.',
+          period: 'Out 2025',
+          techs: ['Next.js', 'React', 'Tailwind', 'TypeScript'],
+          links: { demo: 'https://whatsapp-portfolio.vercel.app', github: 'https://github.com/naicolas-dev/whatsapp-portfolio' },
+          cta: { text: "Visitar", link: "https://whatsapp-portfolio.vercel.app" },
+          images: [
+            '/projects/whatsapp/Captura de tela 2026-02-15 193917.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 193956.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194014.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194045.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194658.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194713.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194801.png',
+          ],
+        },
+        {
+          title: 'MyAi Recipes',
+          description: 'API de receitas com inteligência artificial para sugestões personalizadas.',
+          longDescription: 'API RESTful desenvolvida em Laravel para gerenciamento de receitas culinárias. Integração com IA para sugerir receitas com base nos ingredientes disponíveis do usuário.',
+          period: 'Set 2025',
+          techs: ['PHP', 'Laravel', 'MySQL', 'OpenAI API'],
+          links: { github: 'https://github.com/naicolas-dev/api-receitas' },
+          cta: { text: "Código", link: "https://github.com/naicolas-dev/api-receitas" },
+          images: [
+            '/projects/myai-recipes/1-dark.png',
+            '/projects/myai-recipes/2-dark.png',
+            '/projects/myai-recipes/3-dark.png',
+            '/projects/myai-recipes/1-light.png',
+            '/projects/myai-recipes/2-light.png',
+            '/projects/myai-recipes/3-light.png'
+          ],
+        }
+      ],
       other: [
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://whatsapp-portfolio.vercel.app' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
-        { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
         { name: 'Gestor de Segurança', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
       ],
       viewCode: 'Abrir no GitHub',
@@ -246,6 +284,7 @@ const content: Record<'pt' | 'en', Content> = {
       stackLabel: "Main Stack",
     },
     sections: {
+      experience: "Experience",
       projects: "My Projects",
       otherProjects: "Other Projects",
       featured: "Featured",
@@ -273,34 +312,7 @@ const content: Record<'pt' | 'en', Content> = {
         ],
         isFeatured: true,
       },
-      main: [
-        {
-          title: 'Finance Dashboard',
-          description: 'Real-time system for asset and liability management.',
-          longDescription: 'A modern and interactive dashboard for personal finance management, allowing users to add, view, edit, and delete income and expense transactions. The application features financial summaries and graphical visualizations for clear data analysis.',
-          period: 'Jul 2025 - Aug 2025',
-          techs: ['React', 'JS', 'Firebase'],
-          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
-          cta: { text: "Visit", link: "https://despesas-trabalho.vercel.app" },
-          images: [
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
-            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
-          ],
-        },
-        {
-          title: 'TikTok Downloader',
-          description: 'Android app for downloading watermak-free videos.',
-          longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
-          period: 'Jan 2026',
-          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
-          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
-          cta: { text: "Download", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
-          images: [
-            '/projects/tiktok downloader/preview.jpeg',
-            '/projects/tiktok downloader/preview2.jpeg'
-          ],
-        },
+      experience: [
         {
           title: 'A Ordem Survived',
           description: 'Immersive portal for DayZ server focused on performance.',
@@ -336,12 +348,64 @@ const content: Record<'pt' | 'en', Content> = {
           ],
         }
       ],
+      main: [
+        {
+          title: 'Finance Dashboard',
+          description: 'Real-time system for asset and liability management.',
+          longDescription: 'A modern and interactive dashboard for personal finance management, allowing users to add, view, edit, and delete income and expense transactions. The application features financial summaries and graphical visualizations for clear data analysis.',
+          period: 'Jul 2025 - Aug 2025',
+          techs: ['React', 'JS', 'Firebase'],
+          links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
+          cta: { text: "Visit", link: "https://despesas-trabalho.vercel.app" },
+          images: [
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.24.58.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.02.jpeg',
+            '/projects/dashboard financeiro/WhatsApp Image 2026-01-14 at 19.25.07.jpeg'
+          ],
+        },
+        {
+          title: 'TikTok Downloader',
+          description: 'Android app for downloading watermak-free videos.',
+          longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
+          period: 'Jan 2026',
+          techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
+          links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
+          cta: { text: "Download", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
+          images: [
+            '/projects/tiktok downloader/preview.jpeg',
+            '/projects/tiktok downloader/preview2.jpeg'
+          ],
+        },
+        {
+          title: 'WhatsApp Portfolio',
+          description: 'Interactive portfolio simulating the WhatsApp interface.',
+          longDescription: 'A creative and interactive way to present my portfolio, simulating the WhatsApp Web user experience. Includes simulated chat bot, contact list, and status viewing.',
+          period: 'Oct 2025',
+          techs: ['Next.js', 'React', 'Tailwind', 'Typescript'],
+          links: { demo: 'https://whatsapp-portfolio.vercel.app', github: 'https://github.com/naicolas-dev/whatsapp-portfolio' },
+          cta: { text: "Visit", link: "https://whatsapp-portfolio.vercel.app" },
+          images: [
+            '/projects/whatsapp/Captura de tela 2026-02-15 193917.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 193956.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194014.png',
+            '/projects/whatsapp/Captura de tela 2026-02-15 194045.png'
+          ],
+        },
+        {
+          title: 'MyAi Recipes',
+          description: 'Recipe API with artificial intelligence for personalized suggestions.',
+          longDescription: 'RESTful API developed in Laravel for culinary recipe management. AI integration to suggest recipes based on user available ingredients.',
+          period: 'Sep 2025',
+          techs: ['PHP', 'Laravel', 'MySQL', 'OpenAI API'],
+          links: { github: 'https://github.com/naicolas-dev/api-receitas' },
+          cta: { text: "Code", link: "https://github.com/naicolas-dev/api-receitas" },
+          images: [],
+        }
+      ],
       other: [
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'WhatsApp Portfolio', tech: 'Next.js & React', link: 'https://whatsapp-portfolio.vercel.app' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
-        { name: 'MyAi Recipes', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/api-receitas' },
         { name: 'Security Manager', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
       ],
       viewCode: 'View on GitHub',
@@ -469,11 +533,22 @@ export default function Portfolio() {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial
 
+    // Load language from localStorage
+    const savedLang = localStorage.getItem('portfolio-language');
+    if (savedLang === 'en' || savedLang === 'pt') {
+      setLanguage(savedLang);
+    }
+
     return () => {
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  // Save language to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('portfolio-language', language);
+  }, [language]);
 
   const openProject = (project: Project) => {
     setSelectedProject(project);
@@ -488,10 +563,19 @@ export default function Portfolio() {
       } else {
         // Find index in the OLD language's main array to find the corresponding one in the NEW language's main array
         const oldLanguage = language === 'pt' ? 'en' : 'pt';
+        // Find in MAIN
         const oldMain = content[oldLanguage].projects.main;
         const index = oldMain.findIndex(p => p.links.github === selectedProject.links.github || p.links.demo === selectedProject.links.demo);
         if (index !== -1) {
           setSelectedProject(t.projects.main[index]);
+          return;
+        }
+
+        // Find in EXPERIENCE
+        const oldExperience = content[oldLanguage].projects.experience;
+        const expIndex = oldExperience.findIndex(p => p.links.github === selectedProject.links.github || p.links.demo === selectedProject.links.demo);
+        if (expIndex !== -1) {
+          setSelectedProject(t.projects.experience[expIndex]);
         }
       }
     }
@@ -830,9 +914,80 @@ export default function Portfolio() {
         </header>
 
 
+
+        {/* --- 1. EXPERIENCE --- */}
+        <section className="mb-32">
+          <SectionHeading number="1">{t.sections.experience}</SectionHeading>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={language}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {t.projects.experience.map((project, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => {
+                    track('Project Click', { project: project.title, type: 'Experience' });
+                    openProject(project);
+                  }}
+                  className="rounded-2xl border border-[#30363D] bg-[#161B22]/50 hover:bg-[#161B22] hover:border-[#30363D] transition-all duration-300 group cursor-pointer flex flex-col overflow-hidden"
+                >
+                  {/* Image Preview */}
+                  <div className="relative h-48 w-full overflow-hidden border-b border-[#30363D]">
+                    <div className="absolute inset-0 bg-[#0F1115] animate-pulse" />
+                    {project.images[0] && (
+                      <img
+                        src={project.images[0]}
+                        alt={project.title}
+                        className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
+                      />
+                    )}
+                  </div>
+
+                  <div className="p-8 flex flex-col justify-between flex-grow">
+                    <div>
+                      <div className="flex justify-between items-start mb-2">
+                        <h4 className="text-xl font-semibold text-[#A6ACCD] group-hover:text-white transition-colors tracking-tight">{project.title}</h4>
+                        <div className="p-2 rounded-full bg-[#1c1c1e] text-[#5F6B7C] group-hover:text-white transition-colors">
+                          <ArrowRight size={16} className="-rotate-45" />
+                        </div>
+                      </div>
+                      {project.period && (
+                        <p className="text-xs font-medium text-[#5F6B7C] mb-6 italic">{project.period}</p>
+                      )}
+
+                      <p className="text-[#5F6B7C] text-sm leading-relaxed mb-6 font-light line-clamp-3">
+                        {project.description}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {project.techs.map(t => (
+                        <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </section>
+
+
         {/* --- 2. PROJETOS (Main) --- */}
         <section id="projects-section" className="mb-32">
-          <SectionHeading number="1">{t.sections.projects}</SectionHeading>
+          <SectionHeading number="2">{t.sections.projects}</SectionHeading>
 
           <AnimatePresence mode="wait">
             <motion.div
@@ -951,7 +1106,7 @@ export default function Portfolio() {
 
         {/* --- 3. OUTROS EXPERIMENTOS --- */}
         <section className="mb-40">
-          <SectionHeading number="2">{t.sections.otherProjects}</SectionHeading>
+          <SectionHeading number="3">{t.sections.otherProjects}</SectionHeading>
 
           <AnimatePresence mode="wait">
             <motion.div
@@ -988,7 +1143,7 @@ export default function Portfolio() {
 
         {/* --- 4. FORMAÇÃO --- */}
         <section className="mb-40">
-          <SectionHeading number="3">{t.education.title}</SectionHeading>
+          <SectionHeading number="4">{t.education.title}</SectionHeading>
 
           <AnimatePresence mode="wait">
             <motion.div
