@@ -19,6 +19,55 @@
       opacity: .5;
     }
   }
+
+  /* Mais suave: duration um pouco maior na passada, easing apple-like */
+  --animate-shine: shine 3s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-150%) skewX(-20deg);
+    }
+
+    40% {
+      transform: translateX(150%) skewX(-20deg);
+    }
+
+    100% {
+      transform: translateX(150%) skewX(-20deg);
+    }
+  }
+
+  /* Wiggle starts earlier in the cycle to catch attention upon entry */
+  --animate-wiggle: wiggle 5s ease-in-out infinite;
+
+  @keyframes wiggle {
+
+    0%,
+    5% {
+      transform: rotate(0deg) scale(1);
+    }
+
+    7% {
+      transform: rotate(-2deg) scale(1.05);
+    }
+
+    10% {
+      transform: rotate(2deg) scale(1.05);
+    }
+
+    13% {
+      transform: rotate(-2deg) scale(1.05);
+    }
+
+    16% {
+      transform: rotate(1deg) scale(1.05);
+    }
+
+    19%,
+    100% {
+      transform: rotate(0deg) scale(1);
+    }
+  }
 }
 
 /* Utilitários Customizados */

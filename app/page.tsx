@@ -506,6 +506,7 @@ export default function Portfolio() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [hideLanguageToggle, setHideLanguageToggle] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const [ctaInView, setCtaInView] = useState(false);
 
   const t = content[language];
 
@@ -1184,6 +1185,7 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            onViewportEnter={() => setCtaInView(true)}
             transition={{ duration: 0.6 }}
             className="p-12 rounded-3xl border border-[#30363D] bg-[#161B22] flex flex-col items-center gap-8 relative overflow-hidden"
           >
@@ -1213,11 +1215,12 @@ export default function Portfolio() {
                   <a
                     href="mailto:naicolas.dev@gmail.com"
                     onClick={() => track('Contact CTA Click', { location: 'Footer Section' })}
-                    className="px-10 py-4 rounded-full bg-[#A6ACCD] text-black font-bold text-lg hover:bg-[#A6ACCD] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(166,172,205,0.03)] group flex items-center gap-3"
+                    className={`relative overflow-hidden px-10 py-4 rounded-full bg-[#A6ACCD] text-black font-bold text-lg hover:bg-[#A6ACCD] transition-all hover:scale-105 shadow-[0_20px_40px_rgba(166,172,205,0.03)] group flex items-center gap-3 ${ctaInView ? 'animate-wiggle' : ''} hover:animate-none`}
                   >
-                    <Mail size={20} />
-                    <span>{language === 'pt' ? 'Me Contrate' : 'Hire Me'}</span>
-                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] ${ctaInView ? 'animate-shine' : ''} group-hover:animate-none`} />
+                    <Mail size={20} className="relative z-10" />
+                    <span className="relative z-10">{language === 'pt' ? 'Me Contrate' : 'Hire Me'}</span>
+                    <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
                   </a>
                 </Magnetic>
               </motion.div>
