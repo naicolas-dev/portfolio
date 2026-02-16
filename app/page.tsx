@@ -268,12 +268,6 @@ const content: Record<'pt' | 'en', Content> = {
           institution: "Proz Educação • 2024 — 2026",
           dotColor: "bg-zinc-800",
           textColor: "text-zinc-400"
-        },
-        {
-          title: "Ensino Médio",
-          institution: "Escola Estadual Professora Dilma Quadros • 2023 — 2025",
-          dotColor: "bg-zinc-800",
-          textColor: "text-zinc-400"
         }
       ]
     }
@@ -366,7 +360,7 @@ const content: Record<'pt' | 'en', Content> = {
         },
         {
           title: 'TikTok Downloader',
-          description: 'Android app for downloading watermak-free videos.',
+          description: 'Android app for downloading watermark-free videos.',
           longDescription: 'Performance-focused native application interacting with TikTok API to extract clean videos. Minimalist interface and background downloads.',
           period: 'Jan 2026',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
@@ -423,12 +417,6 @@ const content: Record<'pt' | 'en', Content> = {
         {
           title: "Technical Degree in Systems Development",
           institution: "Proz Education • 2024 — 2026",
-          dotColor: "bg-zinc-800",
-          textColor: "text-zinc-400"
-        },
-        {
-          title: "High School Diploma",
-          institution: "State School Professora Dilma Quadros • 2023 — 2025",
           dotColor: "bg-zinc-800",
           textColor: "text-zinc-400"
         }
@@ -536,12 +524,15 @@ export default function Portfolio() {
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial
 
-    // Load language from localStorage
+    // Load language from localStorage or detect browser language
     const savedLang = localStorage.getItem('portfolio-language');
     if (savedLang === 'en' || savedLang === 'pt') {
       setLanguage(savedLang);
     } else {
-      setShowLanguageModal(true);
+      // Auto-detect browser language
+      const browserLang = navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+      setLanguage(browserLang);
+      localStorage.setItem('portfolio-language', browserLang);
     }
 
     return () => {
