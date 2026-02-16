@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { track } from '@vercel/analytics';
@@ -19,7 +19,6 @@ import {
 import { FaJava } from 'react-icons/fa';
 
 import { TabTitleHandler } from './components/TabTitleHandler';
-import { LocationIndicator } from './components/LocationIndicator';
 import Magnetic from './components/Magnetic';
 import StaggeredText from './components/StaggeredText';
 import { LanguageModal } from './components/LanguageModal';
@@ -55,6 +54,7 @@ interface Content {
     exploreProject: string;
     letsConnect: string;
     experience: string;
+    stack: string;
   };
   projects: {
     featured: Project;
@@ -103,14 +103,14 @@ const techMap: Record<string, { icon: React.ReactNode; color: string }> = {
 
 // --- STACK DATA ---
 const stackItems = [
-  { name: "PHP", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiPhp size={18} /> },
-  { name: "Laravel", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiLaravel size={18} /> },
-  { name: "PostgreSQL", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiPostgresql size={18} /> },
-  { name: "Next.js", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiNextdotjs size={18} /> },
-  { name: "React", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiReact size={18} /> },
-  { name: "JavaScript", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiJavascript size={18} /> },
-  { name: "Tailwind", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiTailwindcss size={18} /> },
-  { name: "TypeScript", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiTypescript size={18} /> },
+  { name: "PHP", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiPhp size={28} /> },
+  { name: "Laravel", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiLaravel size={28} /> },
+  { name: "PostgreSQL", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiPostgresql size={28} /> },
+  { name: "Next.js", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiNextdotjs size={28} /> },
+  { name: "React", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiReact size={28} /> },
+  { name: "JavaScript", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiJavascript size={28} /> },
+  { name: "Tailwind", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiTailwindcss size={28} /> },
+  { name: "TypeScript", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiTypescript size={28} /> },
 ];
 
 const content: Record<'pt' | 'en', Content> = {
@@ -131,14 +131,15 @@ const content: Record<'pt' | 'en', Content> = {
       heroCTA: "ver meus projetos",
       downloadCV: "Baixar currículo",
       exploreProject: "Explorar Projeto",
-      letsConnect: "Vamos Conversar"
+      letsConnect: "Vamos Conversar",
+      stack: "Stack Principal",
     },
     projects: {
       featured: {
         title: 'Frequência Certa',
         description: 'Solução para alunos visualizarem sua assiduidade escolar, visando a permanência na escola e a manutenção de benefícios sociais como o "Pé de Meia".',
         longDescription: 'Plataforma focada no aluno que simplifica o acompanhamento da frequência escolar. Ajuda estudantes a monitorar sua presença para garantir o cumprimento dos requisitos mínimos para aprovação e recebimento de auxílios governamentais, promovendo a transparência e a retenção escolar.',
-        period: 'Dez 2025 — Fev 2026',
+        period: 'Dez 2025 - Fev 2026',
         techs: ['PHP', 'Laravel', 'PostgreSQL', 'Bootstrap', 'Tailwind', 'AlpineJS', 'JavaScript', 'Firebase'],
         links: { github: 'https://github.com/naicolas-dev/frequencia-certa' },
         cta: { text: "Visitar", link: "https://frequenciacerta.app.br" },
@@ -193,7 +194,7 @@ const content: Record<'pt' | 'en', Content> = {
           title: 'Dashboard Financeiro',
           description: 'Aplicação de gestão financeira que simplifica o controle de gastos através de visualização de dados em tempo real.',
           longDescription: 'Transforma dados brutos de receitas e despesas em gráficos intuitivos e relatórios instantâneos. Permite ao usuário tomar decisões financeiras melhores através de uma interface responsiva e interativa, com atualizações em tempo real via Firebase.',
-          period: 'Jul 2025 — Ago 2025',
+          period: 'Jul 2025 - Ago 2025',
           techs: ['React', 'JS', 'Firebase'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
           cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
@@ -295,7 +296,8 @@ const content: Record<'pt' | 'en', Content> = {
       heroCTA: "view my projects",
       downloadCV: "Download resume",
       exploreProject: "Explore Project",
-      letsConnect: "Let's Connect"
+      letsConnect: "Let's Connect",
+      stack: "Main Stack",
     },
     projects: {
       featured: {
@@ -908,9 +910,43 @@ export default function Portfolio() {
 
 
 
-            {/* --- 1. EXPERIENCE --- */}
+            {/* --- 1. STACK --- */}
             <section className="mb-32">
-              <SectionHeading number="1">{t.sections.experience}</SectionHeading>
+              <SectionHeading number="1">{t.sections.stack}</SectionHeading>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {stackItems.map((item, i) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    className={`
+                      group relative overflow-hidden p-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 
+                      hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-300
+                      flex flex-col items-center justify-center gap-4 text-center cursor-default
+                      hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]
+                    `}
+                  >
+
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    <div className="p-4 rounded-full bg-zinc-900/80 border border-zinc-800 group-hover:scale-110 group-hover:border-zinc-700 transition-all duration-300 relative z-10 text-zinc-400 group-hover:text-zinc-100">
+                      {item.icon}
+                    </div>
+
+                    <span className="font-medium text-sm text-zinc-500 group-hover:text-zinc-300 transition-colors z-10 relative">
+                      {item.name}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </section>
+
+            {/* --- 2. EXPERIENCE --- */}
+            <section className="mb-32">
+              <SectionHeading number="2">{t.sections.experience}</SectionHeading>
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -964,11 +1000,16 @@ export default function Portfolio() {
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                          {project.techs.map(t => (
+                          {project.techs.slice(0, 3).map(t => (
                             <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
                               {t}
                             </span>
                           ))}
+                          {project.techs.length > 3 && (
+                            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                              +{project.techs.length - 3}
+                            </span>
+                          )}
                         </div>
                       </div>
                     </motion.div>
@@ -978,9 +1019,9 @@ export default function Portfolio() {
             </section>
 
 
-            {/* --- 2. PROJETOS (Main) --- */}
+            {/* --- 3. PROJETOS (Main) --- */}
             <section id="projects-section" className="mb-32">
-              <SectionHeading number="2">{t.sections.projects}</SectionHeading>
+              <SectionHeading number="3">{t.sections.projects}</SectionHeading>
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -1016,7 +1057,7 @@ export default function Portfolio() {
                         </p>
 
                         <div className="flex flex-wrap gap-2 mb-8">
-                          {t.projects.featured.techs.map(t => {
+                          {t.projects.featured.techs.slice(0, 3).map(t => {
                             const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
                             return (
                               <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
@@ -1024,6 +1065,11 @@ export default function Portfolio() {
                               </StackBadge>
                             );
                           })}
+                          {t.projects.featured.techs.length > 3 && (
+                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5 text-zinc-300">
+                              <span className="font-medium text-[11px] tracking-wide">+{t.projects.featured.techs.length - 3}</span>
+                            </div>
+                          )}
                         </div>
 
                         <div className="flex gap-4">
@@ -1082,11 +1128,16 @@ export default function Portfolio() {
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                          {project.techs.map(t => (
+                          {project.techs.slice(0, 3).map(t => (
                             <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
                               {t}
                             </span>
                           ))}
+                          {project.techs.length > 3 && (
+                            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                              +{project.techs.length - 3}
+                            </span>
+                          )}
                         </div>
                       </motion.div>
                     ))}
@@ -1097,9 +1148,9 @@ export default function Portfolio() {
             </section>
 
 
-            {/* --- 3. OUTROS EXPERIMENTOS --- */}
+            {/* --- 4. OUTROS EXPERIMENTOS --- */}
             <section className="mb-40">
-              <SectionHeading number="3">{t.sections.otherProjects}</SectionHeading>
+              <SectionHeading number="4">{t.sections.otherProjects}</SectionHeading>
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -1134,9 +1185,9 @@ export default function Portfolio() {
             </section>
 
 
-            {/* --- 4. FORMAÇÃO --- */}
+            {/* --- 5. FORMAÃ‡ÃƒO --- */}
             <section className="mb-40">
-              <SectionHeading number="4">{t.education.title}</SectionHeading>
+              <SectionHeading number="5">{t.education.title}</SectionHeading>
 
               <AnimatePresence mode="wait">
                 <motion.div
