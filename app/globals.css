@@ -83,8 +83,7 @@ body {
   color: var(--color-text-primary);
   font-family: var(--font-inter);
 
-  /* 👇 É ESTA LINHA QUE FAZ A MÁGICA */
-  text-transform: lowercase;
+
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

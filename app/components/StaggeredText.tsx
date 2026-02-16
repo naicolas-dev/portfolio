@@ -42,7 +42,7 @@ export default function StaggeredText({ text, className = "" }: { text: string, 
             {words.map((word, index) => (
                 <motion.span variants={child} key={index} className="mr-[0.25em] last:mr-0 inline-block">
                     {word === "V." ? (
-                        <span className="text-[#A6ACCD]">{word}</span>
+                        <span className="text-[#3B82F6]">{word}</span>
                     ) : (
                         word
                     )}
