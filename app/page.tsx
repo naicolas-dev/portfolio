@@ -22,6 +22,7 @@ import { TabTitleHandler } from './components/TabTitleHandler';
 import { LocationIndicator } from './components/LocationIndicator';
 import Magnetic from './components/Magnetic';
 import StaggeredText from './components/StaggeredText';
+import { LanguageModal } from './components/LanguageModal';
 
 // --- TYPES ---
 interface Project {
@@ -500,6 +501,7 @@ export default function Portfolio() {
   const dragControls = useDragControls(); // For controlling bottom sheet drag
   const [mounted, setMounted] = useState(false);
   const [language, setLanguage] = useState<'pt' | 'en'>('pt');
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   const [isStackHovered, setIsStackHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -538,6 +540,8 @@ export default function Portfolio() {
     const savedLang = localStorage.getItem('portfolio-language');
     if (savedLang === 'en' || savedLang === 'pt') {
       setLanguage(savedLang);
+    } else {
+      setShowLanguageModal(true);
     }
 
     return () => {
@@ -546,10 +550,7 @@ export default function Portfolio() {
     };
   }, []);
 
-  // Save language to localStorage when it changes
-  useEffect(() => {
-    localStorage.setItem('portfolio-language', language);
-  }, [language]);
+
 
   const openProject = (project: Project) => {
     setSelectedProject(project);
@@ -641,7 +642,7 @@ export default function Portfolio() {
 
   // Lock body scroll when modal is open
   useEffect(() => {
-    if (selectedProject) {
+    if (selectedProject || showLanguageModal) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -649,10 +650,21 @@ export default function Portfolio() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [selectedProject]);
+  }, [selectedProject, showLanguageModal]);
 
   return (
     <main className="min-h-screen relative font-sans selection:bg-[#A6ACCD]/30 selection:text-zinc-100 overflow-x-hidden">
+      <AnimatePresence>
+        {showLanguageModal && (
+          <LanguageModal
+            onSelect={(lang) => {
+              setLanguage(lang);
+              localStorage.setItem('portfolio-language', lang);
+              setShowLanguageModal(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
       <TabTitleHandler language={language} />
       {/* Background Texture & Lighting - Apple Style */}
       <div className="fixed inset-0 bg-[#0F1115] -z-20" />
@@ -668,7 +680,9 @@ export default function Portfolio() {
                 if (isMobile) {
                   setIsLangMenuOpen(!isLangMenuOpen);
                 } else {
-                  setLanguage(l => l === 'pt' ? 'en' : 'pt');
+                  const newLang = language === 'pt' ? 'en' : 'pt';
+                  setLanguage(newLang);
+                  localStorage.setItem('portfolio-language', newLang);
                 }
               }}
               className={`flex items-center justify-center rounded-full bg-[#161B22] border border-[#30363D] text-xs font-medium text-zinc-100 hover:text-white hover:bg-[#161B22] hover:border-[#30363D] transition-colors shadow-xl group overflow-hidden ${(!isScrolled && isMobile) ? 'px-4 py-2' : 'w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-2 md:justify-start'}`}
@@ -751,7 +765,11 @@ export default function Portfolio() {
                   className="absolute top-12 right-0 bg-[#161B22] border border-[#30363D] rounded-xl overflow-hidden shadow-2xl min-w-[140px] flex flex-col"
                 >
                   <button
-                    onClick={() => { setLanguage('pt'); setIsLangMenuOpen(false); }}
+                    onClick={() => {
+                      setLanguage('pt');
+                      localStorage.setItem('portfolio-language', 'pt');
+                      setIsLangMenuOpen(false);
+                    }}
                     className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'pt' ? 'text-white bg-zinc-800/50' : 'text-zinc-400'}`}
                   >
                     <span>🇧🇷 Português (Brasil)</span>
@@ -759,7 +777,11 @@ export default function Portfolio() {
                   </button>
                   <div className="h-px bg-[#30363D]" />
                   <button
-                    onClick={() => { setLanguage('en'); setIsLangMenuOpen(false); }}
+                    onClick={() => {
+                      setLanguage('en');
+                      localStorage.setItem('portfolio-language', 'en');
+                      setIsLangMenuOpen(false);
+                    }}
                     className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'en' ? 'text-white bg-zinc-800/50' : 'text-zinc-400'}`}
                   >
                     <span>🇺🇸 English (United States)</span>
