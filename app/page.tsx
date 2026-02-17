@@ -22,6 +22,7 @@ import { TabTitleHandler } from './components/TabTitleHandler';
 import Magnetic from './components/Magnetic';
 import StaggeredText from './components/StaggeredText';
 import { LanguageModal } from './components/LanguageModal';
+import MobileMultimediaHub from './components/MobileMultimediaHub';
 import { useLanguage } from './context/LanguageContext';
 
 // --- TYPES ---
@@ -872,6 +873,9 @@ export default function Portfolio() {
                             <p className="text-base md:text-lg text-zinc-400 font-normal leading-relaxed max-w-2xl text-balance pb-4">
                               {t.hero.subtext}
                             </p>
+
+                            {/* Mobile Multimedia Hub (Spotify & Steam) - Visible only inside expanded bio on mobile */}
+                            <MobileMultimediaHub />
                           </motion.div>
                         )}
                       </AnimatePresence>
