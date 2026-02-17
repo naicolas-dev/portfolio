@@ -24,10 +24,18 @@ interface Playlist {
     external_urls: { spotify: string };
 }
 
+interface SpotifyProfile {
+    display_name: string;
+    external_urls: { spotify: string };
+    images: { url: string }[];
+    followers: { total: number };
+}
+
 export default function MusicSection() {
     const { language } = useLanguage();
     const [nowPlaying, setNowPlaying] = useState<SpotifyData | null>(null);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
+    const [profile, setProfile] = useState<SpotifyProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
 
@@ -71,10 +79,22 @@ export default function MusicSection() {
         }
     };
 
+    const fetchProfile = async () => {
+        try {
+            const res = await fetch('/api/spotify/profile');
+            if (res.ok) {
+                const data = await res.json();
+                setProfile(data);
+            }
+        } catch (error) {
+            console.error('Error fetching Profile:', error);
+        }
+    };
+
     useEffect(() => {
         const init = async () => {
             setLoading(true);
-            await Promise.all([fetchNowPlaying(), fetchPlaylists()]);
+            await Promise.all([fetchNowPlaying(), fetchPlaylists(), fetchProfile()]);
             setLoading(false);
         };
         init();
@@ -118,6 +138,33 @@ export default function MusicSection() {
 
     return (
         <div className="flex flex-col gap-4 p-4">
+            {/* Profile Header */}
+            {profile && (
+                <div className="flex items-center gap-3 mb-2">
+                    {profile.images[0] && (
+                        <img
+                            src={profile.images[0].url}
+                            alt={profile.display_name}
+                            className="w-10 h-10 rounded-full border-2 border-[#1DB954]"
+                        />
+                    )}
+                    <div>
+                        <a
+                            href={profile.external_urls.spotify}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white font-semibold hover:text-[#1DB954] transition-colors"
+                        >
+                            {profile.display_name}
+                        </a>
+                        <div className="flex items-center gap-1 text-xs text-[#A1A6B3]">
+                            <SiSpotify size={12} />
+                            <span>Spotify</span>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Now Playing Card */}
             {nowPlaying && nowPlaying.title && (
                 <div className="bg-[#1a1d21]/80 border border-[#2a2d31] rounded-xl p-3">

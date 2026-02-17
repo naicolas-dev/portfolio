@@ -178,3 +178,54 @@ export async function getPublicPlaylists(): Promise<any> {
 
     return result;
 }
+
+export interface SpotifyProfile {
+    display_name: string;
+    external_urls: { spotify: string };
+    images: { url: string }[];
+    followers: { total: number };
+}
+
+const PROFILE_ENDPOINT = `https://api.spotify.com/v1/me`;
+
+let cached_profile: SpotifyProfile | null = null;
+let profile_fetched_at: number = 0;
+
+export async function getUserProfile(): Promise<SpotifyProfile | null> {
+    // Return cached profile if valid (less than 24 hours old - profile rarely changes)
+    if (cached_profile && Date.now() - profile_fetched_at < 24 * 3600 * 1000) {
+        return cached_profile;
+    }
+
+    const { access_token } = await getAccessToken();
+
+    const response = await fetch(PROFILE_ENDPOINT, {
+        headers: {
+            Authorization: `Bearer ${access_token}`,
+        },
+        next: {
+            revalidate: 86400 // Cache for 24 hours
+        }
+    });
+
+    if (!response.ok) {
+        console.error(`Spotify Profile API error: ${response.status}`);
+        // Return stale cache if available
+        if (cached_profile) return cached_profile;
+        return null; // Don't throw, just return null so UI handles it gracefully
+    }
+
+    const data = await response.json();
+
+    const profile: SpotifyProfile = {
+        display_name: data.display_name,
+        external_urls: data.external_urls,
+        images: data.images || [],
+        followers: data.followers || { total: 0 },
+    };
+
+    cached_profile = profile;
+    profile_fetched_at = Date.now();
+
+    return profile;
+}
