@@ -14,15 +14,4 @@ export const games: Game[] = [
         status: 'completed',
         playtime: '120h',
     },
-    {
-        name: 'Elden Ring',
-        platform: 'PlayStation',
-        status: 'playing',
-        playtime: '45h',
-    },
-    {
-        name: 'Minecraft',
-        platform: 'PC',
-        status: 'playing',
-    },
 ];
