@@ -22,6 +22,7 @@ import { TabTitleHandler } from './components/TabTitleHandler';
 import Magnetic from './components/Magnetic';
 import StaggeredText from './components/StaggeredText';
 import { LanguageModal } from './components/LanguageModal';
+import { useLanguage } from './context/LanguageContext';
 
 // --- TYPES ---
 interface Project {
@@ -499,7 +500,7 @@ export default function Portfolio() {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const dragControls = useDragControls(); // For controlling bottom sheet drag
   const [mounted, setMounted] = useState(false);
-  const [language, setLanguage] = useState<'pt' | 'en'>('pt');
+  const { language, setLanguage } = useLanguage();
   const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -545,9 +546,11 @@ export default function Portfolio() {
       setLanguage(savedLang);
     } else {
       // Auto-detect browser language for initial display, but show modal for confirmation
-      const browserLang = navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
-      setLanguage(browserLang);
-      setShowLanguageModal(true);
+      // const browserLang = navigator.language.toLowerCase().startsWith('pt') ? 'pt' : 'en';
+      // setLanguage(browserLang);
+      if (!localStorage.getItem('portfolio-language')) {
+        setShowLanguageModal(true);
+      }
     }
     setIsLoading(false);
 
@@ -666,7 +669,6 @@ export default function Portfolio() {
           <LanguageModal
             onSelect={(lang) => {
               setLanguage(lang);
-              localStorage.setItem('portfolio-language', lang);
               setShowLanguageModal(false);
             }}
           />
@@ -698,7 +700,6 @@ export default function Portfolio() {
                     } else {
                       const newLang = language === 'pt' ? 'en' : 'pt';
                       setLanguage(newLang);
-                      localStorage.setItem('portfolio-language', newLang);
                     }
                   }}
                   className={`flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-xs font-medium text-zinc-100 hover:text-[#dedede] hover:bg-zinc-900 hover:border-zinc-800 transition-colors shadow-xl group overflow-hidden ${(!isScrolled && isMobile) ? 'px-4 py-2' : 'w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-2 md:justify-start'}`}
@@ -783,7 +784,6 @@ export default function Portfolio() {
                       <button
                         onClick={() => {
                           setLanguage('pt');
-                          localStorage.setItem('portfolio-language', 'pt');
                           setIsLangMenuOpen(false);
                         }}
                         className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'pt' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400'}`}
@@ -795,7 +795,6 @@ export default function Portfolio() {
                       <button
                         onClick={() => {
                           setLanguage('en');
-                          localStorage.setItem('portfolio-language', 'en');
                           setIsLangMenuOpen(false);
                         }}
                         className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'en' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400'}`}
