@@ -84,8 +84,8 @@ export default function MusicSection() {
                         <SiSpotify className={`text-[#1DB954] ${nowPlaying.isPlaying ? 'animate-pulse' : ''}`} size={16} />
                         <span className="text-xs text-[#A1A6B3] uppercase tracking-wider">
                             {nowPlaying.isPlaying
-                                ? (language === 'pt' ? 'Ouvindo agora' : 'Now Playing')
-                                : (language === 'pt' ? 'Ouvido recentemente' : 'Recently Played')}
+                                ? (language === 'pt' ? 'Estou ouvindo agora' : "I'm now playing")
+                                : (language === 'pt' ? 'Ouvi recentemente' : "I've listened recently")}
                         </span>
                     </div>
 
@@ -133,7 +133,7 @@ export default function MusicSection() {
             {/* Playlists */}
             {playlists.length > 0 && (
                 <div>
-                    <h3 className="text-xs uppercase tracking-wider text-[#A1A6B3] mb-2 px-1">Public Playlists</h3>
+                    <h3 className="text-xs uppercase tracking-wider text-[#A1A6B3] mb-2 px-1">{language === 'pt' ? 'Minhas Playlists' : 'My Playlists'}</h3>
                     <div className="flex flex-col gap-2">
                         {playlists.map((playlist) => (
                             <a
