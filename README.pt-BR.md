@@ -41,12 +41,18 @@ npm install
 yarn install
 ```
 
-### 3. Configuração de Ambiente (Integração Spotify)
+### 3. Configuração de Ambiente (Integração Spotify & Steam)
 
-Para que a seção de música funcione, você precisa configurar as variáveis de ambiente.
+Para que a seção de música e estatísticas de jogos funcionem, você precisa configurar as variáveis de ambiente.
 
 1.  Renomeie o arquivo `.env.local.example` para `.env.local`.
-2.  Abra o `.env.local` e preencha com suas credenciais do Spotify.
+2.  Abra o `.env.local` e preencha com suas credenciais do Spotify e Steam.
+    - **Spotify**:
+        - [Documentação Web API](https://developer.spotify.com/documentation/web-api)
+        - [Dashboard](https://developer.spotify.com/dashboard)
+    - **Steam**:
+        - [Chave de API](https://steamcommunity.com/dev/apikey)
+        - [SteamID.io](https://steamid.io)
     - **Guia**: instruções detalhadas sobre como obter essas credenciais estão dentro do próprio arquivo `.env.local.example`.
 
 ### 4. Rode o servidor de desenvolvimento

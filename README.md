@@ -43,12 +43,18 @@ npm install
 yarn install
 ```
 
-### 3. Environment Configuration (Spotify Integration)
+3.  Environment Configuration (Spotify & Steam)
 
-To make the music section work, you need to set up your environment variables.
+To make the music section and game stats work, you need to set up your environment variables.
 
 1.  Rename `.env.local.example` to `.env.local`.
-2.  Open `.env.local` and fill in your Spotify Credentials.
+2.  Open `.env.local` and fill in your Spotify and Steam Credentials.
+    - **Spotify**:
+        - [Web API Documentation](https://developer.spotify.com/documentation/web-api)
+        - [Dashboard](https://developer.spotify.com/dashboard)
+    - **Steam**:
+        - [API Key](https://steamcommunity.com/dev/apikey)
+        - [SteamID.io](https://steamid.io)
     - **Guide**: detailed instructions on how to get these credentials are inside the `.env.local.example` file itself.
 
 ### 4. Run the development server
