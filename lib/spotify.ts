@@ -125,7 +125,15 @@ export interface SpotifyPlaylist {
 
 const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?limit=10`;
 
+let cached_playlists: any = null;
+let playlists_fetched_at: number = 0;
+
 export async function getPublicPlaylists(): Promise<any> {
+    // Return cached playlists if valid (less than 1 hour old)
+    if (cached_playlists && Date.now() - playlists_fetched_at < 3600 * 1000) {
+        return cached_playlists;
+    }
+
     const { access_token } = await getAccessToken();
 
     const response = await fetch(PLAYLISTS_ENDPOINT, {
@@ -138,15 +146,15 @@ export async function getPublicPlaylists(): Promise<any> {
     });
 
     if (!response.ok) {
+        // If rate limited or error, try to return stale cache
+        if (cached_playlists) {
+            console.warn(`Spotify API error completely failed: ${response.status}. Returning stale cache.`);
+            return cached_playlists;
+        }
         throw new Error(`Spotify Playlists API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-
-
-
-
-
 
     if (!data.items) {
         console.error(`[Spotify Debug] No items in response:`, data);
@@ -162,5 +170,11 @@ export async function getPublicPlaylists(): Promise<any> {
         external_urls: playlist.external_urls || { spotify: '' },
     }));
 
-    return { items: mapped, debug: data };
+    const result = { items: mapped, debug: data };
+
+    // Update cache
+    cached_playlists = result;
+    playlists_fetched_at = Date.now();
+
+    return result;
 }
