@@ -12,9 +12,30 @@ This is a personal portfolio website built with modern web technologies, featuri
 - **Animations**: Framer Motion
 - **Icons**: Lucide React, React Icons
 
-## Getting Started
+## Features
 
-First, install the dependencies:
+- **Responsive Design**: Fully responsive layout for all devices.
+- **Multi-language Support**: English and Portuguese (Brazil).
+- **Music Section**:
+    - **Real-time Player**: Displays currently playing song with a live progress bar.
+    - **Smart Polling**: Updates every second and intelligently refreshes when a song ends.
+    - **Spotify Integration**: Fetches user profile, now playing data, and public playlists.
+    - **Optimized Caching**: Server-side caching to prevent API rate limiting.
+- **Project Showcase**: Featured projects and detailed experience cards.
+
+
+## Setup Guide
+
+To copy and run this portfolio locally, follow these steps:
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/naicolas-dev/portfolio.git
+cd portfolio
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
@@ -22,7 +43,15 @@ npm install
 yarn install
 ```
 
-Then, run the development server:
+### 3. Environment Configuration (Spotify Integration)
+
+To make the music section work, you need to set up your environment variables.
+
+1.  Rename `.env.local.example` to `.env.local`.
+2.  Open `.env.local` and fill in your Spotify Credentials.
+    - **Guide**: detailed instructions on how to get these credentials are inside the `.env.local.example` file itself.
+
+### 4. Run the development server
 
 ```bash
 npm run dev
