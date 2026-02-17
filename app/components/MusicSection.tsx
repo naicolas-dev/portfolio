@@ -122,7 +122,21 @@ export default function MusicSection() {
             {nowPlaying && nowPlaying.title && (
                 <div className="bg-[#1a1d21]/80 border border-[#2a2d31] rounded-xl p-3">
                     <div className="flex items-center gap-2 mb-2">
-                        <SiSpotify className={`text-[#1DB954] ${nowPlaying.isPlaying ? 'animate-pulse' : ''}`} size={16} />
+                        {nowPlaying.isPlaying ? (
+                            <div className="flex items-end gap-[2px] h-4 w-4 justify-center pb-1">
+                                {[...Array(3)].map((_, i) => (
+                                    <div
+                                        key={i}
+                                        className="w-[2px] bg-[#1DB954] rounded-full animate-sound-wave"
+                                        style={{
+                                            animationDelay: `${i * 0.15}s`,
+                                        }}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <SiSpotify className="text-[#1DB954]" size={16} />
+                        )}
                         <span className="text-xs text-[#A1A6B3] uppercase tracking-wider">
                             {nowPlaying.isPlaying
                                 ? (language === 'pt' ? 'Estou ouvindo agora' : "I'm now playing")
