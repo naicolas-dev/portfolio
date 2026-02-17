@@ -11,6 +11,8 @@ interface SpotifyData {
     album?: string;
     albumImageUrl?: string;
     songUrl?: string;
+    progress_ms?: number;
+    duration_ms?: number;
 }
 
 interface Playlist {
@@ -27,14 +29,24 @@ export default function MusicSection() {
     const [nowPlaying, setNowPlaying] = useState<SpotifyData | null>(null);
     const [playlists, setPlaylists] = useState<Playlist[]>([]);
     const [loading, setLoading] = useState(true);
+    const [progress, setProgress] = useState(0);
+
+    const formatTime = (ms: number) => {
+        const totalSeconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    };
 
     const fetchNowPlaying = async () => {
         try {
             const res = await fetch('/api/spotify');
             if (res.ok) {
                 const data = await res.json();
-                console.log('Now Playing Data:', data);
                 setNowPlaying(data);
+                if (data.progress_ms) {
+                    setProgress(data.progress_ms);
+                }
             } else {
                 console.error('Now Playing Request Failed:', res.status);
             }
@@ -67,9 +79,38 @@ export default function MusicSection() {
         };
         init();
 
-        const interval = setInterval(fetchNowPlaying, 30000);
+        const interval = setInterval(fetchNowPlaying, 1000);
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (nowPlaying?.isPlaying && nowPlaying?.duration_ms && nowPlaying?.progress_ms) {
+            const timeRemaining = nowPlaying.duration_ms - nowPlaying.progress_ms;
+
+            // If the song is about to end (within a reasonable buffer), schedule a fetch
+            if (timeRemaining > 0) {
+                const timeout = setTimeout(() => {
+                    fetchNowPlaying();
+                }, timeRemaining + 1000); // Fetch 1s after expected end
+                return () => clearTimeout(timeout);
+            }
+        }
+    }, [nowPlaying?.duration_ms, nowPlaying?.progress_ms, nowPlaying?.isPlaying]);
+
+    useEffect(() => {
+        let timer: NodeJS.Timeout;
+        if (nowPlaying?.isPlaying && nowPlaying.duration_ms) {
+            timer = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev >= (nowPlaying.duration_ms || 0)) {
+                        return prev;
+                    }
+                    return prev + 1000;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [nowPlaying]);
 
     if (loading) {
         return <div className="text-center text-[#A1A6B3] text-sm py-4">Loading...</div>;
@@ -113,18 +154,18 @@ export default function MusicSection() {
                         </div>
                     </div>
 
-                    {nowPlaying.isPlaying && (
-                        <div className="flex items-end justify-center gap-1 h-6 w-full mt-2">
-                            {[...Array(5)].map((_, i) => (
+                    {nowPlaying.isPlaying && nowPlaying.duration_ms && (
+                        <div className="mt-3">
+                            <div className="w-full bg-[#2a2d31] rounded-full h-1 mb-1">
                                 <div
-                                    key={i}
-                                    className="w-1 bg-[#1DB954] rounded-full animate-sound-wave"
-                                    style={{
-                                        animationDelay: `${i * 0.1}s`,
-                                        height: '50%',
-                                    }}
+                                    className="bg-[#1DB954] h-1 rounded-full transition-all duration-1000 ease-linear"
+                                    style={{ width: `${Math.min((progress / nowPlaying.duration_ms) * 100, 100)}%` }}
                                 />
-                            ))}
+                            </div>
+                            <div className="flex justify-between text-[10px] text-[#A1A6B3] font-mono">
+                                <span>{formatTime(progress)}</span>
+                                <span>{formatTime(nowPlaying.duration_ms)}</span>
+                            </div>
                         </div>
                     )}
                 </div>

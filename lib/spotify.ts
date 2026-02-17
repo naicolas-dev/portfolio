@@ -14,6 +14,8 @@ export interface SpotifyTrack {
     album: string;
     albumImageUrl: string;
     songUrl: string;
+    progress_ms: number;
+    duration_ms: number;
 }
 
 let cached_token: string | null = null;
@@ -74,6 +76,8 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
         album: song.item.album.name,
         albumImageUrl: song.item.album.images[0]?.url || '',
         songUrl: song.item.external_urls.spotify,
+        progress_ms: song.progress_ms,
+        duration_ms: song.item.duration_ms,
     };
 }
 
@@ -105,6 +109,8 @@ export async function getRecentlyPlayed(): Promise<SpotifyTrack | null> {
         album: track.album.name,
         albumImageUrl: track.album.images[0]?.url || '',
         songUrl: track.external_urls.spotify,
+        progress_ms: 0,
+        duration_ms: track.duration_ms,
     };
 }
 
