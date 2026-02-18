@@ -120,8 +120,8 @@ const content: Record<'pt' | 'en', Content> = {
     hero: {
       status: "Disponível para estágio ou vaga júnior em desenvolvimento web",
       aboutMe: "Sobre mim",
-      headline: "Desenvolvedor Full-Stack em formação, com experiência em desenvolvimento de aplicações web completas, do front-end ao back-end, por meio de projetos próprios e acadêmicos.",
-      subtext: "Sou estudante de Sistemas de Informação na Universidade Estadual de Montes Claros (Unimontes), com experiência prática em Laravel, Next.js e PostgreSQL. Busco minha primeira oportunidade como desenvolvedor full-stack júnior, contribuindo com código limpo, organização e foco em performance.",
+      headline: "Desenvolvedor Full-Stack.",
+      subtext: "Tenho experiência no desenvolvimento de aplicações web completas, atuando tanto no front-end quanto no back-end em projetos próprios e acadêmicos. Sou estudante de Sistemas de Informação na Universidade Estadual de Montes Claros (Unimontes) e possuo prática com Laravel, Next.js e PostgreSQL. Busco minha primeira oportunidade como desenvolvedor full-stack júnior, com interesse em contribuir de forma consistente, escrevendo código claro e organizado, com atenção à manutenção e ao desempenho das aplicações.",
       viewProjects: "Ver Projetos",
       contact: "Entrar em Contato"
     },
@@ -285,8 +285,8 @@ const content: Record<'pt' | 'en', Content> = {
     hero: {
       status: "Available for internship or junior web development role",
       aboutMe: "About me",
-      headline: "Full-Stack Developer in training with hands-on experience building end-to-end web applications through personal and academic projects.",
-      subtext: "Information Systems student at the State University of Montes Claros (Unimontes), with practical experience in Laravel, Next.js, and PostgreSQL. Seeking my first opportunity as a Junior Full-Stack Developer, contributing with clean code, organization, and a focus on performance.",
+      headline: "Full-Stack Developer.",
+      subtext: "I have experience developing complete web applications, working on both front-end and back-end in personal and academic projects. I am an Information Systems student at the State University of Montes Claros (Unimontes) and I have practical experience with Laravel, Next.js, and PostgreSQL. I am seeking my first opportunity as a Junior Full-Stack Developer, looking to contribute consistently by writing clear and organized code, with a focus on maintainability and application performance.",
       viewProjects: "View Projects",
       contact: "Get in Touch"
     },
