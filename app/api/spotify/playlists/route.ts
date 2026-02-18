@@ -1,22 +1,21 @@
 import { NextResponse } from 'next/server';
 import { getPublicPlaylists } from '@/lib/spotify';
 
-
+export const runtime = 'edge';
 
 export async function GET() {
-    try {
-        const playlists = await getPublicPlaylists();
-        return NextResponse.json(playlists);
-    } catch (error: any) {
-        console.error('Spotify Playlists API error:', error);
+    const playlists = await getPublicPlaylists();
 
-        // Extract status code from error message if possible (e.g. "Spotify Playlists API error: 429 Too Many Requests")
-        const statusMatch = error.message?.match(/(\d{3})/);
-        const status = statusMatch ? parseInt(statusMatch[0]) : 500;
-
-        return NextResponse.json({
-            error: 'Failed to fetch playlists',
-            details: error.message || error
-        }, { status });
+    // getPublicPlaylists now returns { items: [] } on error, so we can just return it
+    if (playlists.items.length === 0) {
+        // We can optionally check if it's an error based on returned structure or just return empty
+        // For now, returning strictly what the frontend expects is safest.
+        // Frontend expects: { items: [...] } or error object?
+        // Let's check MusicSection.tsx:
+        // const data = await res.json();
+        // setPlaylists(data.items || []);
+        // So returning { items: [] } is perfect.
     }
+
+    return NextResponse.json(playlists);
 }

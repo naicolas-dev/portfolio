@@ -6,6 +6,8 @@ const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=1`;
+const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?limit=10`;
+const PROFILE_ENDPOINT = `https://api.spotify.com/v1/me`;
 
 export interface SpotifyTrack {
     isPlaying: boolean;
@@ -18,45 +20,56 @@ export interface SpotifyTrack {
     duration_ms: number;
 }
 
-let cached_token: string | null = null;
-let token_expiry: number | null = null;
+export interface SpotifyPlaylist {
+    id: string;
+    name: string;
+    description: string;
+    images: { url: string }[];
+    tracks: { total: number };
+    external_urls: { spotify: string };
+}
+
+export interface SpotifyProfile {
+    display_name: string;
+    external_urls: { spotify: string };
+    images: { url: string }[];
+    followers: { total: number };
+}
 
 async function getAccessToken() {
-    // Return cached token if valid (minus 60s safety buffer)
-    if (cached_token && token_expiry && Date.now() < token_expiry - 60000) {
-        return { access_token: cached_token };
+    try {
+        const response = await fetch(TOKEN_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                Authorization: `Basic ${basic}`,
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token!,
+            }),
+            next: {
+                revalidate: 3300 // Cache token for 55 minutes (expires in 60m)
+            }
+        });
+
+        return response.json();
+    } catch (error) {
+        console.error('Error fetching access token:', error);
+        return { access_token: null };
     }
-
-    const response = await fetch(TOKEN_ENDPOINT, {
-        method: 'POST',
-        headers: {
-            Authorization: `Basic ${basic}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            grant_type: 'refresh_token',
-            refresh_token: refresh_token!,
-        }),
-    });
-
-    const data = await response.json();
-
-    if (data.access_token) {
-        cached_token = data.access_token;
-        // Spotify tokens usually last 3600 seconds (1 hour)
-        token_expiry = Date.now() + (data.expires_in || 3600) * 1000;
-    }
-
-    return data;
 }
 
 export async function getNowPlaying(): Promise<SpotifyTrack | null> {
     const { access_token } = await getAccessToken();
 
+    if (!access_token) return null;
+
     const response = await fetch(NOW_PLAYING_ENDPOINT, {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
+        cache: 'no-store' // Real-time data, do not cache
     });
 
     if (response.status === 204 || response.status > 400) {
@@ -84,10 +97,15 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
 export async function getRecentlyPlayed(): Promise<SpotifyTrack | null> {
     const { access_token } = await getAccessToken();
 
+    if (!access_token) return null;
+
     const response = await fetch(RECENTLY_PLAYED_ENDPOINT, {
         headers: {
             Authorization: `Bearer ${access_token}`,
         },
+        next: {
+            revalidate: 600 // Cache for 10 minutes to avoid spamming
+        }
     });
 
     if (response.status > 400) {
@@ -114,27 +132,10 @@ export async function getRecentlyPlayed(): Promise<SpotifyTrack | null> {
     };
 }
 
-export interface SpotifyPlaylist {
-    id: string;
-    name: string;
-    description: string;
-    images: { url: string }[];
-    tracks: { total: number };
-    external_urls: { spotify: string };
-}
-
-const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?limit=10`;
-
-let cached_playlists: any = null;
-let playlists_fetched_at: number = 0;
-
-export async function getPublicPlaylists(): Promise<any> {
-    // Return cached playlists if valid (less than 1 hour old)
-    if (cached_playlists && Date.now() - playlists_fetched_at < 3600 * 1000) {
-        return cached_playlists;
-    }
-
+export async function getPublicPlaylists() {
     const { access_token } = await getAccessToken();
+
+    if (!access_token) return { items: [] };
 
     const response = await fetch(PLAYLISTS_ENDPOINT, {
         headers: {
@@ -146,19 +147,14 @@ export async function getPublicPlaylists(): Promise<any> {
     });
 
     if (!response.ok) {
-        // If rate limited or error, try to return stale cache
-        if (cached_playlists) {
-            console.warn(`Spotify API error completely failed: ${response.status}. Returning stale cache.`);
-            return cached_playlists;
-        }
-        throw new Error(`Spotify Playlists API error: ${response.status} ${response.statusText}`);
+        console.error(`Spotify Playlists API error: ${response.status} ${response.statusText}`);
+        return { items: [] };
     }
 
     const data = await response.json();
 
     if (!data.items) {
-        console.error(`[Spotify Debug] No items in response:`, data);
-        return { items: [], debug: data };
+        return { items: [] };
     }
 
     const mapped = data.items.map((playlist: any) => ({
@@ -170,34 +166,13 @@ export async function getPublicPlaylists(): Promise<any> {
         external_urls: playlist.external_urls || { spotify: '' },
     }));
 
-    const result = { items: mapped, debug: data };
-
-    // Update cache
-    cached_playlists = result;
-    playlists_fetched_at = Date.now();
-
-    return result;
+    return { items: mapped };
 }
-
-export interface SpotifyProfile {
-    display_name: string;
-    external_urls: { spotify: string };
-    images: { url: string }[];
-    followers: { total: number };
-}
-
-const PROFILE_ENDPOINT = `https://api.spotify.com/v1/me`;
-
-let cached_profile: SpotifyProfile | null = null;
-let profile_fetched_at: number = 0;
 
 export async function getUserProfile(): Promise<SpotifyProfile | null> {
-    // Return cached profile if valid (less than 24 hours old - profile rarely changes)
-    if (cached_profile && Date.now() - profile_fetched_at < 24 * 3600 * 1000) {
-        return cached_profile;
-    }
-
     const { access_token } = await getAccessToken();
+
+    if (!access_token) return null;
 
     const response = await fetch(PROFILE_ENDPOINT, {
         headers: {
@@ -210,22 +185,15 @@ export async function getUserProfile(): Promise<SpotifyProfile | null> {
 
     if (!response.ok) {
         console.error(`Spotify Profile API error: ${response.status}`);
-        // Return stale cache if available
-        if (cached_profile) return cached_profile;
-        return null; // Don't throw, just return null so UI handles it gracefully
+        return null;
     }
 
     const data = await response.json();
 
-    const profile: SpotifyProfile = {
+    return {
         display_name: data.display_name,
         external_urls: data.external_urls,
         images: data.images || [],
         followers: data.followers || { total: 0 },
     };
-
-    cached_profile = profile;
-    profile_fetched_at = Date.now();
-
-    return profile;
 }
