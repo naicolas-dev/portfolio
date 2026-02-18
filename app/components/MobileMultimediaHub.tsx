@@ -4,13 +4,15 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SiSpotify, SiSteam } from 'react-icons/si';
 import { IoClose } from 'react-icons/io5';
+import { Book } from 'lucide-react';
 import MusicSection from './MusicSection';
 import GamesSection from './GamesSection';
+import BooksSection from './BooksSection';
 import { useLanguage } from '../context/LanguageContext';
 
 export default function MobileMultimediaHub() {
     const { language } = useLanguage();
-    const [activeModal, setActiveModal] = useState<'music' | 'games' | null>(null);
+    const [activeModal, setActiveModal] = useState<'music' | 'games' | 'books' | null>(null);
 
     const closeModal = () => setActiveModal(null);
 
@@ -44,7 +46,15 @@ export default function MobileMultimediaHub() {
                     className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#18181b] border border-[#27272a] text-[#A1A6B3] hover:text-[#66c0f4] hover:border-[#66c0f4]/50 transition-all"
                 >
                     <SiSteam size={18} />
-                    <span className="text-xs font-medium">{language === 'pt' ? 'Meus jogos' : 'My games'}</span>
+                    <span className="text-xs font-medium">{language === 'pt' ? 'Jogos' : 'Games'}</span>
+                </button>
+                <div className="w-px h-4 bg-[#27272a]"></div>
+                <button
+                    onClick={() => setActiveModal('books')}
+                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#18181b] border border-[#27272a] text-[#A1A6B3] hover:text-[#eab308] hover:border-[#eab308]/50 transition-all"
+                >
+                    <Book size={18} />
+                    <span className="text-xs font-medium">{language === 'pt' ? 'Livros' : 'Books'}</span>
                 </button>
             </motion.div>
 
@@ -73,10 +83,15 @@ export default function MobileMultimediaHub() {
                                             <SiSpotify className="text-[#1DB954]" size={20} />
                                             <h3 className="text-white font-medium">{language === 'pt' ? 'Músicas' : 'Songs'}</h3>
                                         </>
-                                    ) : (
+                                    ) : activeModal === 'games' ? (
                                         <>
                                             <SiSteam className="text-[#66c0f4]" size={20} />
                                             <h3 className="text-white font-medium">{language === 'pt' ? 'Jogos' : 'Games'}</h3>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Book className="text-[#eab308]" size={20} />
+                                            <h3 className="text-white font-medium">{language === 'pt' ? 'Livros' : 'Books'}</h3>
                                         </>
                                     )}
                                 </div>
@@ -90,7 +105,7 @@ export default function MobileMultimediaHub() {
 
                             {/* Modal Content */}
                             <div className="flex-1 overflow-y-auto p-0">
-                                {activeModal === 'music' ? <MusicSection /> : <GamesSection />}
+                                {activeModal === 'music' ? <MusicSection /> : activeModal === 'games' ? <GamesSection /> : <BooksSection />}
                             </div>
                         </motion.div>
 

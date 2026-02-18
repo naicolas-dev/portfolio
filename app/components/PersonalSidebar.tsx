@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { IoChevronForward } from 'react-icons/io5';
 import { SiSpotify, SiSteam } from 'react-icons/si';
+import { Book } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import MusicSection from './MusicSection';
 import GamesSection from './GamesSection';
+import BooksSection from './BooksSection';
 
-type Section = 'music' | 'games';
+type Section = 'music' | 'games' | 'books';
 
 export default function PersonalSidebar() {
     const { language } = useLanguage();
@@ -17,6 +19,7 @@ export default function PersonalSidebar() {
     const sections = [
         { id: 'music' as Section, label: language === 'pt' ? 'Músicas' : 'Songs', icon: SiSpotify, hoverColor: 'hover:text-[#1DB954]' },
         { id: 'games' as Section, label: language === 'pt' ? 'Meus Jogos' : 'My games', icon: SiSteam, hoverColor: 'hover:text-[#00adee]' },
+        { id: 'books' as Section, label: language === 'pt' ? 'Livros' : 'Books', icon: Book, hoverColor: 'hover:text-[#eab308]' },
     ];
 
     const handleSectionClick = (section: Section) => {
@@ -68,13 +71,17 @@ export default function PersonalSidebar() {
                     <div className="flex items-center justify-between p-4 border-b border-[#2a2d31]">
                         {activeSection === 'music' ? (
                             <SiSpotify className="text-[#1DB954]" size={20} />
-                        ) : (
+                        ) : activeSection === 'games' ? (
                             <SiSteam className="text-[#66c0f4]" size={20} />
+                        ) : (
+                            <Book className="text-[#eab308]" size={20} />
                         )}
                         <h2 className="text-lg font-semibold text-white capitalize">
                             {activeSection === 'music'
                                 ? (language === 'pt' ? 'Músicas' : 'Songs')
-                                : (language === 'pt' ? 'Jogos' : 'Games')}
+                                : activeSection === 'games'
+                                    ? (language === 'pt' ? 'Jogos' : 'Games')
+                                    : (language === 'pt' ? 'Livros' : 'Books')}
                         </h2>
                         <button
                             onClick={() => setIsExpanded(false)}
@@ -87,7 +94,7 @@ export default function PersonalSidebar() {
 
                     {/* Content */}
                     <div className="flex-1 overflow-y-auto">
-                        {activeSection === 'music' ? <MusicSection /> : <GamesSection />}
+                        {activeSection === 'music' ? <MusicSection /> : activeSection === 'games' ? <GamesSection /> : <BooksSection />}
                     </div>
                 </div>
             </div>
