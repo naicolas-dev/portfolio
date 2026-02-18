@@ -120,7 +120,7 @@ const content: Record<'pt' | 'en', Content> = {
     hero: {
       status: "Disponível para estágio ou vaga júnior em desenvolvimento web",
       aboutMe: "Sobre mim",
-      headline: "Desenvolvedor Full-Stack focado em criar sistemas web escaláveis e bem estruturados.",
+      headline: "Desenvolvedor Full-Stack em formação, com experiência em desenvolvimento de aplicações web completas, do front-end ao back-end, por meio de projetos próprios e acadêmicos.",
       subtext: "Sou estudante de Sistemas de Informação na Universidade Estadual de Montes Claros (Unimontes), com experiência prática em Laravel, Next.js e PostgreSQL. Busco minha primeira oportunidade como desenvolvedor full-stack júnior, contribuindo com código limpo, organização e foco em performance.",
       viewProjects: "Ver Projetos",
       contact: "Entrar em Contato"
@@ -285,7 +285,7 @@ const content: Record<'pt' | 'en', Content> = {
     hero: {
       status: "Available for internship or junior web development role",
       aboutMe: "About me",
-      headline: "Full-Stack Developer focused on creating scalable and well-structured web systems.",
+      headline: "Full-Stack Developer in training with hands-on experience building end-to-end web applications through personal and academic projects.",
       subtext: "Information Systems student at the State University of Montes Claros (Unimontes), with practical experience in Laravel, Next.js, and PostgreSQL. Seeking my first opportunity as a Junior Full-Stack Developer, contributing with clean code, organization, and a focus on performance.",
       viewProjects: "View Projects",
       contact: "Get in Touch"
