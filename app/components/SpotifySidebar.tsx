@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { SiSpotify } from 'react-icons/si';
+import SpotifyProfile from './SpotifyProfile';
 
 interface SpotifyData {
     isPlaying: boolean;
@@ -11,6 +12,10 @@ interface SpotifyData {
     albumImageUrl?: string;
     songUrl?: string;
 }
+
+// Debug
+import { SPOTIFY_PROFILE } from '@/app/settings/spotify';
+console.log('[Sidebar] Profile imported:', SPOTIFY_PROFILE);
 
 export default function SpotifySidebar() {
     const [data, setData] = useState<SpotifyData | null>(null);
@@ -48,6 +53,8 @@ export default function SpotifySidebar() {
             <>
                 {/* Desktop: Fixed vertical sidebar - Placeholder */}
                 <div className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 flex-col items-center gap-4 w-64 bg-[#1a1d21]/80 backdrop-blur-md border border-[#2a2d31] rounded-2xl p-4 shadow-2xl z-50">
+                    <SpotifyProfile />
+                    <div className="w-full h-px bg-[#2a2d31]" />
                     <div className="flex items-center gap-2 w-full">
                         <SiSpotify className="text-[#1DB954]" size={20} />
                         <span className="text-xs text-[#A1A6B3] uppercase tracking-wider">
@@ -87,6 +94,8 @@ export default function SpotifySidebar() {
         <>
             {/* Desktop: Fixed vertical sidebar */}
             <div className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 flex-col items-center gap-4 w-64 bg-[#1a1d21]/80 backdrop-blur-md border border-[#2a2d31] rounded-2xl p-4 shadow-2xl z-50">
+                <SpotifyProfile />
+                <div className="w-full h-px bg-[#2a2d31]" />
                 <div className="flex items-center gap-2 w-full">
                     <SiSpotify className={`text-[#1DB954] ${data.isPlaying ? 'animate-pulse' : ''}`} size={20} />
                     <span className="text-xs text-[#A1A6B3] uppercase tracking-wider">
