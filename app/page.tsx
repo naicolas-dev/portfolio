@@ -975,12 +975,12 @@ export default function Portfolio() {
                     >
                       {/* Image Preview */}
                       <div className="relative h-48 w-full overflow-hidden border-b border-zinc-800">
-                        <div className="absolute inset-0 bg-[#0e1011] animate-pulse" />
+                        <div className="absolute inset-0 bg-[#0e1011]" />
                         {project.images[0] && (
                           <img
                             src={project.images[0]}
                             alt={project.title}
-                            className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
+                            className="w-full h-full object-cover opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
                           />
                         )}
                       </div>
