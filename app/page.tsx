@@ -530,11 +530,10 @@ export default function Portfolio() {
       setIsScrolled(window.scrollY > 50);
 
       // Hide language toggle when reaching projects section
-      const projectsSection = document.getElementById('projects-section');
-      if (projectsSection) {
-        const rect = projectsSection.getBoundingClientRect();
+      const experienceSection = document.getElementById('experience-section');
+      if (experienceSection) {
+        const rect = experienceSection.getBoundingClientRect();
         // Hide when the top of the projects section reaches the top of the viewport (offset by 100px)
-        // "Eu digo dessa parte pra frente" -> From this part (title visible) onwards.
         setHideLanguageToggle(rect.top < 150);
       }
     };
@@ -948,7 +947,7 @@ export default function Portfolio() {
             </section>
 
             {/* --- 2. EXPERIENCE --- */}
-            <section className="mb-32">
+            <section className="mb-32" id="experience-section">
               <SectionHeading number="2">{t.sections.experience}</SectionHeading>
 
               <AnimatePresence mode="wait">
