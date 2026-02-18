@@ -2,12 +2,10 @@ const client_id = process.env.SPOTIFY_CLIENT_ID;
 const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
 const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
 
-const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
+const basic = btoa(`${client_id}:${client_secret}`);
 const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
 const NOW_PLAYING_ENDPOINT = `https://api.spotify.com/v1/me/player/currently-playing`;
 const RECENTLY_PLAYED_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played?limit=1`;
-const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?limit=10`;
-const PROFILE_ENDPOINT = `https://api.spotify.com/v1/me`;
 
 export interface SpotifyTrack {
     isPlaying: boolean;
@@ -18,22 +16,6 @@ export interface SpotifyTrack {
     songUrl: string;
     progress_ms: number;
     duration_ms: number;
-}
-
-export interface SpotifyPlaylist {
-    id: string;
-    name: string;
-    description: string;
-    images: { url: string }[];
-    tracks: { total: number };
-    external_urls: { spotify: string };
-}
-
-export interface SpotifyProfile {
-    display_name: string;
-    external_urls: { spotify: string };
-    images: { url: string }[];
-    followers: { total: number };
 }
 
 async function getAccessToken() {
@@ -53,15 +35,21 @@ async function getAccessToken() {
             }
         });
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`[Spotify Debug] Token fetch failed: ${response.status} ${response.statusText}`, errorText);
+            throw new Error(`Token fetch failed: ${response.status} ${errorText}`);
+        }
+
         return response.json();
     } catch (error) {
-        console.error('Error fetching access token:', error);
-        return { access_token: null };
+        console.error('[Spotify Debug] Error fetching access token:', error);
+        throw error;
     }
 }
 
 export async function getNowPlaying(): Promise<SpotifyTrack | null> {
-    const { access_token } = await getAccessToken();
+    const { access_token } = await getAccessToken().catch(() => ({ access_token: null }));
 
     if (!access_token) return null;
 
@@ -95,7 +83,7 @@ export async function getNowPlaying(): Promise<SpotifyTrack | null> {
 }
 
 export async function getRecentlyPlayed(): Promise<SpotifyTrack | null> {
-    const { access_token } = await getAccessToken();
+    const { access_token } = await getAccessToken().catch(() => ({ access_token: null }));
 
     if (!access_token) return null;
 
@@ -129,71 +117,5 @@ export async function getRecentlyPlayed(): Promise<SpotifyTrack | null> {
         songUrl: track.external_urls.spotify,
         progress_ms: 0,
         duration_ms: track.duration_ms,
-    };
-}
-
-export async function getPublicPlaylists() {
-    const { access_token } = await getAccessToken();
-
-    if (!access_token) return { items: [] };
-
-    const response = await fetch(PLAYLISTS_ENDPOINT, {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-        next: {
-            revalidate: 3600 // Cache for 1 hour
-        }
-    });
-
-    if (!response.ok) {
-        console.error(`Spotify Playlists API error: ${response.status} ${response.statusText}`);
-        return { items: [] };
-    }
-
-    const data = await response.json();
-
-    if (!data.items) {
-        return { items: [] };
-    }
-
-    const mapped = data.items.map((playlist: any) => ({
-        id: playlist.id,
-        name: playlist.name,
-        description: playlist.description || '',
-        images: playlist.images || [],
-        tracks: { total: playlist.tracks?.total || 0 },
-        external_urls: playlist.external_urls || { spotify: '' },
-    }));
-
-    return { items: mapped };
-}
-
-export async function getUserProfile(): Promise<SpotifyProfile | null> {
-    const { access_token } = await getAccessToken();
-
-    if (!access_token) return null;
-
-    const response = await fetch(PROFILE_ENDPOINT, {
-        headers: {
-            Authorization: `Bearer ${access_token}`,
-        },
-        next: {
-            revalidate: 86400 // Cache for 24 hours
-        }
-    });
-
-    if (!response.ok) {
-        console.error(`Spotify Profile API error: ${response.status}`);
-        return null;
-    }
-
-    const data = await response.json();
-
-    return {
-        display_name: data.display_name,
-        external_urls: data.external_urls,
-        images: data.images || [],
-        followers: data.followers || { total: 0 },
     };
 }
