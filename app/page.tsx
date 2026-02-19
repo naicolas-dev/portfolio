@@ -256,6 +256,7 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
+        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer' },
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
@@ -411,6 +412,7 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
+        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer' },
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
