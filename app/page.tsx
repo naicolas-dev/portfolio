@@ -207,16 +207,15 @@ const content: Record<'pt' | 'en', Content> = {
           ],
         },
         {
-          title: 'TikTok Downloader',
-          description: 'Removedor de marca d\'água integrado ao sistema de compartilhamento do Android, eliminando a necessidade de usar sites no navegador.',
-          longDescription: 'Resolve a fricção de ter que copiar links e abrir sites externos. O app recebe links diretamente do menu "Compartilhar" do TikTok e inicia o download automaticamente em background, permitindo salvar vídeos limpos com o mínimo de cliques possível.',
+          title: 'Social Media Downloader',
+          description: 'Baixador de vídeos sem marca d\'água integrado ao sistema de compartilhamento do Android, eliminando a necessidade de usar sites no navegador.',
+          longDescription: 'Resolve a fricção de ter que copiar links e abrir sites externos. O app recebe links diretamente do menu "Compartilhar" do TikTok, X ou Instagram e inicia o download automaticamente do conteúdo em background, permitindo salvar vídeos limpos com o mínimo de cliques possível.',
           period: 'Fev 2026',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
           links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
-          cta: { text: "Baixar", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
+          cta: { text: "Baixar", link: "https://github.com/naicolas-dev/socialmedia-downloader/releases/tag/v.1.3.0" },
           images: [
-            '/projects/tiktok downloader/preview.jpeg',
-            '/projects/tiktok downloader/preview2.jpeg'
+            '/projects/socialmedia-downloader/preview.png',
           ],
         },
         {
@@ -256,7 +255,7 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
-        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer' },
+        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer/releases/tag/v1.0.0' },
         { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
         { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
         { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
@@ -373,16 +372,15 @@ const content: Record<'pt' | 'en', Content> = {
           ],
         },
         {
-          title: 'TikTok Downloader',
-          description: 'Watermark remover integrated with Android\'s share system, eliminating the need to use browser-based sites.',
-          longDescription: 'Solves the friction of copying links and opening external sites. The app receives links directly from TikTok\'s "Share" menu and automatically starts the download in the background, allowing users to save clean videos with minimal clicks.',
+          title: 'Social Media Downloader',
+          description: 'Video downloader app integrated with Android\'s share system, eliminating the need to use external sites.',
+          longDescription: 'Solves the friction of copying links and opening external sites. The app receives links directly from TikTok\'s, X or Instagram\'s "Share" menu and automatically starts the download in the background, allowing users to save clean videos with minimal clicks.',
           period: 'Feb 2026',
           techs: ['Kotlin', 'Jetpack Compose', 'API Rest'],
           links: { github: 'https://github.com/naicolas-dev/tiktok-downloader' },
-          cta: { text: "Download", link: "https://github.com/naicolas-dev/tiktok-downloader/releases/tag/v1.2.0" },
+          cta: { text: "Download", link: "https://github.com/naicolas-dev/socialmedia-downloader/releases/tag/v.1.3.0" },
           images: [
-            '/projects/tiktok downloader/preview.jpeg',
-            '/projects/tiktok downloader/preview2.jpeg'
+            '/projects/socialmedia-downloader/preview.png',
           ],
         },
         {
