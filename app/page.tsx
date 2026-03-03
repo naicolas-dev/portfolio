@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { track } from '@vercel/analytics';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import {
@@ -198,7 +198,7 @@ const content: Record<'pt' | 'en', Content> = {
           description: 'Aplicação de gestão financeira que simplifica o controle de gastos através de visualização de dados em tempo real.',
           longDescription: 'Transforma dados brutos de receitas e despesas em gráficos intuitivos e relatórios instantâneos. Permite ao usuário tomar decisões financeiras melhores através de uma interface responsiva e interativa, com atualizações em tempo real via Firebase.',
           period: 'Jul 2025 - Ago 2025',
-          techs: ['React', 'JS', 'Firebase'],
+          techs: ['React', 'JS', 'Firebase', 'Tailwind'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
           cta: { text: "Visitar", link: "https://despesas-trabalho.vercel.app" },
           images: [
@@ -242,7 +242,7 @@ const content: Record<'pt' | 'en', Content> = {
           description: 'API inteligente para encontrar o que cozinhar com os ingredientes disponíveis no momento.',
           longDescription: 'Backend robusto que resolve o dilema do "o que comer hoje". Integra lógica de negócios com Inteligência Artificial para analisar os ingredientes que o usuário tem em casa e sugerir receitas viáveis instantaneamente, demonstrando flexibilidade de integração com qualquer LLM.',
           period: 'Set 2025',
-          techs: ['PHP', 'Laravel', 'MySQL'],
+          techs: ['PHP', 'Laravel', 'JavaScript', 'MySQL', 'Tailwind'],
           links: { github: 'https://github.com/naicolas-dev/api-receitas' },
           cta: { text: "Código", link: "https://github.com/naicolas-dev/api-receitas" },
           images: [
@@ -363,7 +363,7 @@ const content: Record<'pt' | 'en', Content> = {
           description: 'Financial management application that simplifies expense tracking through real-time data visualization.',
           longDescription: 'Transforms raw income and expense data into intuitive charts and instant reports. Enables users to make better financial decisions through a responsive, interactive interface with real-time updates via Firebase.',
           period: 'Jul 2025 - Aug 2025',
-          techs: ['React', 'JS', 'Firebase'],
+          techs: ['React', 'JS', 'Firebase', 'Tailwind'],
           links: { github: 'https://github.com/naicolas-dev/dashboard-financeiro-irt' },
           cta: { text: "Visit", link: "https://despesas-trabalho.vercel.app" },
           images: [
@@ -404,10 +404,17 @@ const content: Record<'pt' | 'en', Content> = {
           description: 'Intelligent backend to find what to cook with currently available ingredients.',
           longDescription: 'Robust backend that solves the "what to eat today" dilemma. Integrates business logic with Artificial Intelligence to analyze ingredients the user has at home and suggest viable recipes instantly, demonstrating flexible integration with any LLM.',
           period: 'Sep 2025',
-          techs: ['PHP', 'Laravel', 'MySQL', 'OpenAI API'],
+          techs: ['PHP', 'Laravel', 'JavaScript', 'MySQL', 'Tailwind'],
           links: { github: 'https://github.com/naicolas-dev/api-receitas' },
           cta: { text: "Code", link: "https://github.com/naicolas-dev/api-receitas" },
-          images: [],
+          images: [
+            '/projects/myai-recipes/1-dark.png',
+            '/projects/myai-recipes/2-dark.png',
+            '/projects/myai-recipes/3-dark.png',
+            '/projects/myai-recipes/1-light.png',
+            '/projects/myai-recipes/2-light.png',
+            '/projects/myai-recipes/3-light.png'
+          ],
         }
       ],
       other: [
@@ -568,6 +575,30 @@ const HoverProjectRow = ({ project }: { project: { name: string; tech: string; l
 };
 
 // --- MAIN PAGE ---
+
+const getProjectCountForTech = (techName: string): string => {
+  const aliases = [techName.toLowerCase()];
+  if (techName === 'JavaScript') aliases.push('js');
+
+  const allProjects = [
+    content.pt.projects.featured,
+    ...content.pt.projects.experience,
+    ...content.pt.projects.main
+  ];
+
+  let count = allProjects.filter(p =>
+    p.techs.some(t => aliases.includes(t.toLowerCase()))
+  ).length;
+
+  content.pt.projects.other.forEach(p => {
+    const techString = p.tech.toLowerCase();
+    if (aliases.some(a => techString.includes(a))) {
+      count++;
+    }
+  });
+
+  return count > 9 ? '9+' : count.toString();
+};
 
 export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -875,32 +906,85 @@ export default function Portfolio() {
             <SectionHeading number="1">{t.sections.stack}</SectionHeading>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stackItems.map((item, i) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.05 }}
-                  className={`
-                      group relative overflow-hidden p-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 
-                      hover:bg-zinc-900 hover:border-zinc-700 transition-colors duration-300
-                      flex flex-col items-center justify-center gap-4 text-center cursor-default
-                      hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]
-                    `}
-                >
+              {stackItems.map((item, i) => {
+                const projectCount = getProjectCountForTech(item.name);
+                const [isHovered, setIsHovered] = useState(false);
+                const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                useEffect(() => {
+                  const handleMouseMove = (e: MouseEvent) => {
+                    if (isHovered) {
+                      setMousePosition({
+                        x: e.clientX,
+                        y: e.clientY,
+                      });
+                    }
+                  };
 
-                  <div className="p-4 rounded-full bg-zinc-900/80 border border-zinc-800 group-hover:scale-110 group-hover:border-zinc-700 transition-all duration-300 relative z-10 text-zinc-400 group-hover:text-zinc-100">
-                    {item.icon}
-                  </div>
+                  if (isHovered) {
+                    window.addEventListener('mousemove', handleMouseMove);
+                  }
 
-                  <span className="font-medium text-sm text-zinc-500 group-hover:text-zinc-300 transition-colors z-10 relative">
-                    {item.name}
-                  </span>
-                </motion.div>
-              ))}
+                  return () => {
+                    window.removeEventListener('mousemove', handleMouseMove);
+                  };
+                }, [isHovered]);
+
+                return (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.05 }}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    className={`
+                        group relative overflow-hidden p-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 
+                        hover:bg-zinc-900 hover:border-zinc-700 transition-colors duration-300
+                        flex flex-col items-center justify-center gap-4 text-center cursor-default
+                        hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]
+                      `}
+                  >
+
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    {/* Tooltip that follows mouse */}
+                    <AnimatePresence>
+                      {isHovered && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{ duration: 0.15, ease: "easeOut" }}
+                          className="fixed pointer-events-none z-50 bg-zinc-800/90 backdrop-blur-md border border-zinc-700/50 px-3 py-1.5 rounded-full flex items-center gap-2 shadow-xl"
+                          style={{
+                            top: mousePosition.y + 15,
+                            left: mousePosition.x + 15,
+                          }}
+                        >
+                          <div className="text-zinc-400 w-3 h-3 flex items-center justify-center">
+                            {React.cloneElement(item.icon as React.ReactElement<any>, { size: 12 })}
+                          </div>
+                          <span className="text-xs font-medium text-zinc-300">
+                            {language === 'pt'
+                              ? `Usado em ${projectCount} ${projectCount === '1' ? 'projeto' : 'projetos'}`
+                              : `Used in ${projectCount} ${projectCount === '1' ? 'project' : 'projects'}`}
+                          </span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="p-4 rounded-full bg-zinc-900/80 border border-zinc-800 group-hover:scale-110 group-hover:border-zinc-700 transition-all duration-300 relative z-10 text-zinc-400 group-hover:text-zinc-100">
+                      {item.icon}
+                    </div>
+
+                    <span className="font-medium text-sm text-zinc-500 group-hover:text-zinc-300 transition-colors z-10 relative">
+                      {item.name}
+                    </span>
+                  </motion.div>
+                );
+              })}
             </div>
           </section>
 
