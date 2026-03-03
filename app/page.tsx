@@ -63,7 +63,7 @@ interface Content {
     featured: Project;
     main: Project[];
     experience: Project[];
-    other: { name: string; tech: string; link: string }[];
+    other: { name: string; tech: string; link: string; image?: string }[];
     viewCode: string;
   };
   education: {
@@ -256,11 +256,11 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
-        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer/releases/tag/v1.0.0' },
-        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
-        { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
-        { name: 'Gestor de Segurança', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
+        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer/releases/tag/v1.0.0', image: '/other-projects/DevCLTTimer.png' },
+        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika', image: '/other-projects/nutrika.png' },
+        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api', image: '/other-projects/kanban-api.png' },
+        { name: 'Biblioteca API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api', image: '/other-projects/biblioteca-api.png' },
+        { name: 'Gestor de Segurança', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca', image: '/other-projects/gestor-seguranca.png' },
       ],
       viewCode: 'Abrir no GitHub',
     },
@@ -411,11 +411,11 @@ const content: Record<'pt' | 'en', Content> = {
         }
       ],
       other: [
-        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer' },
-        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika' },
-        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api' },
-        { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api' },
-        { name: 'Security Manager', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca' },
+        { name: 'Dev CLT Timer', tech: '.NET 8 & WPF', link: 'https://github.com/naicolas-dev/DevCLTTimer', image: '/other-projects/DevCLTTimer.png' },
+        { name: 'Nutrika', tech: 'Next.js & React', link: 'https://github.com/naicolas-dev/nutrika', image: '/other-projects/nutrika.png' },
+        { name: 'Kanban API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/kanban-api', image: '/other-projects/kanban-api.png' },
+        { name: 'Library API', tech: 'PHP & Laravel', link: 'https://github.com/naicolas-dev/biblioteca-api', image: '/other-projects/biblioteca-api.png' },
+        { name: 'Security Manager', tech: 'PHP & CodeIgniter', link: 'https://github.com/naicolas-dev/GestorSeguranca', image: '/other-projects/gestor-seguranca.png' },
       ],
       viewCode: 'View on GitHub',
     },
@@ -492,6 +492,80 @@ const SocialButton = ({ icon, label, href, download = false, onClick }: { icon: 
 );
 
 
+
+const HoverProjectRow = ({ project }: { project: { name: string; tech: string; link: string; image?: string } }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isHovered) {
+        setMousePosition({
+          x: e.clientX,
+          y: e.clientY,
+        });
+      }
+    };
+
+    if (isHovered) {
+      window.addEventListener('mousemove', handleMouseMove);
+    }
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [isHovered]);
+
+  return (
+    <>
+      <motion.a
+        href={project.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => track('Project Click', { project: project.name, type: 'Other' })}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block relative z-10"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
+        <h5 className="text-zinc-300 font-medium text-sm group-hover:text-[#dedede] transition-colors">{project.name}</h5>
+        <div className="flex items-center gap-3">
+          <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{project.tech}</p>
+          <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-[#dedede] transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
+        </div>
+      </motion.a>
+
+      {/* Floating Image Component */}
+      {project.image && (
+        <AnimatePresence>
+          {isHovered && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="fixed pointer-events-none z-50 hidden sm:block shadow-2xl overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900"
+              style={{
+                top: mousePosition.y - 120, // Offset so image isn't exactly under cursor
+                left: mousePosition.x + 20,
+                width: '450px',
+                aspectRatio: '16/9',
+              }}
+            >
+              <img
+                src={project.image}
+                alt={`${project.name} preview`}
+                className="w-full h-full object-contain bg-[#121212]"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
+    </>
+  );
+};
 
 // --- MAIN PAGE ---
 
@@ -1045,26 +1119,10 @@ export default function Portfolio() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="divide-y divide-white/5 border-t border-b border-white/5"
+                className="divide-y divide-white/5 border-t border-b border-white/5 relative"
               >
                 {t.projects.other.map((p, i) => (
-                  <motion.a
-                    key={i}
-                    href={p.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => track('Project Click', { project: p.name, type: 'Other' })}
-                    className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                  >
-                    <h5 className="text-zinc-300 font-medium text-sm group-hover:text-[#dedede] transition-colors">{p.name}</h5>
-                    <div className="flex items-center gap-3">
-                      <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
-                      <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-[#dedede] transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
-                    </div>
-                  </motion.a>
+                  <HoverProjectRow key={i} project={p} />
                 ))}
               </motion.div>
             </AnimatePresence>
