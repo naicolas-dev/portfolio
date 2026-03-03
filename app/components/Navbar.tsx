@@ -112,7 +112,7 @@ export default function Navbar() {
                 animate={{ y: 0 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                 className={cn(
-                    'pointer-events-auto fixed top-0 left-0 right-0 z-[60] px-6 md:px-10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+                    'pointer-events-auto fixed top-0 left-0 right-0 z-[40] px-6 md:px-10 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
                     isScrolled
                         ? 'translate-y-2 md:translate-y-4'
                         : 'translate-y-0 pt-4 md:pt-6'
