@@ -37,7 +37,7 @@ export const SPOTIFY_PLAYLISTS = [
     },
     {
         id: "3PNTyKD2OYmFWuZS80iHHE",
-        name: "pearsonal gym",
+        name: "personal gym",
         description: "Public Playlist",
         image_url: "https://mosaic.scdn.co/300/ab67616d00001e020cd942c1a864afa4e92d04f2ab67616d00001e023cf83c82a8e976d7b51e2d00ab67616d00001e029214ff0109a0e062f8a6cf0fab67616d00001e02bf88666ba508af771dc24653",
         external_url: "https://open.spotify.com/playlist/3PNTyKD2OYmFWuZS80iHHE"
