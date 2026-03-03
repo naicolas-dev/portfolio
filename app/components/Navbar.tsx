@@ -223,9 +223,31 @@ export default function Navbar() {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 exit={{ opacity: 0, x: 10 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="flex items-center text-xs whitespace-nowrap"
+                                                className="flex items-center text-xs whitespace-nowrap overflow-hidden pt-0.5"
                                             >
-                                                <span>pt-BR</span>
+                                                <div className="flex max-w-0 group-hover:max-w-[8px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span>P</span>
+                                                </div>
+                                                <div className="flex max-w-[8px] group-hover:max-w-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 group-hover:opacity-0 overflow-hidden">
+                                                    <span>p</span>
+                                                </div>
+                                                <div className="flex max-w-0 group-hover:max-w-[16px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span>or</span>
+                                                </div>
+                                                <span>t</span>
+                                                <div className="flex max-w-0 group-hover:max-w-[40px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span className="whitespace-pre">uguês </span>
+                                                </div>
+                                                <div className="flex max-w-[8px] group-hover:max-w-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 group-hover:opacity-0 overflow-hidden">
+                                                    <span>-</span>
+                                                </div>
+                                                <span>B</span>
+                                                <div className="flex max-w-[8px] group-hover:max-w-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 group-hover:opacity-0 overflow-hidden">
+                                                    <span>R</span>
+                                                </div>
+                                                <div className="flex max-w-0 group-hover:max-w-[50px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span>rasileiro</span>
+                                                </div>
                                             </motion.div>
                                         ) : (
                                             <motion.div
@@ -234,9 +256,23 @@ export default function Navbar() {
                                                 animate={{ opacity: 1, x: 0 }}
                                                 exit={{ opacity: 0, x: 10 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="flex items-center text-xs whitespace-nowrap"
+                                                className="flex items-center text-xs whitespace-nowrap overflow-hidden pt-[1px]"
                                             >
-                                                <span>en-US</span>
+                                                <div className="flex max-w-0 group-hover:max-w-[8px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span>E</span>
+                                                </div>
+                                                <div className="flex max-w-[8px] group-hover:max-w-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 group-hover:opacity-0 overflow-hidden">
+                                                    <span>e</span>
+                                                </div>
+                                                <span>n</span>
+                                                <div className="flex max-w-0 group-hover:max-w-[36px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-0 group-hover:opacity-100 overflow-hidden">
+                                                    <span className="whitespace-pre">glish </span>
+                                                </div>
+                                                <div className="flex max-w-[8px] group-hover:max-w-0 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] opacity-100 group-hover:opacity-0 overflow-hidden">
+                                                    <span>-</span>
+                                                </div>
+                                                <span>U</span>
+                                                <span>S</span>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -256,16 +292,16 @@ export default function Navbar() {
                                             animate={{ opacity: 1, y: 0, scale: 1 }}
                                             exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                             transition={{ duration: 0.1 }}
-                                            className="absolute top-12 right-0 bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl min-w-[120px] flex flex-col z-[70]"
+                                            className="absolute top-12 right-0 bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl min-w-[200px] flex flex-col z-[70]"
                                         >
                                             <button
                                                 onClick={() => {
                                                     setLanguage('pt');
                                                     setIsLangMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800", language === 'pt' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
+                                                className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 whitespace-nowrap", language === 'pt' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
                                             >
-                                                <span>pt-BR</span>
+                                                <span>Português Brasileiro</span>
                                                 {language === 'pt' && <Check size={14} className="text-zinc-400" />}
                                             </button>
                                             <div className="h-px bg-[#30363D]" />
@@ -274,9 +310,9 @@ export default function Navbar() {
                                                     setLanguage('en');
                                                     setIsLangMenuOpen(false);
                                                 }}
-                                                className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800", language === 'en' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
+                                                className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 whitespace-nowrap", language === 'en' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
                                             >
-                                                <span>en-US</span>
+                                                <span>English US</span>
                                                 {language === 'en' && <Check size={14} className="text-zinc-400" />}
                                             </button>
                                         </motion.div>
