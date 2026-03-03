@@ -194,10 +194,9 @@ export default function Navbar() {
                                 onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
                                 className={cn(
                                     "flex items-center justify-center rounded-full bg-zinc-900 border text-xs font-medium text-zinc-100 hover:text-[#dedede] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group overflow-hidden",
-                                    isScrolled
+                                    (isScrolled && !isMobile)
                                         ? "h-9 w-9 px-0 border-transparent bg-zinc-800 hover:bg-zinc-700"
-                                        : "px-3 py-2 sm:px-3 sm:py-2 border-zinc-800 hover:bg-zinc-800",
-                                    !isScrolled && !isMobile ? "sm:h-auto sm:w-auto" : ""
+                                        : "px-3 py-2 border-zinc-800 hover:bg-zinc-800"
                                 )}
                                 transition={{ layout: { duration: 0.3, type: "spring", stiffness: 300, damping: 30 } }}
                             >
@@ -209,9 +208,9 @@ export default function Navbar() {
                                     layout="position"
                                     className="flex items-center overflow-hidden"
                                     animate={{
-                                        width: isScrolled ? 0 : "auto",
-                                        opacity: isScrolled ? 0 : 1,
-                                        marginLeft: isScrolled ? 0 : 6
+                                        width: (isScrolled && !isMobile) ? 0 : "auto",
+                                        opacity: (isScrolled && !isMobile) ? 0 : 1,
+                                        marginLeft: (isScrolled && !isMobile) ? 0 : 6
                                     }}
                                     transition={{ duration: 0.3 }}
                                 >
@@ -301,7 +300,10 @@ export default function Navbar() {
                                                 }}
                                                 className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 whitespace-nowrap", language === 'pt' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
                                             >
-                                                <span>Português Brasileiro</span>
+                                                <span className="flex items-center">
+                                                    {isMobile && <span className="mr-2 text-base leading-none">🇧🇷</span>}
+                                                    Português Brasileiro
+                                                </span>
                                                 {language === 'pt' && <Check size={14} className="text-zinc-400" />}
                                             </button>
                                             <div className="h-px bg-[#30363D]" />
@@ -312,7 +314,10 @@ export default function Navbar() {
                                                 }}
                                                 className={cn("flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 whitespace-nowrap", language === 'en' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400')}
                                             >
-                                                <span>English US</span>
+                                                <span className="flex items-center">
+                                                    {isMobile && <span className="mr-2 text-base leading-none">🇺🇸</span>}
+                                                    English US
+                                                </span>
                                                 {language === 'en' && <Check size={14} className="text-zinc-400" />}
                                             </button>
                                         </motion.div>
