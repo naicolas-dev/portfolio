@@ -89,13 +89,10 @@
 }
 
 /* Reset Básico Dark Mode */
-body {
-  background-color: var(--color-bg-page);
-  color: var(--color-text-primary);
+html, body {
+  background-color: #0e1011;
+  color: #A1A6B3;
   font-family: var(--font-inter);
-
-
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
