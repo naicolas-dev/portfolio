@@ -5,7 +5,6 @@ import { track } from '@vercel/analytics';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import {
   Github, Linkedin, Mail, ArrowRight, X, Download,
-  Globe, Check,
   Server, Code2,
   ChevronLeft, ChevronRight,
   Plus, Layers, ArrowUpRight
@@ -23,7 +22,9 @@ import Magnetic from './components/Magnetic';
 import StaggeredText from './components/StaggeredText';
 import { LanguageModal } from './components/LanguageModal';
 import MobileMultimediaHub from './components/MobileMultimediaHub';
+import Navbar from './components/Navbar';
 import { useLanguage } from './context/LanguageContext';
+import { cn } from '@/lib/utils';
 
 // --- TYPES ---
 interface Project {
@@ -509,9 +510,7 @@ export default function Portfolio() {
   const [isStackHovered, setIsStackHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [hideLanguageToggle, setHideLanguageToggle] = useState(false);
 
-  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [ctaInView, setCtaInView] = useState(false);
   const [isBioExpanded, setIsBioExpanded] = useState(false);
 
@@ -528,14 +527,6 @@ export default function Portfolio() {
     // Scroll listener
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
-
-      // Hide language toggle when reaching projects section
-      const experienceSection = document.getElementById('experience-section');
-      if (experienceSection) {
-        const rect = experienceSection.getBoundingClientRect();
-        // Hide when the top of the projects section reaches the top of the viewport (offset by 100px)
-        setHideLanguageToggle(rect.top < 150);
-      }
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Check initial
@@ -664,6 +655,7 @@ export default function Portfolio() {
 
   return (
     <main className="min-h-screen relative font-sans selection:bg-[#3B82F6]/30 selection:text-zinc-100 overflow-x-hidden">
+      <Navbar />
       <AnimatePresence>
         {showLanguageModal && (
           <LanguageModal
@@ -675,291 +667,324 @@ export default function Portfolio() {
         )}
       </AnimatePresence>
 
-      {/* Loading State or Language Modal Only State */}
-      {(isLoading || showLanguageModal) && (
-        <div className="fixed inset-0 bg-[#0e1011] z-40 transition-opacity duration-500" />
-      )}
+      {/* Loading Overlay */}
+      <AnimatePresence>
+        {isLoading && !showLanguageModal && (
+          <motion.div
+            key="loading-overlay"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 bg-[#0e1011] z-40"
+          />
+        )}
+      </AnimatePresence>
 
-      {/* Main Content - Only shown when not loading and not showing language modal */}
-      {!isLoading && !showLanguageModal && (
-        <div className="animate-in fade-in duration-1000">
-          <TabTitleHandler language={language} />
-          {/* Background Texture & Lighting - Apple Style */}
-          <div className="fixed inset-0 bg-[#0e1011] -z-20" />
+      {/* Main Content - Always rendered to preserve scroll height */}
+      <div className={cn("transition-opacity duration-1000", isLoading || showLanguageModal ? "opacity-0 invisible" : "opacity-100 visible")}>
+        <TabTitleHandler language={language} />
+        {/* Background Texture & Lighting - Apple Style */}
+        <div className="fixed inset-0 bg-[#0e1011] -z-20" />
 
-          <div className="max-w-5xl mx-auto px-6 py-20 md:py-32 relative z-10">
+        <div className="max-w-5xl mx-auto px-6 py-20 md:py-32 relative z-10">
 
-            {/* --- 1. HERO --- */}
-            <header className="mb-32 md:mb-40 relative flex flex-col items-center text-center">
-              <div className={`fixed top-4 right-4 md:top-6 md:right-6 z-50 flex flex-col items-end transition-opacity duration-300 ${isMobile && hideLanguageToggle ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                <motion.button
-                  layout={true}
-                  onClick={() => {
-                    if (isMobile) {
-                      setIsLangMenuOpen(!isLangMenuOpen);
-                    } else {
-                      const newLang = language === 'pt' ? 'en' : 'pt';
-                      setLanguage(newLang);
-                    }
-                  }}
-                  className={`flex items-center justify-center rounded-full bg-zinc-900 border border-zinc-800 text-xs font-medium text-zinc-100 hover:text-[#dedede] hover:bg-zinc-900 hover:border-zinc-800 transition-colors shadow-xl group overflow-hidden ${(!isScrolled && isMobile) ? 'px-4 py-2' : 'w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-2 md:justify-start'}`}
-                  transition={{ layout: { duration: 0.3, type: "spring", stiffness: 300, damping: 30 } }}
-                >
-                  <motion.div layout="position" className="flex-shrink-0">
-                    <Globe size={16} />
-                  </motion.div>
+          {/* --- 1. HERO --- */}
+          <header id="hero" className="mb-32 md:mb-40 relative flex flex-col items-center text-center">
 
-                  {/* Show text if: Desktop OR (Mobile AND Not Scrolled) */}
-                  <motion.div
-                    layout="position"
-                    className={`flex items-center overflow-hidden`}
-                    animate={{
-                      width: (isMobile && isScrolled) ? 0 : "auto",
-                      opacity: (isMobile && isScrolled) ? 0 : 1,
-                      marginLeft: (isMobile && isScrolled) ? 0 : 8 // 8px gap manually applied
-                    }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <AnimatePresence mode="wait">
-                      {language === 'pt' ? (
-                        <motion.div
-                          key="pt"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-center text-xs whitespace-nowrap"
-                        >
-                          {/* Mobile Text (Simple) */}
-                          <span className="md:hidden">🇧🇷 Português (Brasil)</span>
-
-                          {/* Desktop Text (Animated) */}
-                          <div className="hidden md:flex items-center">
-                            <span>p</span>
-                            <span className="max-w-0 group-hover:max-w-[20px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">or</span>
-                            <span>t</span>
-                            <span className="max-w-0 group-hover:max-w-[45px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">uguês</span>
-                            <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">-</span>
-                            <span className="max-w-0 group-hover:max-w-[10px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">&nbsp;</span>
-                            <span>B</span>
-                            <span className="max-w-0 group-hover:max-w-[70px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">rasileiro</span>
-                            <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">R</span>
-                          </div>
-                        </motion.div>
-                      ) : (
-                        <motion.div
-                          key="en"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: 10 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-center text-xs whitespace-nowrap"
-                        >
-                          {/* Mobile Text (Simple) */}
-                          <span className="md:hidden">🇺🇸 English (United States)</span>
-
-                          {/* Desktop Text (Animated) */}
-                          <div className="hidden md:flex items-center">
-                            <span>en</span>
-                            <span className="max-w-[10px] group-hover:max-w-0 overflow-hidden transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0">-</span>
-                            <span className="max-w-0 group-hover:max-w-[40px] overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100">glish&nbsp;</span>
-                            <span>US</span>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                </motion.button>
-
-                {/* Language Dropdown Menu (Mobile Only) */}
-                <AnimatePresence>
-                  {isLangMenuOpen && isMobile && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.1 }}
-                      className="absolute top-12 right-0 bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-2xl min-w-[140px] flex flex-col"
-                    >
-                      <button
-                        onClick={() => {
-                          setLanguage('pt');
-                          setIsLangMenuOpen(false);
-                        }}
-                        className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'pt' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400'}`}
-                      >
-                        <span>🇧🇷 Português (Brasil)</span>
-                        {language === 'pt' && <Check size={14} className="text-zinc-400" />}
-                      </button>
-                      <div className="h-px bg-[#30363D]" />
-                      <button
-                        onClick={() => {
-                          setLanguage('en');
-                          setIsLangMenuOpen(false);
-                        }}
-                        className={`flex items-center justify-between px-4 py-3 text-sm transition-colors hover:bg-zinc-800 ${language === 'en' ? 'text-[#dedede] bg-zinc-800/50' : 'text-zinc-400'}`}
-                      >
-                        <span>🇺🇸 English (United States)</span>
-                        {language === 'en' && <Check size={14} className="text-zinc-400" />}
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-col items-center text-center max-w-4xl mx-auto mt-20 md:mt-32"
-              >
-                <StaggeredText
-                  text="Nicolas V. Alves"
-                  className="text-4xl md:text-7xl font-extrabold tracking-tight text-[#dedede] mb-4"
-                />
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={language}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex flex-col items-center px-4"
-                  >
-                    {/* Status Line */}
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 mb-8">
-                      <div className="flex items-center gap-2">
-                        <span className="relative flex h-2 w-2">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                        </span>
-                        <span className="text-sm md:text-base text-emerald-400 font-medium tracking-wide">
-                          {t.hero.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Headline */}
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#dedede] mb-6 max-w-2xl leading-[1.15]">
-                      {t.hero.headline}
-                    </h2>
-
-                    {/* Subtext (Collapsible) */}
-                    <div className="flex flex-col items-center mb-10 w-full">
-                      <button
-                        onClick={() => setIsBioExpanded(!isBioExpanded)}
-                        className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-4 group"
-                      >
-                        <span className="text-sm font-medium uppercase tracking-wider">{t.hero.aboutMe}</span>
-                        <motion.div
-                          animate={{ rotate: isBioExpanded ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <ChevronLeft size={16} className="-rotate-90" />
-                        </motion.div>
-                      </button>
-
-                      <AnimatePresence>
-                        {isBioExpanded && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
-                            className="overflow-hidden"
-                          >
-                            <p className="text-base md:text-lg text-zinc-400 font-normal leading-relaxed max-w-2xl text-balance pb-4">
-                              {t.hero.subtext}
-                            </p>
-
-                            {/* Mobile Multimedia Hub (Spotify & Steam) - Visible only inside expanded bio on mobile */}
-                            <MobileMultimediaHub />
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Buttons Row */}
-                    <div className="flex flex-col sm:flex-row items-center gap-4">
-
-
-                      <a
-                        href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'}
-                        download
-                        onClick={() => track('Download CV', { language })}
-                        className="px-8 py-3 rounded-lg bg-zinc-900 border border-zinc-800 text-[#dedede] font-medium hover:bg-[#1c2128] transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
-                      >
-                        <Download size={18} />
-                        {t.sections.downloadCV}
-                      </a>
-
-                      <a
-                        href="https://www.linkedin.com/in/naicolas-dev/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Hero' })}
-                        className="px-8 py-3 rounded-lg bg-[#0A66C2] text-[#dedede] font-medium hover:bg-[#004182] transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
-                      >
-                        <Linkedin size={18} />
-                        LinkedIn
-                      </a>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
-              </motion.div>
-            </header>
-
-
-
-            {/* --- 1. STACK --- */}
-            <section className="mb-32">
-              <SectionHeading number="1">{t.sections.stack}</SectionHeading>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {stackItems.map((item, i) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.05 }}
-                    className={`
-                      group relative overflow-hidden p-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 
-                      hover:bg-zinc-900 hover:border-zinc-700 transition-all duration-300
-                      flex flex-col items-center justify-center gap-4 text-center cursor-default
-                      hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]
-                    `}
-                  >
-
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                    <div className="p-4 rounded-full bg-zinc-900/80 border border-zinc-800 group-hover:scale-110 group-hover:border-zinc-700 transition-all duration-300 relative z-10 text-zinc-400 group-hover:text-zinc-100">
-                      {item.icon}
-                    </div>
-
-                    <span className="font-medium text-sm text-zinc-500 group-hover:text-zinc-300 transition-colors z-10 relative">
-                      {item.name}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-
-            {/* --- 2. EXPERIENCE --- */}
-            <section className="mb-32" id="experience-section">
-              <SectionHeading number="2">{t.sections.experience}</SectionHeading>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col items-center text-center max-w-4xl mx-auto mt-20 md:mt-32"
+            >
+              <StaggeredText
+                text="Nicolas V. Alves"
+                className="text-4xl md:text-7xl font-extrabold tracking-tight text-[#dedede] mb-4"
+              />
 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={language}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col items-center px-4"
                 >
-                  {t.projects.experience.map((project, i) => (
+                  {/* Status Line */}
+                  <div className="inline-block px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 mb-8">
+                    <div className="flex items-center gap-2">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                      </span>
+                      <span className="text-sm md:text-base text-emerald-400 font-medium tracking-wide">
+                        {t.hero.status}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Headline */}
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#dedede] mb-6 max-w-2xl leading-[1.15]">
+                    {t.hero.headline}
+                  </h2>
+
+                  {/* Subtext (Collapsible) */}
+                  <div className="flex flex-col items-center mb-10 w-full">
+                    <button
+                      onClick={() => setIsBioExpanded(!isBioExpanded)}
+                      className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors mb-4 group"
+                    >
+                      <span className="text-sm font-medium uppercase tracking-wider">{t.hero.aboutMe}</span>
+                      <motion.div
+                        animate={{ rotate: isBioExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <ChevronLeft size={16} className="-rotate-90" />
+                      </motion.div>
+                    </button>
+
+                    <AnimatePresence>
+                      {isBioExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-base md:text-lg text-zinc-400 font-normal leading-relaxed max-w-2xl text-balance pb-4">
+                            {t.hero.subtext}
+                          </p>
+
+                          {/* Mobile Multimedia Hub (Spotify & Steam) - Visible only inside expanded bio on mobile */}
+                          <MobileMultimediaHub />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Buttons Row */}
+                  <div className="flex flex-col sm:flex-row items-center gap-4">
+
+
+                    <a
+                      href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'}
+                      download
+                      onClick={() => track('Download CV', { language })}
+                      className="px-8 py-3 rounded-lg bg-zinc-900 border border-zinc-800 text-[#dedede] font-medium hover:bg-[#1c2128] transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+                    >
+                      <Download size={18} />
+                      {t.sections.downloadCV}
+                    </a>
+
+                    <a
+                      href="https://www.linkedin.com/in/naicolas-dev/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Hero' })}
+                      className="px-8 py-3 rounded-lg bg-[#0A66C2] text-[#dedede] font-medium hover:bg-[#004182] transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
+                    >
+                      <Linkedin size={18} />
+                      LinkedIn
+                    </a>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </header>
+
+
+
+          {/* --- 1. STACK --- */}
+          <section id="stack" className="mb-32">
+            <SectionHeading number="1">{t.sections.stack}</SectionHeading>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {stackItems.map((item, i) => (
+                <motion.div
+                  key={item.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`
+                      group relative overflow-hidden p-6 rounded-2xl border border-zinc-800 bg-zinc-900/50 
+                      hover:bg-zinc-900 hover:border-zinc-700 transition-colors duration-300
+                      flex flex-col items-center justify-center gap-4 text-center cursor-default
+                      hover:shadow-[0_0_20px_rgba(0,0,0,0.3)]
+                    `}
+                >
+
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                  <div className="p-4 rounded-full bg-zinc-900/80 border border-zinc-800 group-hover:scale-110 group-hover:border-zinc-700 transition-all duration-300 relative z-10 text-zinc-400 group-hover:text-zinc-100">
+                    {item.icon}
+                  </div>
+
+                  <span className="font-medium text-sm text-zinc-500 group-hover:text-zinc-300 transition-colors z-10 relative">
+                    {item.name}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </section>
+
+          {/* --- 2. EXPERIENCE --- */}
+          <section className="mb-32" id="experience-section">
+            <SectionHeading number="2">{t.sections.experience}</SectionHeading>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={language}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              >
+                {t.projects.experience.map((project, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    onClick={() => {
+                      track('Project Click', { project: project.title, type: 'Experience' });
+                      openProject(project);
+                    }}
+                    className="rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-800 transition-colors duration-300 group cursor-pointer flex flex-col overflow-hidden"
+                  >
+                    {/* Image Preview */}
+                    <div className="relative h-48 w-full overflow-hidden border-b border-zinc-800">
+                      <div className="absolute inset-0 bg-[#0e1011]" />
+                      {project.images[0] && (
+                        <img
+                          src={project.images[0]}
+                          alt={project.title}
+                          className="w-full h-full object-cover opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
+                        />
+                      )}
+                    </div>
+
+                    <div className="p-8 flex flex-col justify-between flex-grow">
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="text-xl font-semibold text-zinc-400 group-hover:text-[#dedede] transition-colors tracking-tight">{project.title}</h4>
+                          <div className="p-2 rounded-full bg-[#1c1c1e] text-zinc-500 group-hover:text-[#dedede] transition-colors">
+                            <ArrowRight size={16} className="-rotate-45" />
+                          </div>
+                        </div>
+                        {project.period && (
+                          <p className="text-xs font-medium text-zinc-500 mb-6 italic">{project.period}</p>
+                        )}
+
+                        <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-light line-clamp-3">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {project.techs.slice(0, 3).map(t => (
+                          <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                            {t}
+                          </span>
+                        ))}
+                        {project.techs.length > 3 && (
+                          <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                            +{project.techs.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </section>
+
+
+          {/* --- 3. PROJETOS (Main) --- */}
+          <section id="projects-section" className="mb-32">
+            <SectionHeading number="3">{t.sections.projects}</SectionHeading>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={language}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="space-y-16"
+              >
+
+                {/* DESTAQUE: TCC */}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="group relative cursor-pointer rounded-3xl overflow-hidden border border-blue-500/20 bg-zinc-900/50 transition-colors duration-300 hover:border-blue-500/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]"
+                  onClick={() => {
+                    track('Project Click', { project: t.projects.featured.title, type: 'Featured' });
+                    openProject(t.projects.featured);
+                  }}
+                >
+
+                  <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                      <span className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
+                      <h3 className="text-4xl font-bold text-zinc-100 mb-1 tracking-tight">{t.projects.featured.title}</h3>
+                      {t.projects.featured.period && (
+                        <span className="text-sm font-medium text-blue-300 mb-4 block italic">{t.projects.featured.period}</span>
+                      )}
+                      <p className="text-zinc-300 leading-relaxed mb-8 text-lg font-light">
+                        {t.projects.featured.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {t.projects.featured.techs.slice(0, 3).map(t => {
+                          const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
+                          return (
+                            <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
+                              {tech.icon}
+                            </StackBadge>
+                          );
+                        })}
+                        {t.projects.featured.techs.length > 3 && (
+                          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5 text-zinc-300">
+                            <span className="font-medium text-[11px] tracking-wide">+{t.projects.featured.techs.length - 3}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex gap-4">
+                        <span className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:text-blue-300 transition-colors">
+                          {language === 'pt' ? 'Explorar Projeto' : 'Explore Project'} <ArrowRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900 shadow-inner">
+                      {/* Background decorative gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#161B22] to-[#0e1011]" />
+                      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,#3B82F6_0%,transparent_100%)]" />
+
+                      {t.projects.featured.images[0] && (
+                        <img
+                          src={t.projects.featured.images[0]}
+                          alt="Project Preview"
+                          className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105 transform filter brightness-75 group-hover:brightness-100"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+
+
+                {/* OUTROS PROJETOS PRINCIPAIS */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {t.projects.main.map((project, i) => (
                     <motion.div
                       key={i}
                       initial={{ opacity: 0, y: 20 }}
@@ -967,616 +992,473 @@ export default function Portfolio() {
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
                       onClick={() => {
-                        track('Project Click', { project: project.title, type: 'Experience' });
+                        track('Project Click', { project: project.title, type: 'Main' });
                         openProject(project);
                       }}
-                      className="rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-800 transition-all duration-300 group cursor-pointer flex flex-col overflow-hidden"
+                      className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-800 transition-colors duration-300 group cursor-pointer flex flex-col justify-between"
                     >
-                      {/* Image Preview */}
-                      <div className="relative h-48 w-full overflow-hidden border-b border-zinc-800">
-                        <div className="absolute inset-0 bg-[#0e1011]" />
-                        {project.images[0] && (
-                          <img
-                            src={project.images[0]}
-                            alt={project.title}
-                            className="w-full h-full object-cover opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
-                          />
+                      <div>
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="text-xl font-semibold text-zinc-400 group-hover:text-[#dedede] transition-colors tracking-tight">{project.title}</h4>
+                          <div className="p-2 rounded-full bg-[#1c1c1e] text-zinc-500 group-hover:text-[#dedede] transition-colors">
+                            <ArrowRight size={16} className="-rotate-45" />
+                          </div>
+                        </div>
+                        {project.period && (
+                          <p className="text-xs font-medium text-zinc-500 mb-6 italic">{project.period}</p>
                         )}
+
+                        <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-light line-clamp-3">
+                          {project.description}
+                        </p>
                       </div>
 
-                      <div className="p-8 flex flex-col justify-between flex-grow">
-                        <div>
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-xl font-semibold text-zinc-400 group-hover:text-[#dedede] transition-colors tracking-tight">{project.title}</h4>
-                            <div className="p-2 rounded-full bg-[#1c1c1e] text-zinc-500 group-hover:text-[#dedede] transition-colors">
-                              <ArrowRight size={16} className="-rotate-45" />
-                            </div>
-                          </div>
-                          {project.period && (
-                            <p className="text-xs font-medium text-zinc-500 mb-6 italic">{project.period}</p>
-                          )}
-
-                          <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-light line-clamp-3">
-                            {project.description}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          {project.techs.slice(0, 3).map(t => (
-                            <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
-                              {t}
-                            </span>
-                          ))}
-                          {project.techs.length > 3 && (
-                            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
-                              +{project.techs.length - 3}
-                            </span>
-                          )}
-                        </div>
+                      <div className="flex flex-wrap gap-2">
+                        {project.techs.slice(0, 3).map(t => (
+                          <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                            {t}
+                          </span>
+                        ))}
+                        {project.techs.length > 3 && (
+                          <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
+                            +{project.techs.length - 3}
+                          </span>
+                        )}
                       </div>
                     </motion.div>
                   ))}
-                </motion.div>
-              </AnimatePresence>
-            </section>
+                </div>
+
+              </motion.div>
+            </AnimatePresence>
+          </section>
 
 
-            {/* --- 3. PROJETOS (Main) --- */}
-            <section id="projects-section" className="mb-32">
-              <SectionHeading number="3">{t.sections.projects}</SectionHeading>
+          {/* --- 4. OUTROS EXPERIMENTOS --- */}
+          <section className="mb-40">
+            <SectionHeading number="4">{t.sections.otherProjects}</SectionHeading>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={language}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="space-y-16"
-                >
-
-                  {/* DESTAQUE: TCC */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={language}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="divide-y divide-white/5 border-t border-b border-white/5"
+              >
+                {t.projects.other.map((p, i) => (
+                  <motion.a
+                    key={i}
+                    href={p.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => track('Project Click', { project: p.name, type: 'Other' })}
+                    className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    className="group relative cursor-pointer rounded-3xl overflow-hidden border border-blue-500/20 bg-zinc-900/50 transition-all duration-300 hover:border-blue-500/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)]"
-                    onClick={() => {
-                      track('Project Click', { project: t.projects.featured.title, type: 'Featured' });
-                      openProject(t.projects.featured);
-                    }}
                   >
+                    <h5 className="text-zinc-300 font-medium text-sm group-hover:text-[#dedede] transition-colors">{p.name}</h5>
+                    <div className="flex items-center gap-3">
+                      <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
+                      <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-[#dedede] transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
+                    </div>
+                  </motion.a>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </section>
 
-                    <div className="relative p-8 md:p-12 z-10 grid md:grid-cols-2 gap-8 items-center">
-                      <div>
-                        <span className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3 block">{t.sections.featured}</span>
-                        <h3 className="text-4xl font-bold text-zinc-100 mb-1 tracking-tight">{t.projects.featured.title}</h3>
-                        {t.projects.featured.period && (
-                          <span className="text-sm font-medium text-blue-300 mb-4 block italic">{t.projects.featured.period}</span>
-                        )}
-                        <p className="text-zinc-300 leading-relaxed mb-8 text-lg font-light">
-                          {t.projects.featured.description}
-                        </p>
 
-                        <div className="flex flex-wrap gap-2 mb-8">
-                          {t.projects.featured.techs.slice(0, 3).map(t => {
-                            const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400" };
-                            return (
-                              <StackBadge key={t} name={t} color="bg-white/5 border-white/5 text-zinc-300">
-                                {tech.icon}
-                              </StackBadge>
-                            );
-                          })}
-                          {t.projects.featured.techs.length > 3 && (
-                            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/5 bg-white/5 text-zinc-300">
-                              <span className="font-medium text-[11px] tracking-wide">+{t.projects.featured.techs.length - 3}</span>
-                            </div>
-                          )}
-                        </div>
+          {/* --- 5. FORMAÃ‡ÃƒO --- */}
+          <section id="education" className="mb-40">
+            <SectionHeading number="5">{t.education.title}</SectionHeading>
 
-                        <div className="flex gap-4">
-                          <span className="inline-flex items-center gap-2 text-sm font-bold text-blue-400 group-hover:text-blue-300 transition-colors">
-                            {language === 'pt' ? 'Explorar Projeto' : 'Explore Project'} <ArrowRight size={14} />
-                          </span>
-                        </div>
-                      </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={language}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="relative space-y-12 pl-4"
+              >
+                {/* Timeline Line */}
+                <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
 
-                      <div className="relative h-64 md:h-full min-h-[250px] rounded-2xl overflow-hidden border border-zinc-800 bg-zinc-900 shadow-inner">
-                        {/* Background decorative gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#161B22] to-[#0e1011]" />
-                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,#3B82F6_0%,transparent_100%)]" />
-
-                        {t.projects.featured.images[0] && (
-                          <img
-                            src={t.projects.featured.images[0]}
-                            alt="Project Preview"
-                            className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105 transform filter brightness-75 group-hover:brightness-100"
-                          />
-                        )}
-                      </div>
+                {t.education.items.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    className="relative pl-10"
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#0e1011] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
+                    <div className="mb-2">
+                      <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
+                      <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
                     </div>
                   </motion.div>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </section>
 
 
-                  {/* OUTROS PROJETOS PRINCIPAIS */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {t.projects.main.map((project, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        onClick={() => {
-                          track('Project Click', { project: project.title, type: 'Main' });
-                          openProject(project);
-                        }}
-                        className="p-8 rounded-2xl border border-zinc-800 bg-zinc-900/50 hover:bg-zinc-900 hover:border-zinc-800 transition-all duration-300 group cursor-pointer flex flex-col justify-between"
-                      >
-                        <div>
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="text-xl font-semibold text-zinc-400 group-hover:text-[#dedede] transition-colors tracking-tight">{project.title}</h4>
-                            <div className="p-2 rounded-full bg-[#1c1c1e] text-zinc-500 group-hover:text-[#dedede] transition-colors">
-                              <ArrowRight size={16} className="-rotate-45" />
-                            </div>
-                          </div>
-                          {project.period && (
-                            <p className="text-xs font-medium text-zinc-500 mb-6 italic">{project.period}</p>
-                          )}
+          {/* --- 5. CONTACT CTA --- */}
+          <section className="mb-24 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              onViewportEnter={() => setCtaInView(true)}
+              transition={{ duration: 0.6 }}
+              className="p-12 rounded-3xl border border-zinc-800 bg-zinc-900 flex flex-col items-center gap-8 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#3B82F6]/5 blur-[80px] rounded-full -mr-32 -mt-32" />
 
-                          <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-light line-clamp-3">
-                            {project.description}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          {project.techs.slice(0, 3).map(t => (
-                            <span key={t} className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
-                              {t}
-                            </span>
-                          ))}
-                          {project.techs.length > 3 && (
-                            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500 border border-white/5 px-2 py-1 rounded-full">
-                              +{project.techs.length - 3}
-                            </span>
-                          )}
-                        </div>
-                      </motion.div>
-                    ))}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={language}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative z-10 flex flex-col items-center gap-8"
+                >
+                  <div>
+                    <h2 className="text-4xl md:text-5xl font-bold text-[#dedede] mb-4 tracking-tight">
+                      {language === 'pt' ? 'Vamos Colaborar?' : "Let's Collaborate"}
+                    </h2>
+                    <p className="text-zinc-400 text-lg max-w-[500px] mb-2 mx-auto">
+                      {language === 'pt'
+                        ? 'Tem um projeto interessante em mente? Vamos transformá-lo em realidade.'
+                        : "Have an interesting project in mind? Let's turn it into reality."}
+                    </p>
                   </div>
 
-                </motion.div>
-              </AnimatePresence>
-            </section>
-
-
-            {/* --- 4. OUTROS EXPERIMENTOS --- */}
-            <section className="mb-40">
-              <SectionHeading number="4">{t.sections.otherProjects}</SectionHeading>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={language}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="divide-y divide-white/5 border-t border-b border-white/5"
-                >
-                  {t.projects.other.map((p, i) => (
-                    <motion.a
-                      key={i}
-                      href={p.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => track('Project Click', { project: p.name, type: 'Other' })}
-                      className="py-4 flex items-center justify-between group hover:bg-white/5 px-4 rounded-lg -mx-4 transition-colors cursor-pointer block"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
+                  <Magnetic>
+                    <a
+                      href="mailto:naicolas.dev@gmail.com"
+                      onClick={() => track('Contact CTA Click', { location: 'Footer Section' })}
+                      className={`relative overflow-hidden px-10 py-4 rounded-full bg-[#10B981] text-white font-bold text-lg hover:bg-[#059669] transition-all hover:scale-105 shadow-[0_10px_20px_rgba(16,185,129,0.2)] group flex items-center gap-3 ${ctaInView ? 'animate-wiggle' : ''} hover:animate-none`}
                     >
-                      <h5 className="text-zinc-300 font-medium text-sm group-hover:text-[#dedede] transition-colors">{p.name}</h5>
-                      <div className="flex items-center gap-3">
-                        <p className="text-zinc-600 text-xs font-mono group-hover:text-zinc-400 transition-colors">{p.tech}</p>
-                        <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-[#dedede] transition-all opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0" />
-                      </div>
-                    </motion.a>
-                  ))}
+                      <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] ${ctaInView ? 'animate-shine' : ''} group-hover:animate-none`} />
+                      <Mail size={20} className="relative z-10" />
+                      <span className="relative z-10">{language === 'pt' ? 'Me Contrate' : 'Hire Me'}</span>
+                      <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                    </a>
+                  </Magnetic>
                 </motion.div>
               </AnimatePresence>
-            </section>
+            </motion.div>
+          </section>
 
 
-            {/* --- 5. FORMAÃ‡ÃƒO --- */}
-            <section className="mb-40">
-              <SectionHeading number="5">{t.education.title}</SectionHeading>
+          {/* --- FOOTER --- */}
+          <footer className="border-t border-zinc-800 pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
+            <div className="flex gap-6">
+              <a href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'} download onClick={() => track('Download CV', { language })} className="hover:text-[#dedede] transition-colors flex p-2"><Download size={20} /></a>
+              <a href="https://github.com/naicolas-dev" onClick={() => track('Social Click', { platform: 'Github', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Github size={20} /></a>
+              <a href="https://www.linkedin.com/in/naicolas-dev/" onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Linkedin size={20} /></a>
+              <a href="mailto:naicolas.dev@gmail.com" onClick={() => track('Social Click', { platform: 'Mail', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Mail size={20} /></a>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-zinc-400 transition-colors">Nicolas Viana Alves</a></p>
+            </div>
+          </footer>
 
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={language}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="relative space-y-12 pl-4"
-                >
-                  {/* Timeline Line */}
-                  <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
+        </div>
 
-                  {t.education.items.map((item, i) => (
-                    <motion.div
-                      key={i}
-                      className="relative pl-10"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
-                    >
-                      <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#0e1011] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
-                      <div className="mb-2">
-                        <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
-                        <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </section>
-
-
-            {/* --- 5. CONTACT CTA --- */}
-            <section className="mb-24 text-center">
+        {/* --- MODAL --- */}
+        <AnimatePresence>
+          {selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-[#0e1011] sm:bg-[#0e1011]/90"
+            >
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                onViewportEnter={() => setCtaInView(true)}
-                transition={{ duration: 0.6 }}
-                className="p-12 rounded-3xl border border-zinc-800 bg-zinc-900 flex flex-col items-center gap-8 relative overflow-hidden"
+                initial={isMobile ? { opacity: 0, scale: 0.95, y: "100%" } : { opacity: 0, scale: 0.9, y: 0 }}
+                animate={isMobile ? { opacity: 1, scale: 1, y: 0 } : { opacity: 1, scale: 1, y: 0 }}
+                exit={isMobile ? { opacity: 0, scale: 0.95, y: "100%" } : { opacity: 0, scale: 0.9, y: 0 }}
+                transition={{
+                  type: isMobile ? "tween" : "spring",
+                  duration: 0.3,
+                  ease: "easeOut",
+                  damping: 25,
+                  stiffness: 300
+                }}
+                drag="y"
+                dragControls={dragControls}
+                dragListener={false} // Only drag via controls
+                dragConstraints={{ top: 0 }}
+                dragElastic={{ top: 0, bottom: 0.2 }}
+                dragDirectionLock // Locks drag direction to either x or y, helping prevent diagonal drags
+                onDragEnd={(_, info) => {
+                  if (info.offset.y > 100 || info.velocity.y > 500) {
+                    setSelectedProject(null);
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-[2rem] sm:rounded-2xl w-full max-w-2xl max-h-[85vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col will-change-transform"
               >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-[#3B82F6]/5 blur-[80px] rounded-full -mr-32 -mt-32" />
+                {/* Mobile Drag Handle Area - Trigger for Drag */}
+                <div
+                  className="sm:hidden w-full flex justify-center pt-3 pb-1 sticky top-0 bg-zinc-900 z-30 touch-none"
+                  onPointerDown={(e) => dragControls.start(e)}
+                >
+                  <div className="w-12 h-1.5 bg-zinc-700/50 rounded-full" />
+                </div>
+
+                {/* Close Button - Hidden on Mobile (Bottom Sheet) */}
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="hidden sm:block absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 rounded-full text-zinc-400 hover:text-[#dedede] transition-colors z-50"
+                >
+                  <X size={20} />
+                </button>
+
+                {/* Carousel Section */}
+                <div
+                  className="w-full h-auto aspect-video sm:h-96 min-h-[220px] bg-[#121212] relative group flex items-center justify-center overflow-hidden cursor-zoom-in touch-none"
+                  onPointerDown={(e) => {
+                    // Optional: allow dragging from image too?
+                    // No, image has its own drag for swiping.
+                    // So we DON'T start dragControls here.
+                  }}
+                  onClick={() => setIsFullScreen(true)}
+                >
+
+                  {/* Blurred Background for Vertical Images */}
+                  <div className="absolute inset-0">
+                    <motion.img
+                      key={`bg-${currentImageIndex}`}
+                      src={selectedProject.images[currentImageIndex]}
+                      className="w-full h-full object-cover opacity-20 hidden sm:block scale-110"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.2 }}
+                      transition={{ duration: 0.5 }}
+                    />
+                  </div>
+
+                  <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                    <motion.img
+                      key={currentImageIndex}
+                      src={selectedProject.images[currentImageIndex]}
+                      alt={`${selectedProject.title} image ${currentImageIndex + 1}`}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={{
+                        x: { type: "spring", stiffness: 300, damping: 30 },
+                        opacity: { duration: 0.2 },
+                        scale: { duration: 0.2 }
+                      }}
+                      drag="x"
+                      dragConstraints={{ left: 0, right: 0 }}
+                      dragElastic={1}
+                      onDragEnd={(_, info) => {
+                        const swipe = info.offset.x;
+                        if (swipe < -50) {
+                          nextImage();
+                        } else if (swipe > 50) {
+                          prevImage();
+                        }
+                      }}
+                      className="w-full h-full object-contain relative z-10 touch-pan-y"
+                    />
+                  </AnimatePresence>
+
+                  {/* Gradient Overlay for Controls Visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/50 via-transparent to-transparent pointer-events-none z-10" />
+
+                  {/* Carousel Controls */}
+                  {selectedProject.images.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevImage}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-[#dedede] rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                      >
+                        <ChevronLeft size={24} />
+                      </button>
+                      <button
+                        onClick={nextImage}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-[#dedede] rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                      >
+                        <ChevronRight size={24} />
+                      </button>
+
+                      {/* Indicators */}
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                        {selectedProject.images.map((_, idx) => (
+                          <div
+                            key={idx}
+                            className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/30'}`}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  <div className="absolute top-4 right-4 bg-black/80 sm:bg-black/50 text-[#dedede] text-xs px-2 py-1 rounded z-20 pointer-events-none md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+                    {language === 'pt' ? 'Toque para ampliar' : 'Tap to enlarge'}
+                  </div>
+                </div>
 
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={language}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="relative z-10 flex flex-col items-center gap-8"
+                    className="p-8"
                   >
-                    <div>
-                      <h2 className="text-4xl md:text-5xl font-bold text-[#dedede] mb-4 tracking-tight">
-                        {language === 'pt' ? 'Vamos Colaborar?' : "Let's Collaborate"}
-                      </h2>
-                      <p className="text-zinc-400 text-lg max-w-[500px] mb-2 mx-auto">
-                        {language === 'pt'
-                          ? 'Tem um projeto interessante em mente? Vamos transformá-lo em realidade.'
-                          : "Have an interesting project in mind? Let's turn it into reality."}
+                    <h3 className="text-3xl font-bold text-[#dedede] mb-1">{selectedProject.title}</h3>
+                    {selectedProject.period && (
+                      <p className="text-sm font-medium text-zinc-500 mb-4 italic">{selectedProject.period}</p>
+                    )}
+                    <div className="mb-6 flex flex-wrap gap-2">
+                      {selectedProject.techs.map(t => {
+                        const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
+                        return (
+                          <StackBadge key={t} name={t} color={tech.color}>
+                            {tech.icon}
+                          </StackBadge>
+                        );
+                      })}
+                    </div>
+
+                    <div className="prose prose-invert prose-zinc max-w-none mb-8">
+                      <p className="text-lg leading-relaxed text-zinc-300">
+                        {selectedProject.longDescription || selectedProject.description}
                       </p>
                     </div>
 
-                    <Magnetic>
-                      <a
-                        href="mailto:naicolas.dev@gmail.com"
-                        onClick={() => track('Contact CTA Click', { location: 'Footer Section' })}
-                        className={`relative overflow-hidden px-10 py-4 rounded-full bg-[#10B981] text-white font-bold text-lg hover:bg-[#059669] transition-all hover:scale-105 shadow-[0_10px_20px_rgba(16,185,129,0.2)] group flex items-center gap-3 ${ctaInView ? 'animate-wiggle' : ''} hover:animate-none`}
-                      >
-                        <div className={`absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] ${ctaInView ? 'animate-shine' : ''} group-hover:animate-none`} />
-                        <Mail size={20} className="relative z-10" />
-                        <span className="relative z-10">{language === 'pt' ? 'Me Contrate' : 'Hire Me'}</span>
-                        <ArrowRight size={18} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                      </a>
-                    </Magnetic>
-                  </motion.div>
-                </AnimatePresence>
-              </motion.div>
-            </section>
-
-
-            {/* --- FOOTER --- */}
-            <footer className="border-t border-zinc-800 pt-12 pb-12 flex flex-col items-center justify-center gap-6 text-zinc-600">
-              <div className="flex gap-6">
-                <a href={language === 'pt' ? '/Nicolas_Viana_Alves_Curriculo.pdf' : '/Nicolas_Viana_Alves_Resume.pdf'} download onClick={() => track('Download CV', { language })} className="hover:text-[#dedede] transition-colors flex p-2"><Download size={20} /></a>
-                <a href="https://github.com/naicolas-dev" onClick={() => track('Social Click', { platform: 'Github', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Github size={20} /></a>
-                <a href="https://www.linkedin.com/in/naicolas-dev/" onClick={() => track('Social Click', { platform: 'Linkedin', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Linkedin size={20} /></a>
-                <a href="mailto:naicolas.dev@gmail.com" onClick={() => track('Social Click', { platform: 'Mail', location: 'Footer' })} className="hover:text-[#dedede] transition-colors flex p-2"><Mail size={20} /></a>
-              </div>
-              <div className="flex flex-col items-center gap-2">
-                <p className="text-sm">© {new Date().getFullYear()} <a href="https://github.com/naicolas-dev" className="hover:text-zinc-400 transition-colors">Nicolas Viana Alves</a></p>
-              </div>
-            </footer>
-
-          </div>
-
-          {/* --- MODAL --- */}
-          <AnimatePresence>
-            {selectedProject && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setSelectedProject(null)}
-                className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-[#0e1011] sm:bg-[#0e1011]/90"
-              >
-                <motion.div
-                  initial={isMobile ? { opacity: 0, scale: 0.95, y: "100%" } : { opacity: 0, scale: 0.9, y: 0 }}
-                  animate={isMobile ? { opacity: 1, scale: 1, y: 0 } : { opacity: 1, scale: 1, y: 0 }}
-                  exit={isMobile ? { opacity: 0, scale: 0.95, y: "100%" } : { opacity: 0, scale: 0.9, y: 0 }}
-                  transition={{
-                    type: isMobile ? "tween" : "spring",
-                    duration: 0.3,
-                    ease: "easeOut",
-                    damping: 25,
-                    stiffness: 300
-                  }}
-                  drag="y"
-                  dragControls={dragControls}
-                  dragListener={false} // Only drag via controls
-                  dragConstraints={{ top: 0 }}
-                  dragElastic={{ top: 0, bottom: 0.2 }}
-                  dragDirectionLock // Locks drag direction to either x or y, helping prevent diagonal drags
-                  onDragEnd={(_, info) => {
-                    if (info.offset.y > 100 || info.velocity.y > 500) {
-                      setSelectedProject(null);
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="bg-zinc-900 border-t sm:border border-zinc-800 rounded-t-[2rem] sm:rounded-2xl w-full max-w-2xl max-h-[85vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl relative flex flex-col will-change-transform"
-                >
-                  {/* Mobile Drag Handle Area - Trigger for Drag */}
-                  <div
-                    className="sm:hidden w-full flex justify-center pt-3 pb-1 sticky top-0 bg-zinc-900 z-30 touch-none"
-                    onPointerDown={(e) => dragControls.start(e)}
-                  >
-                    <div className="w-12 h-1.5 bg-zinc-700/50 rounded-full" />
-                  </div>
-
-                  {/* Close Button - Hidden on Mobile (Bottom Sheet) */}
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="hidden sm:block absolute top-4 right-4 p-2 bg-black/60 hover:bg-black/80 rounded-full text-zinc-400 hover:text-[#dedede] transition-colors z-50"
-                  >
-                    <X size={20} />
-                  </button>
-
-                  {/* Carousel Section */}
-                  <div
-                    className="w-full h-auto aspect-video sm:h-96 min-h-[220px] bg-[#121212] relative group flex items-center justify-center overflow-hidden cursor-zoom-in touch-none"
-                    onPointerDown={(e) => {
-                      // Optional: allow dragging from image too?
-                      // No, image has its own drag for swiping.
-                      // So we DON'T start dragControls here.
-                    }}
-                    onClick={() => setIsFullScreen(true)}
-                  >
-
-                    {/* Blurred Background for Vertical Images */}
-                    <div className="absolute inset-0">
-                      <motion.img
-                        key={`bg-${currentImageIndex}`}
-                        src={selectedProject.images[currentImageIndex]}
-                        className="w-full h-full object-cover opacity-20 hidden sm:block scale-110"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.2 }}
-                        transition={{ duration: 0.5 }}
-                      />
-                    </div>
-
-                    <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                      <motion.img
-                        key={currentImageIndex}
-                        src={selectedProject.images[currentImageIndex]}
-                        alt={`${selectedProject.title} image ${currentImageIndex + 1}`}
-                        custom={direction}
-                        variants={slideVariants}
-                        initial="enter"
-                        animate="center"
-                        exit="exit"
-                        transition={{
-                          x: { type: "spring", stiffness: 300, damping: 30 },
-                          opacity: { duration: 0.2 },
-                          scale: { duration: 0.2 }
-                        }}
-                        drag="x"
-                        dragConstraints={{ left: 0, right: 0 }}
-                        dragElastic={1}
-                        onDragEnd={(_, info) => {
-                          const swipe = info.offset.x;
-                          if (swipe < -50) {
-                            nextImage();
-                          } else if (swipe > 50) {
-                            prevImage();
-                          }
-                        }}
-                        className="w-full h-full object-contain relative z-10 touch-pan-y"
-                      />
-                    </AnimatePresence>
-
-                    {/* Gradient Overlay for Controls Visibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-900/50 via-transparent to-transparent pointer-events-none z-10" />
-
-                    {/* Carousel Controls */}
-                    {selectedProject.images.length > 1 && (
-                      <>
-                        <button
-                          onClick={prevImage}
-                          className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-[#dedede] rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                        >
-                          <ChevronLeft size={24} />
-                        </button>
-                        <button
-                          onClick={nextImage}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/40 hover:bg-black/60 text-[#dedede] rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                        >
-                          <ChevronRight size={24} />
-                        </button>
-
-                        {/* Indicators */}
-                        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-                          {selectedProject.images.map((_, idx) => (
-                            <div
-                              key={idx}
-                              className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/30'}`}
-                            />
-                          ))}
-                        </div>
-                      </>
-                    )}
-
-                    <div className="absolute top-4 right-4 bg-black/80 sm:bg-black/50 text-[#dedede] text-xs px-2 py-1 rounded z-20 pointer-events-none md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                      {language === 'pt' ? 'Toque para ampliar' : 'Tap to enlarge'}
-                    </div>
-                  </div>
-
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={language}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="p-8"
-                    >
-                      <h3 className="text-3xl font-bold text-[#dedede] mb-1">{selectedProject.title}</h3>
-                      {selectedProject.period && (
-                        <p className="text-sm font-medium text-zinc-500 mb-4 italic">{selectedProject.period}</p>
-                      )}
-                      <div className="mb-6 flex flex-wrap gap-2">
-                        {selectedProject.techs.map(t => {
-                          const tech = techMap[t] || { icon: <Code2 size={18} />, color: "bg-zinc-800/10 text-zinc-400 border-zinc-800/20" };
-                          return (
-                            <StackBadge key={t} name={t} color={tech.color}>
-                              {tech.icon}
-                            </StackBadge>
-                          );
-                        })}
-                      </div>
-
-                      <div className="prose prose-invert prose-zinc max-w-none mb-8">
-                        <p className="text-lg leading-relaxed text-zinc-300">
-                          {selectedProject.longDescription || selectedProject.description}
-                        </p>
-                      </div>
-
-                      <div className="flex gap-4 pt-6 border-t border-zinc-800 items-center justify-between">
-                        <div className="flex gap-3">
-                          {selectedProject.links.github && (
-                            <a
-                              href={selectedProject.links.github}
-                              target="_blank"
-                              onClick={() => track('Project Link Click', { project: selectedProject.title, type: 'Github' })}
-                              className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-[#dedede] hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
-                            >
-                              <Github size={16} /> {t.projects.viewCode}
-                            </a>
-                          )}
-                        </div>
-
-                        {selectedProject.cta && (
+                    <div className="flex gap-4 pt-6 border-t border-zinc-800 items-center justify-between">
+                      <div className="flex gap-3">
+                        {selectedProject.links.github && (
                           <a
-                            href={selectedProject.cta.link || '#'}
+                            href={selectedProject.links.github}
                             target="_blank"
-                            onClick={(e) => {
-                              if (!selectedProject.cta?.link) {
-                                e.preventDefault();
-                              } else {
-                                track('Project Link Click', { project: selectedProject.title, type: 'CTA' });
-                              }
-                            }}
-                            className={`
-                          flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
-                          ${selectedProject.cta.link
-                                ? 'bg-[#2563EB] hover:bg-[#3B82F6] text-white font-bold hover:-translate-y-0.5 shadow-md shadow-blue-500/10 hover:shadow-blue-600/20 cursor-pointer'
-                                : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
-                        `}
+                            onClick={() => track('Project Link Click', { project: selectedProject.title, type: 'Github' })}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-800/50 text-zinc-400 hover:text-[#dedede] hover:bg-zinc-800 transition-all text-xs font-medium border border-zinc-700/50"
                           >
-                            {selectedProject.cta.text}
-                            {selectedProject.cta.link && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
+                            <Github size={16} /> {t.projects.viewCode}
                           </a>
                         )}
                       </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
-          {/* --- FULL SCREEN IMAGE --- */}
-          <AnimatePresence>
-            {isFullScreen && selectedProject && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[60] bg-black flex items-center justify-center p-4"
-                onClick={() => setIsFullScreen(false)}
-              >
-                <button
-                  onClick={() => setIsFullScreen(false)}
-                  className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-[#dedede] transition-colors z-50"
-                >
-                  <X size={24} />
-                </button>
-
-                <AnimatePresence initial={false} custom={direction} mode="popLayout">
-                  <motion.img
-                    key={currentImageIndex}
-                    src={selectedProject.images[currentImageIndex]}
-                    alt="Full screen view"
-                    custom={direction}
-                    variants={slideVariants}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      x: { type: "spring", stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                      scale: { duration: 0.2 }
-                    }}
-                    drag="x"
-                    dragConstraints={{ left: 0, right: 0 }}
-                    dragElastic={1}
-                    onDragEnd={(_, info) => {
-                      const swipe = info.offset.x;
-                      if (swipe < -50) {
-                        nextImage();
-                      } else if (swipe > 50) {
-                        prevImage();
-                      }
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="max-w-full max-h-full object-contain cursor-grab active:cursor-grabbing"
-                  />
+                      {selectedProject.cta && (
+                        <a
+                          href={selectedProject.cta.link || '#'}
+                          target="_blank"
+                          onClick={(e) => {
+                            if (!selectedProject.cta?.link) {
+                              e.preventDefault();
+                            } else {
+                              track('Project Link Click', { project: selectedProject.title, type: 'CTA' });
+                            }
+                          }}
+                          className={`
+                          flex items-center gap-2 px-8 py-2.5 rounded-full font-medium text-sm transition-all duration-300
+                          ${selectedProject.cta.link
+                              ? 'bg-[#2563EB] hover:bg-[#3B82F6] text-white font-bold hover:-translate-y-0.5 shadow-md shadow-blue-500/10 hover:shadow-blue-600/20 cursor-pointer'
+                              : 'bg-zinc-800/50 text-zinc-500 cursor-default opacity-50 border border-zinc-800'}
+                        `}
+                        >
+                          {selectedProject.cta.text}
+                          {selectedProject.cta.link && <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />}
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
-
-                {selectedProject.images.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/10 hover:bg-white/20 text-[#dedede] rounded-full transition-colors z-50 disabled:opacity-50"
-                    >
-                      <ChevronLeft size={32} />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/10 hover:bg-white/20 text-[#dedede] rounded-full transition-colors z-50 disabled:opacity-50"
-                    >
-                      <ChevronRight size={32} />
-                    </button>
-                  </>
-                )}
-
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 sm:bg-black/50 px-4 py-2 rounded-full text-[#dedede] text-sm sm:backdrop-blur-md">
-                  {currentImageIndex + 1} / {selectedProject.images.length}
-                </div>
               </motion.div>
-            )}
-          </AnimatePresence>
-        </div >
-      )
-      }
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* --- FULL SCREEN IMAGE --- */}
+        <AnimatePresence>
+          {isFullScreen && selectedProject && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[60] bg-black flex items-center justify-center p-4"
+              onClick={() => setIsFullScreen(false)}
+            >
+              <button
+                onClick={() => setIsFullScreen(false)}
+                className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-[#dedede] transition-colors z-50"
+              >
+                <X size={24} />
+              </button>
+
+              <AnimatePresence initial={false} custom={direction} mode="popLayout">
+                <motion.img
+                  key={currentImageIndex}
+                  src={selectedProject.images[currentImageIndex]}
+                  alt="Full screen view"
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 300, damping: 30 },
+                    opacity: { duration: 0.2 },
+                    scale: { duration: 0.2 }
+                  }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={1}
+                  onDragEnd={(_, info) => {
+                    const swipe = info.offset.x;
+                    if (swipe < -50) {
+                      nextImage();
+                    } else if (swipe > 50) {
+                      prevImage();
+                    }
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="max-w-full max-h-full object-contain cursor-grab active:cursor-grabbing"
+                />
+              </AnimatePresence>
+
+              {selectedProject.images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-4 bg-white/10 hover:bg-white/20 text-[#dedede] rounded-full transition-colors z-50 disabled:opacity-50"
+                  >
+                    <ChevronLeft size={32} />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-4 bg-white/10 hover:bg-white/20 text-[#dedede] rounded-full transition-colors z-50 disabled:opacity-50"
+                  >
+                    <ChevronRight size={32} />
+                  </button>
+                </>
+              )}
+
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 sm:bg-black/50 px-4 py-2 rounded-full text-[#dedede] text-sm sm:backdrop-blur-md">
+                {currentImageIndex + 1} / {selectedProject.images.length}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div >
     </main >
   );
 }
