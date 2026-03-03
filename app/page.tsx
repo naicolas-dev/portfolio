@@ -71,8 +71,10 @@ interface Content {
     items: {
       title: string;
       institution: string;
+      image?: string;
       dotColor: string;
       textColor: string;
+      description: string;
     }[];
   };
 }
@@ -270,14 +272,18 @@ const content: Record<'pt' | 'en', Content> = {
         {
           title: "Bacharelado em Sistemas de Informação",
           institution: "Universidade Estadual de Montes Claros (Unimontes) • 2026 — 2029",
+          image: "/education/unimontesmg_logo.jpg",
           dotColor: "bg-[#3B82F6]",
-          textColor: "text-[#dedede]"
+          textColor: "text-[#dedede]",
+          description: "Graduação focada no desenvolvimento de soluções computacionais para negócios, abrangendo engenharia de software, banco de dados, governança de TI e gestão de projetos. Durante o curso, exploro aplicações práticas e me aprofundo em arquiteturas backend e frontend para construir sistemas escaláveis."
         },
         {
           title: "Técnico em Desenvolvimento de Sistemas",
           institution: "Proz Educação • 2024 — 2026",
+          image: "/education/proz_logo.png",
           dotColor: "bg-zinc-800",
-          textColor: "text-zinc-400"
+          textColor: "text-zinc-400",
+          description: "Formação técnica que me introduziu aos fundamentos da programação, incluindo lógica, algoritmos e banco de dados. Aprendi as bases do desenvolvimento web com HTML, CSS, JavaScript e PHP, além de metodologias ágeis e controle de versão, desenvolvendo meus primeiros projetos práticos."
         }
       ]
     }
@@ -432,14 +438,18 @@ const content: Record<'pt' | 'en', Content> = {
         {
           title: "Bachelor’s Degree in Information Systems",
           institution: "State University of Montes Claros (Unimontes) • 2026 — 2029",
+          image: "/education/unimontesmg_logo.jpg",
           dotColor: "bg-[#3B82F6]",
-          textColor: "text-[#dedede]"
+          textColor: "text-[#dedede]",
+          description: "Bachelor's program focused on developing computational solutions for businesses, covering software engineering, databases, IT governance, and project management. During the course, I explore practical applications and dive deep into backend and frontend architectures to build scalable systems."
         },
         {
           title: "Technical Degree in Systems Development",
           institution: "Proz Education • 2024 — 2026",
+          image: "/education/proz_logo.png",
           dotColor: "bg-zinc-800",
-          textColor: "text-zinc-400"
+          textColor: "text-zinc-400",
+          description: "Technical education that introduced me to the fundamentals of programming, including logic, algorithms, and databases. I learned the basics of web development with HTML, CSS, JavaScript, and PHP, alongside agile methodologies and version control, developing my first practical projects."
         }
       ]
     }
@@ -618,6 +628,7 @@ export default function Portfolio() {
 
   const [ctaInView, setCtaInView] = useState(false);
   const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [expandedEducationIndex, setExpandedEducationIndex] = useState<number | null>(null);
 
   const t = content[language];
 
@@ -1213,7 +1224,7 @@ export default function Portfolio() {
           </section>
 
 
-          {/* --- 5. FORMAÃ‡ÃƒO --- */}
+          {/* --- 5. FORMAÇÃO / EDUCATION --- */}
           <section id="education" className="mb-40">
             <SectionHeading number="5">{t.education.title}</SectionHeading>
 
@@ -1229,22 +1240,66 @@ export default function Portfolio() {
                 {/* Timeline Line */}
                 <div className="absolute left-[7px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-zinc-800 via-zinc-800 to-transparent" />
 
-                {t.education.items.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    className="relative pl-10"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#0e1011] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
-                    <div className="mb-2">
-                      <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
-                      <span className="text-zinc-500 text-sm font-medium">{item.institution}</span>
-                    </div>
-                  </motion.div>
-                ))}
+                {t.education.items.map((item, i) => {
+                  const isExpanded = expandedEducationIndex === i;
+
+                  return (
+                    <motion.div
+                      key={i}
+                      className="relative pl-10"
+                      initial={{ opacity: 0, x: -10 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      <div className={`absolute left-0 top-2 w-4 h-4 rounded-full border-2 border-[#0e1011] ${item.dotColor} shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10`} />
+
+                      <div className="mb-2 flex items-start gap-5 translate-y-[-8px]">
+                        {item.image && (
+                          <div className="w-14 h-14 shrink-0 flex items-center justify-center pt-2">
+                            <img src={item.image} alt={item.institution} className="w-full h-full object-contain rounded-sm" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <span className={`text-xl font-semibold block tracking-tight ${item.textColor}`}>{item.title}</span>
+                          <span className="text-zinc-500 text-sm font-medium block mb-2">{item.institution}</span>
+
+                          {/* Expand Description Toggle */}
+                          <button
+                            onClick={() => setExpandedEducationIndex(isExpanded ? null : i)}
+                            className="flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-zinc-300 transition-colors group outline-none mb-2"
+                          >
+                            <span>{language === 'pt' ? 'Detalhes' : 'Details'}</span>
+                            <motion.div
+                              animate={{ rotate: isExpanded ? 180 : 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="bg-zinc-800/50 p-1 rounded-full group-hover:bg-zinc-800 transition-colors"
+                            >
+                              <ChevronLeft size={12} className="-rotate-90" />
+                            </motion.div>
+                          </button>
+
+                          {/* Expandable Description Body */}
+                          <AnimatePresence>
+                            {isExpanded && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                              >
+                                <div className="pt-2 text-zinc-300 text-sm leading-relaxed max-w-2xl">
+                                  {item.description}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )
+                })}
               </motion.div>
             </AnimatePresence>
           </section>
