@@ -31,7 +31,7 @@ export default function MobileMultimediaHub() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.1 }}
-                className="flex items-center justify-center gap-4 mt-6 md:hidden"
+                className="flex flex-wrap items-center justify-center gap-4 mt-6 md:hidden w-full max-w-full"
             >
                 <button
                     onClick={() => setActiveModal('music')}
