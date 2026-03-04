@@ -39,9 +39,10 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
     // We must always wrap children in the provider, even if not mounted yet
     // to avoid the "useLanguage must be used within a LanguageProvider" error
+    // IMPORTANT: Never wrap children differently based on `mounted` or it unmounts the entire app on hydration!
     return (
         <LanguageContext.Provider value={{ language, setLanguage: updateLanguage, t }}>
-            {mounted ? children : <div className="invisible">{children}</div>}
+            {children}
         </LanguageContext.Provider>
     );
 }
