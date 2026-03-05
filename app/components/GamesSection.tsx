@@ -62,7 +62,7 @@ export default function GamesSection() {
     };
 
     if (loading) {
-        return <div className="text-center text-[#A1A6B3] text-sm py-8">Loading...</div>;
+        return <div className="text-center text-[#A1A6B3] text-sm py-8">{language === 'pt' ? 'Carregando...' : 'Loading...'}</div>;
     }
 
     if (!steamData) {

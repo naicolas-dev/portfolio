@@ -96,7 +96,7 @@ export default function MusicSection() {
 
             {/* Now Playing Section */}
             {loading ? (
-                <div className="text-center text-[#A1A6B3] text-sm py-4">Loading...</div>
+                <div className="text-center text-[#A1A6B3] text-sm py-4">{language === 'pt' ? 'Carregando...' : 'Loading...'}</div>
             ) : !nowPlaying?.title ? (
                 <div className="flex flex-col items-center justify-center py-4 text-center bg-[#1a1d21]/50 rounded-xl border border-[#2a2d31]">
                     <SiSpotify className="text-[#A1A6B3] mb-2" size={24} />
@@ -124,7 +124,7 @@ export default function MusicSection() {
                         )}
                         <span className="text-xs text-[#A1A6B3] uppercase tracking-wider">
                             {nowPlaying.isPlaying
-                                ? (language === 'pt' ? 'Estou ouvindo agora' : "I'm now playing")
+                                ? (language === 'pt' ? 'Estou ouvindo agora' : "I'm now listening")
                                 : (language === 'pt' ? 'Ouvi recentemente' : "I've listened recently")}
                         </span>
                     </div>
