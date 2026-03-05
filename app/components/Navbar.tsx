@@ -135,14 +135,14 @@ export default function Navbar() {
                             }}
                             className="group flex items-center text-xl font-bold tracking-tighter cursor-pointer"
                         >
-                            <span className="text-zinc-500 mr-1 group-hover:text-zinc-400 transition-colors duration-300">&lt;</span>
+                            <span className="text-zinc-500 group-hover:text-zinc-400 transition-colors duration-300">&lt;/</span><p className="text-zinc-500 group-hover:text-[#dedede] transition-colors duration-300">naicolas.</p>
                             <TextShimmer
                                 duration={3}
                                 className="[--base-color:#3a7eed] [--base-gradient-color:#7fb0ff] dark:[--base-color:#3a7eed] dark:[--base-gradient-color:#ffffff]"
                             >
-                                NVA.
+                                dev
                             </TextShimmer>
-                            <span className="text-zinc-500 ml-1 group-hover:text-zinc-400 transition-colors duration-300">/&gt;</span>
+                            <span className="text-zinc-500 group-hover:text-zinc-400 transition-colors duration-300">&gt;</span>
                         </button>
                     </div>
 
@@ -153,7 +153,7 @@ export default function Navbar() {
                                 key={item.id}
                                 onClick={() => scrollToSection(item.id)}
                                 className={cn(
-                                    'px-4 py-2 text-sm font-medium transition-all rounded-full relative',
+                                    'px-3 py-2 text-sm font-medium transition-all rounded-full relative',
                                     activeSection === item.id
                                         ? 'text-white'
                                         : 'text-zinc-400 hover:text-[#dedede]'
@@ -185,7 +185,7 @@ export default function Navbar() {
                     </nav>
 
                     {/* Right Action (Resume) + Mobile Menu Toggle + Language Toggle */}
-                    <div className="flex items-center gap-2 sm:gap-4">
+                    <div className="flex items-center gap-2 sm:gap-2">
 
                         {/* Language Toggle */}
                         <div className="relative flex flex-col items-end">
