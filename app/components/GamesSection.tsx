@@ -103,7 +103,7 @@ export default function GamesSection() {
             {/* Currently Playing (Only 1) */}
             <div>
                 <h3 className="text-[10px] uppercase tracking-widest text-[#A1A6B3]/60 mb-2 px-1 font-bold">
-                    {language === 'pt' ? 'Jogando agora' : 'Currently Playing'}
+                    {language === 'pt' ? 'Jogado recentemente' : 'Recently Played'}
                 </h3>
                 {currentlyPlaying ? (
                     <div className="flex items-center gap-3 p-3 rounded-lg bg-[#1a1d21]/50 border border-[#2a2d31] hover:bg-[#1a1d21] transition-colors group">
