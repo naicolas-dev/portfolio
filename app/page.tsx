@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { track } from '@vercel/analytics';
@@ -7,7 +7,7 @@ import {
   Github, Linkedin, Mail, ArrowRight, X, Download,
   Server, Code2,
   ChevronLeft, ChevronRight,
-  Plus, Layers, ArrowUpRight
+  Plus, Layers, ArrowUpRight, Briefcase
 } from 'lucide-react';
 import {
   SiPhp, SiLaravel, SiNextdotjs, SiReact,
@@ -57,7 +57,20 @@ interface Content {
     exploreProject: string;
     letsConnect: string;
     experience: string;
+    freelance: string;
     stack: string;
+  };
+  professionalExperience: {
+    items: {
+      role: string;
+      company: string;
+      period: string;
+      startDate?: string;
+      location?: string;
+      image?: string;
+      description: string;
+      dotColor?: string;
+    }[];
   };
   projects: {
     featured: Project;
@@ -118,10 +131,13 @@ const stackItems = [
   { name: "TypeScript", color: "bg-[#5F6B7C]/10 text-zinc-500 border-zinc-800", icon: <SiTypescript size={28} /> },
 ];
 
+// 0 = Disponível para trabalho / Open to work
+const WORK_STATUS: number = Number(process.env.NEXT_PUBLIC_WORK_STATUS) || 0;
+
 const content: Record<'pt' | 'en', Content> = {
   pt: {
     hero: {
-      status: "Disponível para estágio ou vaga júnior em desenvolvimento web",
+      status: "Disponível para oportunidades | Desenvolvedor Full-Stack",
       aboutMe: "Sobre mim",
       headline: "Desenvolvedor Full-Stack.",
       subtext: "Tenho experiência no desenvolvimento de aplicações web completas, atuando tanto no front-end quanto no back-end em projetos próprios e acadêmicos. Sou estudante de Sistemas de Informação na Universidade Estadual de Montes Claros (Unimontes) e possuo prática com Laravel, Next.js e PostgreSQL. Busco minha primeira oportunidade como desenvolvedor full-stack júnior, com interesse em contribuir de forma consistente, escrevendo código claro e organizado, com atenção à manutenção e ao desempenho das aplicações.",
@@ -129,15 +145,30 @@ const content: Record<'pt' | 'en', Content> = {
       contact: "Entrar em Contato"
     },
     sections: {
-      experience: "Experiência",
+      experience: "Experiência Profissional",
+      freelance: "Projetos Freelance",
       projects: "Meus Projetos",
       otherProjects: "Outros Projetos",
       featured: "Destaque",
       heroCTA: "ver meus projetos",
-      downloadCV: "Baixar currículo",
+      downloadCV: "Ver currículo",
       exploreProject: "Explorar Projeto",
       letsConnect: "Vamos Conversar",
       stack: "Stack Principal",
+    },
+    professionalExperience: {
+      items: [
+        {
+          role: "Estagiário em Desenvolvimento",
+          company: "Megleo",
+          period: "Abril 2026 - Atualmente",
+          startDate: "2026-04-01",
+          location: "Brasil",
+          image: "/experience/megleo.png",
+          dotColor: "bg-[#3B82F6]",
+          description: "Estagiário de Desenvolvimento de Software focado em desenvolver funcionalidades, corrigir bugs e melhorar a qualidade do código, colaborando com o time e aprendendo boas práticas da área."
+        }
+      ]
     },
     projects: {
       featured: {
@@ -290,7 +321,7 @@ const content: Record<'pt' | 'en', Content> = {
   },
   en: {
     hero: {
-      status: "Available for internship or junior web development role",
+      status: "Open to Work | Full-Stack Developer",
       aboutMe: "About me",
       headline: "Full-Stack Developer.",
       subtext: "I have experience developing complete web applications, working on both front-end and back-end in personal and academic projects. I am an Information Systems student at the State University of Montes Claros (Unimontes) and I have practical experience with Laravel, Next.js, and PostgreSQL. I am seeking my first opportunity as a Junior Full-Stack Developer, looking to contribute consistently by writing clear and organized code, with a focus on maintainability and application performance.",
@@ -298,15 +329,30 @@ const content: Record<'pt' | 'en', Content> = {
       contact: "Get in Touch"
     },
     sections: {
-      experience: "Experience",
+      experience: "Professional Experience",
+      freelance: "Freelance Projects",
       projects: "My Projects",
       otherProjects: "Other Projects",
       featured: "Featured",
       heroCTA: "view my projects",
-      downloadCV: "Download resume",
+      downloadCV: "View resume",
       exploreProject: "Explore Project",
       letsConnect: "Let's Connect",
       stack: "Main Stack",
+    },
+    professionalExperience: {
+      items: [
+        {
+          role: "Development Intern",
+          company: "Megleo",
+          period: "April 2026 - Present",
+          startDate: "2026-04-01",
+          location: "Brazil",
+          image: "/experience/megleo.png",
+          dotColor: "bg-[#3B82F6]",
+          description: "Software Development Intern focused on building features, fixing bugs, and improving code quality while collaborating with the team and learning industry best practices."
+        }
+      ]
     },
     projects: {
       featured: {
@@ -586,6 +632,28 @@ const HoverProjectRow = ({ project }: { project: { name: string; tech: string; l
 
 // --- MAIN PAGE ---
 
+const calculateDuration = (startDate: string, language: string) => {
+  const start = new Date(startDate);
+  const now = new Date();
+
+  let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+
+  if (months <= 0) return language === 'pt' ? '1 mês' : '1 mo';
+
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  let result = [];
+  if (years > 0) {
+    result.push(`${years} ${language === 'pt' ? (years === 1 ? 'ano' : 'anos') : (years === 1 ? 'yr' : 'yrs')}`);
+  }
+  if (remainingMonths > 0) {
+    result.push(`${remainingMonths} ${language === 'pt' ? (remainingMonths === 1 ? 'mês' : 'meses') : (remainingMonths === 1 ? 'mo' : 'mos')}`);
+  }
+
+  return result.length > 0 ? result.join(language === 'pt' ? ' e ' : ' and ') : (language === 'pt' ? '1 mês' : '1 mo');
+};
+
 const getProjectCountForTech = (techName: string): string => {
   const aliases = [techName.toLowerCase()];
   if (techName === 'JavaScript') aliases.push('js');
@@ -815,16 +883,29 @@ export default function Portfolio() {
                   className="flex flex-col items-center px-4"
                 >
                   {/* Status Line */}
-                  <div className="inline-block px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 mb-8">
-                    <div className="flex items-center gap-2">
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                      </span>
-                      <span className="text-sm md:text-base text-emerald-400 font-medium tracking-wide">
-                        {t.hero.status}
-                      </span>
-                    </div>
+                  <div className="mb-8">
+                    {WORK_STATUS === 1 && t.professionalExperience.items.length > 0 ? (
+                      <div className="inline-block px-4 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 shadow-[0_0_15px_rgba(255,255,255,0.03)] group transition-colors hover:border-zinc-700">
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="w-4 h-4 text-zinc-400 group-hover:text-zinc-300 transition-colors" />
+                          <span className="text-sm md:text-base text-zinc-300 font-medium tracking-wide group-hover:text-zinc-200 transition-colors">
+                            {t.professionalExperience.items[0].role} @ {t.professionalExperience.items[0].company}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.05)]">
+                        <div className="flex items-center gap-2">
+                          <span className="relative flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                          </span>
+                          <span className="text-sm md:text-base text-emerald-400 font-medium tracking-wide">
+                            {t.hero.status}
+                          </span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Headline */}
@@ -986,9 +1067,58 @@ export default function Portfolio() {
             </div>
           </section>
 
-          {/* --- 2. EXPERIENCE --- */}
-          <section className="mb-32" id="experience-section">
+          {/* --- 2. PROFESSIONAL EXPERIENCE --- */}
+          <section id="professional-experience-section" className="mb-32">
             <SectionHeading number="2">{t.sections.experience}</SectionHeading>
+
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={language}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="relative space-y-8 max-w-4xl"
+              >
+                {t.professionalExperience.items.map((item, i) => {
+                  return (
+                    <motion.div
+                      key={i}
+                      className="group flex gap-4"
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      {item.image && (
+                        <div className="w-12 h-12 shrink-0 overflow-hidden mt-1">
+                          <img src={item.image} alt={item.company} className="w-full h-full object-cover rounded-md bg-white/5" />
+                        </div>
+                      )}
+                      <div className="flex-1 flex flex-col">
+                        <span className="text-[17px] font-semibold text-[#dedede] leading-snug tracking-tight">{item.role}</span>
+                        <span className="text-[15px] text-[#dedede] mt-0.5">{item.company}</span>
+                        <span className="text-[14px] text-zinc-400 mt-0.5">
+                          {item.period} {item.startDate && <span>&middot; {calculateDuration(item.startDate, language)}</span>}
+                        </span>
+                        {item.location && <span className="text-[14px] text-zinc-400 mt-0.5">{item.location}</span>}
+
+                        {item.description && (
+                          <div className="mt-4 text-[15px] text-zinc-300 leading-relaxed whitespace-pre-line text-balance">
+                            {item.description}
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </motion.div>
+            </AnimatePresence>
+          </section>
+
+          {/* --- 3. FREELANCE PROJECTS --- */}
+          <section className="mb-32" id="experience-section">
+            <SectionHeading number="3">{t.sections.freelance}</SectionHeading>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -1061,9 +1191,9 @@ export default function Portfolio() {
           </section>
 
 
-          {/* --- 3. PROJETOS (Main) --- */}
+          {/* --- 4. PROJETOS (Main) --- */}
           <section id="projects-section" className="mb-32">
-            <SectionHeading number="3">{t.sections.projects}</SectionHeading>
+            <SectionHeading number="4">{t.sections.projects}</SectionHeading>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -1190,9 +1320,9 @@ export default function Portfolio() {
           </section>
 
 
-          {/* --- 4. OUTROS EXPERIMENTOS --- */}
-          <section className="mb-40">
-            <SectionHeading number="4">{t.sections.otherProjects}</SectionHeading>
+          {/* --- 5. OUTROS EXPERIMENTOS --- */}
+          <section className="mb-40" id="otherProjects">
+            <SectionHeading number="5">{t.sections.otherProjects}</SectionHeading>
 
             <AnimatePresence mode="wait">
               <motion.div
@@ -1211,9 +1341,9 @@ export default function Portfolio() {
           </section>
 
 
-          {/* --- 5. FORMAÇÃO / EDUCATION --- */}
+          {/* --- 6. FORMAÇÃO / EDUCATION --- */}
           <section id="education" className="mb-40">
-            <SectionHeading number="5">{t.education.title}</SectionHeading>
+            <SectionHeading number="6">{t.education.title}</SectionHeading>
 
             <AnimatePresence mode="wait">
               <motion.div

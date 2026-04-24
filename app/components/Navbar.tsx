@@ -24,17 +24,17 @@ export default function Navbar() {
 
     const content = {
         pt: {
-            about: 'Sobre mim',
+            about: 'Sobre',
             stack: 'Stack',
-            experience: 'Experiência',
+            professional: 'Experiência',
             projects: 'Projetos',
             education: 'Formação',
             downloadCV: 'Baixar currículo',
         },
         en: {
-            about: 'About me',
+            about: 'About',
             stack: 'Stack',
-            experience: 'Experience',
+            professional: 'Experience',
             projects: 'Projects',
             education: 'Education',
             downloadCV: 'Download resume',
@@ -46,8 +46,8 @@ export default function Navbar() {
     const navItems = [
         { id: 'hero', label: t.about },
         { id: 'stack', label: t.stack },
-        { id: 'experience-section', label: t.experience },
-        { id: 'projects-section', label: t.projects },
+        { id: 'professional-experience-section', label: t.professional },
+        { id: 'experience-section', label: t.projects },
         { id: 'education', label: t.education },
     ];
 
