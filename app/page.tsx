@@ -159,14 +159,14 @@ const content: Record<'pt' | 'en', Content> = {
     professionalExperience: {
       items: [
         {
-          role: "Estagiário em Desenvolvimento",
+          role: "Desenvolvedor de software",
           company: "Megleo",
           period: "Abril 2026 - Atualmente",
           startDate: "2026-04-01",
           location: "Brasil",
           image: "/experience/megleo.png",
           dotColor: "bg-[#3B82F6]",
-          description: "Estagiário de Desenvolvimento de Software focado em desenvolver funcionalidades, corrigir bugs e melhorar a qualidade do código, colaborando com o time e aprendendo boas práticas da área."
+          description: "Desenvolvedor de  de Software focado em desenvolver funcionalidades, corrigir bugs e melhorar a qualidade do código, colaborando com o time e responsável por documentações."
         }
       ]
     },
@@ -343,14 +343,14 @@ const content: Record<'pt' | 'en', Content> = {
     professionalExperience: {
       items: [
         {
-          role: "Development Intern",
+          role: "Software Developer",
           company: "Megleo",
           period: "April 2026 - Present",
           startDate: "2026-04-01",
           location: "Brazil",
           image: "/experience/megleo.png",
           dotColor: "bg-[#3B82F6]",
-          description: "Software Development Intern focused on building features, fixing bugs, and improving code quality while collaborating with the team and learning industry best practices."
+          description: "Software Developer focused on building features, fixing bugs, and improving code quality while collaborating with the team and responsible for documentation."
         }
       ]
     },
